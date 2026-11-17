@@ -2,9 +2,11 @@
 
 **Renstek** tarafından geliştirilen, otelin kat planı üzerinden rezervasyon yapılan yerel bir otel yönetim sistemi (PMS – Property Management System).
 
-![Renstek PMS ekran görüntüsü](docs/ekran-goruntusu.png)
+| Açık tema | Karanlık tema |
+|---|---|
+| ![Renstek PMS açık tema](docs/ekran-goruntusu.png) | ![Renstek PMS karanlık tema](docs/ekran-goruntusu-karanlik.png) |
 
-> Sürüm: **v1.0.0**
+> Sürüm: **v1.0.1**
 
 ## Özellikler
 
@@ -14,7 +16,8 @@
 - **Klasik rezervasyon ayarları:** Oda tipi (Standart, Deluxe, Suit) ve pansiyon tipi (Sadece oda, Oda + kahvaltı, Yarım pansiyon, Tam pansiyon, Her şey dahil) seçilebilir.
 - **Çoklu oda rezervasyonu:** Birden fazla oda seçilebilir. Toplam fiyat anında hesaplanır, kapasite yetmezse uyarı verilir.
 - **Rezervasyon işlemleri:** Giriş yap, çıkış yap, iptal et.
-- **Otel ayarları:** Kat sayısı, kattaki sıra sayısı (1 veya 2), sıradaki oda sayısı ve oda fiyatları değiştirilebilir. Kroki bu ayarlara göre yeniden çizilir.
+- **Otel ayarları:** Kat sayısı, kattaki sıra sayısı (1 veya 2), sıradaki oda sayısı ve oda fiyatları değiştirilebilir. Uygulama sürümü de bu menüde görünür. Kroki bu ayarlara göre yeniden çizilir.
+- **Tema:** Ayarlar menüsünden *Açık*, *Karanlık* veya *Otomatik* tema seçilebilir. Otomatik tema, cihazın açık/karanlık mod ayarını izler.
 - **Tasarım:** Material 3 Expressive. Tonal renk paleti, büyük yuvarlak şekiller, dokununca şekil değiştiren oda ve butonlar, yaylı animasyonlar ve Roboto Flex yazı tipi kullanılır.
 
 ## Kurulum ve çalıştırma
@@ -66,7 +69,8 @@ A sırasının son odası Suit, A sırasının diğer odaları Deluxe, B sıras�
 Renstek-PMS/
 ├── index.html          # Uygulamanın tamamı (HTML + CSS + JS)
 ├── docs/
-│   └── ekran-goruntusu.png
+│   ├── ekran-goruntusu.png
+│   └── ekran-goruntusu-karanlik.png
 ├── CHANGELOG.md
 └── README.md
 ```

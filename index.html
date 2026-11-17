@@ -17,11 +17,27 @@
   --success-container:#c9f2d5; --on-success-container:#0b3a1c;
   --surface:#fdf8ff; --surface-c-low:#f7f1fc; --surface-c:#f1ebf8; --surface-c-high:#ebe5f2; --surface-c-highest:#e5dfec;
   --on-surface:#1c1a22; --on-surface-v:#494553; --outline:#7a7585; --outline-v:#cbc4d6;
+  --inverse-surface:#322f37; --inverse-on-surface:#f5eff7;
+  --scrim:rgba(28,26,34,.32);
+  color-scheme:light;
   --spring:cubic-bezier(.34,1.56,.64,1);
   --fast-spatial:cubic-bezier(.42,1.67,.21,.9);
   --emph:cubic-bezier(.2,0,0,1);
 }
+:root[data-theme="dark"]{
+  --primary:#cbbeff; --on-primary:#2e1a87;
+  --primary-container:#4429b8; --on-primary-container:#e7deff;
+  --secondary-container:#48455d; --on-secondary-container:#e4e0f9;
+  --tertiary:#ffafd0; --tertiary-container:#831850; --on-tertiary-container:#ffd8e7;
+  --success-container:#1d5130; --on-success-container:#c9f2d5;
+  --surface:#141218; --surface-c-low:#1d1b20; --surface-c:#211f26; --surface-c-high:#2b2930; --surface-c-highest:#36343b;
+  --on-surface:#e6e0e9; --on-surface-v:#cac4d0; --outline:#938f99; --outline-v:#49454f;
+  --inverse-surface:#e6e0e9; --inverse-on-surface:#322f37;
+  --scrim:rgba(0,0,0,.5);
+  color-scheme:dark;
+}
 *{box-sizing:border-box}
+body,.card,.floor,.tf,.stepper,.si,.empty,.total,.dlg,.rc,.btn,.seg button{transition-property:background-color,color,border-color,border-radius,box-shadow;transition-duration:.3s}
 html,body{margin:0}
 body{font-family:'Roboto Flex',system-ui,sans-serif;background:var(--surface);color:var(--on-surface);font-size:15px;min-height:100vh}
 button,input,select{font:inherit;color:inherit}
@@ -45,7 +61,7 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .btn-filled:hover{box-shadow:0 2px 8px rgba(91,63,209,.35)}
 .btn-tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
 .btn-text{background:transparent;color:var(--primary);padding:0 16px}
-.btn-text:hover{background:rgba(91,63,209,.08)}
+.btn-text:hover{background:color-mix(in srgb,var(--primary) 10%,transparent)}
 .btn-danger{background:var(--tertiary-container);color:var(--on-tertiary-container)}
 .btn-icon{width:48px;padding:0;background:var(--surface-c-high);color:var(--on-surface-v)}
 .btn-icon:hover{background:var(--surface-c-highest)}
@@ -69,7 +85,7 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .tf:focus-within{border-color:var(--primary);border-radius:20px 20px 4px 4px}
 .tf label{position:absolute;top:8px;left:16px;font-size:12px;color:var(--on-surface-v)}
 .tf:focus-within label{color:var(--primary)}
-.tf input,.tf select{border:0;background:transparent;outline:none;width:100%;font-size:16px;padding:2px 0;color-scheme:light}
+.tf input,.tf select{border:0;background:transparent;outline:none;width:100%;font-size:16px;padding:2px 0}
 .tf select{appearance:none;cursor:pointer}
 .stepper{display:flex;align-items:center;justify-content:space-between;background:var(--surface-c-highest);border-radius:16px;padding:6px;height:62px}
 .stepper .lbl{font-size:12px;color:var(--on-surface-v);padding-left:10px;line-height:1.2}
@@ -111,7 +127,7 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .sel{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
 .si{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 8px;border-radius:20px;background:var(--surface);animation:pop .5s var(--spring)}
 @keyframes pop{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
-.si .no{width:52px;height:52px;border-radius:16px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:17px}
+.si .no{width:52px;height:52px;border-radius:16px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:800;font-size:17px}
 .si .t{flex:1}.si .t b{display:block}.si .t span{font-size:13px;color:var(--on-surface-v)}
 .si .x{width:40px;height:40px;border:0;border-radius:50%;background:transparent;cursor:pointer;color:var(--on-surface-v)}
 .si .x:hover{background:var(--surface-c-high)}
@@ -126,7 +142,7 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .warn{font-size:13px;color:var(--tertiary);margin:-6px 4px 12px;display:none}
 
 /* dialog */
-.scrim{position:fixed;inset:0;background:rgba(28,26,34,.32);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+.scrim{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
 .scrim.open{display:flex}
 .dlg{width:min(480px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--surface-c-high);border-radius:28px;padding:24px;animation:dlg .5s var(--spring)}
 @keyframes dlg{from{transform:scale(.85);opacity:0;border-radius:80px}to{transform:none;opacity:1}}
@@ -141,9 +157,11 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .acts .btn{height:40px;font-size:14px;padding:0 18px}
 .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.theme-seg{display:flex;width:100%;margin-top:10px}.theme-seg button{flex:1;justify-content:center}
+.ver{margin-right:auto;align-self:center;font-size:13px;color:var(--on-surface-v)}
 .sgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
 
-.snack{position:fixed;left:50%;bottom:24px;transform:translate(-50%,200%);background:#322f37;color:#f5eff7;padding:14px 22px;border-radius:16px;
+.snack{position:fixed;left:50%;bottom:24px;transform:translate(-50%,200%);background:var(--inverse-surface);color:var(--inverse-on-surface);padding:14px 22px;border-radius:16px;
   z-index:60;transition:transform .5s var(--spring);font-size:14px;max-width:90vw}
 .snack.show{transform:translate(-50%,0)}
 </style>
@@ -226,10 +244,16 @@ const TODAY = iso(new Date());
 const TYPES = { STD:{name:'Standart',cap:2}, DLX:{name:'Deluxe',cap:3}, STE:{name:'Suit',cap:4} };
 const BOARD = { RO:'Sadece oda', BB:'Oda + kahvaltı', HB:'Yarım pansiyon', FB:'Tam pansiyon', AI:'Her şey dahil' };
 
+const VERSION='1.0.1';
 const KEY='renstek-pms-m3';
 function defaults(){ return { config:{name:'Renstek Demo Otel',floors:2,rows:2,perRow:6,rates:{STD:2400,DLX:3200,STE:5200},board:{RO:0,BB:300,HB:650,FB:950,AI:1400}}, res:[], seq:1001 }; }
 let S; try{ S=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
 if(!S){ S=defaults(); seed(); }
+if(!S.config.theme) S.config.theme='auto';
+const mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+function applyTheme(){ const t=S.config.theme; const dark = t==='dark' || (t==='auto' && mq && mq.matches); document.documentElement.dataset.theme = dark?'dark':'light'; }
+applyTheme();
+if(mq){ (mq.addEventListener?mq.addEventListener('change',applyTheme):mq.addListener(applyTheme)); }
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
 
 let Q = { in:TODAY, out:addDays(TODAY,3), ad:2, ch:0, type:'ALL', board:'BB' };
@@ -265,39 +289,39 @@ function plan(f){
   const c=S.config, list=rooms().filter(r=>r.floor===f);
   const W=P*2+STAIR+c.perRow*RW, H=P*2+c.rows*RH+CW;
   const x0=P+STAIR, yA=P, yC=P+RH, yB=P+RH+CW;
-  const line='#7a7585', soft='#cbc4d6';
+  const line='var(--outline)', soft='var(--outline-v)';
   let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Roboto Flex, sans-serif">`;
   // outline
-  s+=`<rect x="${P}" y="${P}" width="${W-2*P}" height="${H-2*P}" rx="22" fill="none" stroke="${line}" stroke-width="2"/>`;
+  s+=`<rect x="${P}" y="${P}" width="${W-2*P}" height="${H-2*P}" rx="22" fill="none" style="stroke:${line}" stroke-width="2"/>`;
   // stairs
-  s+=`<line x1="${x0}" y1="${P}" x2="${x0}" y2="${H-P}" stroke="${line}" stroke-width="1.5"/>`;
-  for(let k=1;k<8;k++){ const y=P+18+k*((H-2*P-36)/8); s+=`<line x1="${P+14}" y1="${y}" x2="${x0-14}" y2="${y}" stroke="${soft}" stroke-width="1.5"/>`; }
-  s+=`<text x="${P+STAIR/2}" y="${P+16}" text-anchor="middle" font-size="10" fill="#7a7585">MERDİVEN</text>`;
+  s+=`<line x1="${x0}" y1="${P}" x2="${x0}" y2="${H-P}" style="stroke:${line}" stroke-width="1.5"/>`;
+  for(let k=1;k<8;k++){ const y=P+18+k*((H-2*P-36)/8); s+=`<line x1="${P+14}" y1="${y}" x2="${x0-14}" y2="${y}" style="stroke:${soft}" stroke-width="1.5"/>`; }
+  s+=`<text x="${P+STAIR/2}" y="${P+16}" text-anchor="middle" font-size="10" style="fill:var(--outline)">MERDİVEN</text>`;
   // corridor
   const cy = c.rows===2 ? yC : yA+RH;
-  s+=`<line x1="${x0}" y1="${cy}" x2="${W-P}" y2="${cy}" stroke="${line}" stroke-width="1.5"/>`;
-  if(c.rows===2) s+=`<line x1="${x0}" y1="${yB}" x2="${W-P}" y2="${yB}" stroke="${line}" stroke-width="1.5"/>`;
-  s+=`<line x1="${x0+12}" y1="${cy+CW/2}" x2="${W-P-12}" y2="${cy+CW/2}" stroke="${soft}" stroke-width="1.5" stroke-dasharray="6 8"/>
-      <text x="${x0+(W-P-x0)/2}" y="${cy+CW/2-8}" text-anchor="middle" font-size="10" letter-spacing="2" fill="#7a7585">KORİDOR</text>`;
+  s+=`<line x1="${x0}" y1="${cy}" x2="${W-P}" y2="${cy}" style="stroke:${line}" stroke-width="1.5"/>`;
+  if(c.rows===2) s+=`<line x1="${x0}" y1="${yB}" x2="${W-P}" y2="${yB}" style="stroke:${line}" stroke-width="1.5"/>`;
+  s+=`<line x1="${x0+12}" y1="${cy+CW/2}" x2="${W-P-12}" y2="${cy+CW/2}" style="stroke:${soft}" stroke-width="1.5" stroke-dasharray="6 8"/>
+      <text x="${x0+(W-P-x0)/2}" y="${cy+CW/2-8}" text-anchor="middle" font-size="10" letter-spacing="2" style="fill:var(--outline)">KORİDOR</text>`;
   // room dividers + rooms
   list.forEach(r=>{
     const x=x0+r.idx*RW, y=r.row===0?yA:yB;
-    if(r.idx>0) s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+RH}" stroke="${line}" stroke-width="1.5"/>`;
+    if(r.idx>0) s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+RH}" style="stroke:${line}" stroke-width="1.5"/>`;
     const st=state(r);
     s+=`<g class="room${st.cls}" data-no="${r.no}">
-      <rect class="rb" x="${x+7}" y="${y+7}" width="${RW-14}" height="${RH-14}" rx="16" ry="16" fill="${st.fill}"/>
-      <text x="${x+RW/2}" y="${y+RH/2-2}" text-anchor="middle" font-size="22" font-weight="800" fill="${st.ink}">${r.no}</text>
-      <text x="${x+RW/2}" y="${y+RH/2+18}" text-anchor="middle" font-size="11" font-weight="500" fill="${st.ink}" opacity=".8">${esc(st.sub||TYPES[r.type].name)}</text>
+      <rect class="rb" x="${x+7}" y="${y+7}" width="${RW-14}" height="${RH-14}" rx="16" ry="16" style="fill:${st.fill}"/>
+      <text x="${x+RW/2}" y="${y+RH/2-2}" text-anchor="middle" font-size="22" font-weight="800" style="fill:${st.ink}">${r.no}</text>
+      <text x="${x+RW/2}" y="${y+RH/2+18}" text-anchor="middle" font-size="11" font-weight="500" style="fill:${st.ink}" opacity=".8">${esc(st.sub||TYPES[r.type].name)}</text>
     </g>`;
   });
   return s+'</svg>';
 }
 function state(r){
-  if(selected.has(r.no)) return {fill:'#5b3fd1',ink:'#fff',cls:' sel',sub:'Seçili'};
+  if(selected.has(r.no)) return {fill:'var(--primary)',ink:'var(--on-primary)',cls:' sel',sub:'Seçili'};
   const b=busy(r.no,Q.in,Q.out);
-  if(b.length){ const n=b[0].guest.split(' '); return {fill:'#ffd8e7',ink:'#3d0021',cls:' busy',sub:n[0][0]+'. '+n[n.length-1]}; }
+  if(b.length){ const n=b[0].guest.split(' '); return {fill:'var(--tertiary-container)',ink:'var(--on-tertiary-container)',cls:' busy',sub:n[0][0]+'. '+n[n.length-1]}; }
   const dim = Q.type!=='ALL' && Q.type!==r.type;
-  return {fill:'#e5dfec',ink:'#1c1a22',cls:dim?' dim':'',sub:''};
+  return {fill:'var(--surface-c-highest)',ink:'var(--on-surface)',cls:dim?' dim':'',sub:''};
 }
 
 function render(){
@@ -364,7 +388,11 @@ function settingsDlg(){
       <div class="tf"><label>Deluxe ₺</label><input id="rDLX" type="number" value="${c.rates.DLX}"></div>
       <div class="tf"><label>Suit ₺</label><input id="rSTE" type="number" value="${c.rates.STE}"></div>
     </div>
-    <div class="foot"><button class="btn btn-text" data-close>Vazgeç</button><button class="btn btn-filled" id="sSave">Kaydet</button></div>`);
+    <div style="margin-top:20px;font-size:13px;color:var(--on-surface-v)">Tema</div>
+    <div class="seg theme-seg" id="themeSeg">
+      ${[['light','Açık'],['dark','Karanlık'],['auto','Otomatik']].map(([v,l])=>`<button data-theme="${v}" class="${c.theme===v?'on':''}">${l}</button>`).join('')}
+    </div>
+    <div class="foot"><span class="ver">Renstek PMS v${VERSION}</span><button class="btn btn-text" data-close>Vazgeç</button><button class="btn btn-filled" id="sSave">Kaydet</button></div>`);
 }
 
 /* ---------- events ---------- */
@@ -374,8 +402,9 @@ $('#qBoard').addEventListener('change',e=>{ Q.board=e.target.value; render(); })
 function prune(){ [...selected].forEach(no=>{ if(busy(no,Q.in,Q.out).length) selected.delete(no); }); }
 
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-step],#qType button,#floorSeg button,.room,[data-unsel],[data-close],[data-act],#sSave');
+  const t=e.target.closest('#themeSeg button,[data-step],#qType button,#floorSeg button,.room,[data-unsel],[data-close],[data-act],#sSave');
   if(!t) return;
+  if(t.matches('#themeSeg button')){ S.config.theme=t.dataset.theme; applyTheme(); save(); document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b===t)); return; }
   if(t.dataset.step){ const [k,v]=t.dataset.step.split(':'); if(k==='ad') Q.ad=Math.max(1,Math.min(12,Q.ad+ +v)); else Q.ch=Math.max(0,Math.min(8,Q.ch+ +v)); render(); return; }
   if(t.matches('#qType button')){ Q.type=t.dataset.v; render(); return; }
   if(t.matches('#floorSeg button')){ floorView=t.dataset.v; render(); return; }

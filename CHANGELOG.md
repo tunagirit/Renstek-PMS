@@ -1,5 +1,15 @@
 # Değişiklik Günlüğü
 
+## [1.0.1] – 2026-11-17
+
+### Eklenenler
+- Ayarlar menüsünde tema seçimi: Açık, Karanlık, Otomatik (cihaz ayarını izler)
+- Material 3 karanlık renk paleti
+- Ayarlar menüsünde sürüm bilgisi
+
+### Değişenler
+- Kat planı ve oda renkleri temaya göre değişen renk değişkenlerine taşındı
+
 ## [1.0.0] – 2026-11-17
 
 İlk sürüm.
