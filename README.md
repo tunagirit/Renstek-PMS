@@ -22,7 +22,7 @@
 Kurulum gerektirmez. Uygulama tek bir HTML dosyasından oluşur.
 
 ```bash
-git clone https://github.com/<kullanici-adi>/Renstek-PMS.git
+git clone https://github.com/tunagirit/Renstek-PMS.git
 cd Renstek-PMS
 ```
 
