@@ -1,35 +1,79 @@
 # Renstek PMS
 
-**Renstek** tarafından geliştirilen, otelin kat planı üzerinden rezervasyon yapılan yerel bir otel yönetim sistemi (PMS – Property Management System).
+**Renstek** tarafından geliştirilen, büyük oteller için yerel bir otel yönetim sistemi (PMS – Property Management System) ve yönetim paneli. Otelin kat planı üzerinden rezervasyon yapılır; bakım, kat hizmetleri, fiyat ve misafir yönetimi tek bir panelden yürütülür.
 
-| Açık tema | Karanlık tema |
+> Sürüm: **v1.0.2**
+
+| Genel bakış | Kat planı |
 |---|---|
-| ![Renstek PMS açık tema](docs/ekran-goruntusu.png) | ![Renstek PMS karanlık tema](docs/ekran-goruntusu-karanlik.png) |
+| ![Genel bakış](docs/panel.png) | ![Kat planı](docs/kat-plani.png) |
+| **Bakım & arıza** | **Doluluk takvimi** |
+| ![Bakım ve arıza](docs/bakim.png) | ![Doluluk takvimi](docs/takvim.png) |
+| **Kat hizmetleri** | **Karanlık tema** |
+| ![Kat hizmetleri](docs/kat-hizmetleri.png) | ![Karanlık tema](docs/panel-karanlik.png) |
 
-> Sürüm: **v1.0.1**
+## Modüller
 
-## Özellikler
+### Genel bakış (otel sahibi paneli)
+- Bu geceki doluluk, ADR (ortalama oda fiyatı), RevPAR, bu ayın geliri ve oteldeki misafir sayısı
+- Önümüzdeki 14 günün doluluk grafiği, odaların anlık durumu (dolu / müsait / temizlik bekliyor / bakımda)
+- Bugünkü girişler ve çıkışlar (tek dokunuşla giriş / çıkış), kanal bazında gelir, tahsil edilmemiş bakiye
+- Bakımla çakışan rezervasyon uyarısı ve son işlemler kaydı
 
-- **Otel krokisi:** Otelin her katı çizgilerle çizilmiş basit bir plan olarak görünür. Planda merdiven, ortada bir koridor ve koridorun bir ya da iki yanında oda sıraları bulunur.
-- **Durum renkleri:** Odalar seçilen tarih aralığına göre *müsait*, *seçili* veya *dolu* olarak renklenir. Dolu odalarda misafirin adı yazar.
-- **Tarih ve misafir:** Giriş ve çıkış tarihi, yetişkin ve çocuk sayısı seçilir. Gece sayısı otomatik hesaplanır.
-- **Klasik rezervasyon ayarları:** Oda tipi (Standart, Deluxe, Suit) ve pansiyon tipi (Sadece oda, Oda + kahvaltı, Yarım pansiyon, Tam pansiyon, Her şey dahil) seçilebilir.
-- **Çoklu oda rezervasyonu:** Birden fazla oda seçilebilir. Toplam fiyat anında hesaplanır, kapasite yetmezse uyarı verilir.
-- **Rezervasyon işlemleri:** Giriş yap, çıkış yap, iptal et.
-- **Otel ayarları:** Kat sayısı, kattaki sıra sayısı (1 veya 2), sıradaki oda sayısı ve oda fiyatları değiştirilebilir. Uygulama sürümü de bu menüde görünür. Kroki bu ayarlara göre yeniden çizilir.
-- **Tema:** Ayarlar menüsünden *Açık*, *Karanlık* veya *Otomatik* tema seçilebilir. Otomatik tema, cihazın açık/karanlık mod ayarını izler.
-- **Tasarım:** Material 3 Expressive. Tonal renk paleti, büyük yuvarlak şekiller, dokununca şekil değiştiren oda ve butonlar, yaylı animasyonlar ve Roboto Flex yazı tipi kullanılır.
+### Kat planı ve rezervasyon
+- Seçilen katın çizgisel krokisi ve tüm binanın kesit görünümü (her kat, her oda tek bakışta)
+- Tarih, yetişkin / çocuk, oda tipi, pansiyon (RO, BB, HB, FB, AI, UAI) seçimi
+- Özelliğe göre filtre: deniz manzarası, balkon, jakuzi, engelli erişimi, bağlantılı oda, mutfak, evcil hayvan, sigara
+- Birden fazla oda seçimi, alt çubukta canlı toplam; misafir, kanal, kapora ve not ile rezervasyonu tamamlama
 
-## Kurulum ve çalıştırma
+### Doluluk takvimi
+- Odalar × 3 hafta şerit görünümü; onaylı, konaklayan, çıkış yapmış rezervasyonlar ve bakım blokları
+- Boş hücreye dokunarak o tarihten rezervasyon başlatma
 
-Kurulum gerektirmez. Uygulama tek bir HTML dosyasından oluşur.
+### Rezervasyonlar
+- Arama (misafir, oda, telefon, kanal, numara), durum ve tarih filtreleri
+- Giriş / çıkış, iptal, gelmedi (no-show), tahsilat, tarih değiştirme, oda değiştirme, VIP işaretleme
+
+### Odalar
+- 7 oda tipi (Standart, Superior, Deluxe, Aile, Junior suit, Suit, Kral dairesi) ve oda bazında özellikler
+- Oda tipini, özelliklerini ve personel notunu düzenleme; toplu seçimle bakım planlama veya tip değiştirme
+
+### Bakım & arıza
+- Odaları belirli tarihlerde (örn. `601-604`, 27 Kas – 3 Ara) bakıma alıp satışa kapatma
+- Kategori (klima, tesisat, elektrik, mobilya, boya / tadilat, elektronik), öncelik ve teknik sorumlu
+- Planlarken çakışan rezervasyonları ve kayıp geliri gösterir; çakışan misafirleri otomatik olarak uygun boş odalara taşır
+- Devam eden / planlı / tamamlanan iş emirleri ve ilerleme çubuğu; tamamlanan odalar kontrole düşer
+
+### Kat hizmetleri
+- Temiz, kirli, kontrol bekliyor, rahatsız etmeyin durumları; bugün giriş / çıkış işaretleri
+- Kat bazında sorumlu personel atama, temizlenenleri toplu onaylama
+
+### Fiyat & sezon
+- Oda tipi taban fiyatları ve kapasiteleri, sezonlar (yüzde ile), hafta sonu farkı, çocuk oranı, pansiyon fiyatları
+- Önümüzdeki 60 günün fiyat önizlemesi
+
+### Misafirler
+- Konaklama sayısı, geceleme, toplam harcama, son konaklama; VIP işaretleme, uyruğa göre dağılım
+
+### Ayarlar
+- Otel bilgileri, bina yapısı (kat, sıra, sıradaki oda), personel
+- Açık / karanlık / otomatik tema, animasyonlar (açık / cihaza göre / kapalı)
+- Veriyi dışa aktarma (yedek), içe aktarma ve demo veriye sıfırlama
+
+## Tasarım
+
+Material 3 Expressive: tonal renk paleti, büyük yuvarlak şekiller, şekil değiştiren butonlar ve odalar, yaylı (spring) hareketler, sayfa geçişleri, sırayla beliren kartlar, sayarak artan göstergeler, büyüyen grafikler, dalga (ripple) efekti ve şekil değiştiren açılış göstergesi. Simgeler dosyanın içine gömülüdür, internet olmadan da görünür.
+
+## Çalıştırma
+
+Kurulum gerektirmez; uygulama tek bir HTML dosyasıdır.
 
 ```bash
 git clone https://github.com/tunagirit/Renstek-PMS.git
 cd Renstek-PMS
 ```
 
-`index.html` dosyasını tarayıcıda açmanız yeterlidir. İsterseniz yerel bir sunucuyla da çalıştırabilirsiniz:
+`index.html` dosyasını tarayıcıda açın. İsterseniz yerel bir sunucuyla da çalıştırabilirsiniz:
 
 ```bash
 python3 -m http.server 8080
@@ -38,39 +82,31 @@ python3 -m http.server 8080
 
 ## Veri saklama
 
-v1.0'da veriler tarayıcının `localStorage` alanında tutulur. Bu nedenle:
-
-- Veriler yalnızca uygulamanın açıldığı tarayıcıda görünür.
-- Tarayıcı verileri silinirse rezervasyonlar da silinir.
-- İlk açılışta örnek (demo) rezervasyonlar yüklenir.
+Veriler tarayıcının `localStorage` alanında tutulur. İlk açılışta 8 katlı, 192 odalı örnek bir otel ve demo rezervasyonlar yüklenir. **Ayarlar → Veri** bölümünden yedek alıp başka bir bilgisayara aktarabilirsiniz.
 
 ## Oda numaralandırma
 
-Oda numarası `kat × 100 + sıra numarası` şeklinde verilir. Örneğin 2 sıra ve sırada 6 oda olan bir katta:
+Oda numarası `kat × 100 + sıra numarası` şeklindedir. Varsayılan yapıda her katta 2 sıra ve sırada 12 oda vardır:
 
-| Sıra | 1. kat | 2. kat |
+| Sıra | 1. kat | 8. kat |
 |---|---|---|
-| A sırası | 101 – 106 | 201 – 206 |
-| B sırası | 107 – 112 | 207 – 212 |
-
-A sırasının son odası Suit, A sırasının diğer odaları Deluxe, B sırasının odaları Standart olarak tanımlanır.
+| A blok (deniz cephesi) | 101 – 112 | 801 – 812 |
+| B blok | 113 – 124 | 813 – 824 |
 
 ## Yol haritası
 
 - [ ] Yerel veritabanı (SQLite) ile çok kullanıcılı çalışma
-- [ ] Rezervasyon takvimi (doluluk şeridi)
-- [ ] Kat hizmetleri (temiz, kirli, arızalı)
-- [ ] Raporlar: doluluk ve gelir
-- [ ] Misafir kartı ve fatura
+- [ ] Kullanıcı girişi ve rol bazlı yetki (resepsiyon, kat hizmetleri, teknik servis)
+- [ ] Fatura ve folyo yönetimi
+- [ ] Kanal yöneticisi entegrasyonu
+- [ ] PDF / Excel raporları
 
 ## Proje yapısı
 
 ```
 Renstek-PMS/
-├── index.html          # Uygulamanın tamamı (HTML + CSS + JS)
-├── docs/
-│   ├── ekran-goruntusu.png
-│   └── ekran-goruntusu-karanlik.png
+├── index.html      # Uygulamanın tamamı (HTML + CSS + JS)
+├── docs/           # Ekran görüntüleri
 ├── CHANGELOG.md
 └── README.md
 ```

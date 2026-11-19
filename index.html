@@ -8,437 +8,1545 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,300..1000&display=swap" rel="stylesheet">
 <style>
+/* ============ Material 3 tokens ============ */
 :root{
-  /* M3 tonal palette (expressive, violet seed) */
-  --primary:#5b3fd1; --on-primary:#fff;
-  --primary-container:#e7deff; --on-primary-container:#1b0063;
-  --secondary-container:#e4e0f9; --on-secondary-container:#1d1a33;
+  --primary:#5b3fd1; --on-primary:#fff; --primary-container:#e7deff; --on-primary-container:#1b0063;
+  --secondary:#605b71; --secondary-container:#e4e0f9; --on-secondary-container:#1d1a33;
   --tertiary:#a2306a; --tertiary-container:#ffd8e7; --on-tertiary-container:#3d0021;
-  --success-container:#c9f2d5; --on-success-container:#0b3a1c;
-  --surface:#fdf8ff; --surface-c-low:#f7f1fc; --surface-c:#f1ebf8; --surface-c-high:#ebe5f2; --surface-c-highest:#e5dfec;
+  --success:#2e6b45; --success-container:#c9f2d5; --on-success-container:#0b3a1c;
+  --amber:#8b5000; --amber-container:#ffdcbe; --on-amber-container:#2d1600;
+  --error:#ba1a1a; --error-container:#ffdad6; --on-error-container:#410002;
+  --surface:#fdf8ff; --surface-c-lowest:#ffffff; --surface-c-low:#f7f1fc; --surface-c:#f1ebf8; --surface-c-high:#ebe5f2; --surface-c-highest:#e5dfec;
   --on-surface:#1c1a22; --on-surface-v:#494553; --outline:#7a7585; --outline-v:#cbc4d6;
-  --inverse-surface:#322f37; --inverse-on-surface:#f5eff7;
-  --scrim:rgba(28,26,34,.32);
+  --inverse-surface:#322f37; --inverse-on-surface:#f5eff7; --scrim:rgba(28,26,34,.36);
+  --shadow:0 1px 3px rgba(28,26,34,.12),0 4px 12px rgba(28,26,34,.06);
   color-scheme:light;
   --spring:cubic-bezier(.34,1.56,.64,1);
-  --fast-spatial:cubic-bezier(.42,1.67,.21,.9);
+  --spatial:cubic-bezier(.42,1.67,.21,.9);
+  --emph-dec:cubic-bezier(.05,.7,.1,1);
   --emph:cubic-bezier(.2,0,0,1);
+  --rail-w:268px;
 }
 :root[data-theme="dark"]{
-  --primary:#cbbeff; --on-primary:#2e1a87;
-  --primary-container:#4429b8; --on-primary-container:#e7deff;
-  --secondary-container:#48455d; --on-secondary-container:#e4e0f9;
+  --primary:#cbbeff; --on-primary:#2e1a87; --primary-container:#4429b8; --on-primary-container:#e7deff;
+  --secondary:#c9c3dc; --secondary-container:#48455d; --on-secondary-container:#e4e0f9;
   --tertiary:#ffafd0; --tertiary-container:#831850; --on-tertiary-container:#ffd8e7;
-  --success-container:#1d5130; --on-success-container:#c9f2d5;
-  --surface:#141218; --surface-c-low:#1d1b20; --surface-c:#211f26; --surface-c-high:#2b2930; --surface-c-highest:#36343b;
+  --success:#8fd8a8; --success-container:#1d5130; --on-success-container:#c9f2d5;
+  --amber:#ffb870; --amber-container:#6a3c00; --on-amber-container:#ffdcbe;
+  --error:#ffb4ab; --error-container:#93000a; --on-error-container:#ffdad6;
+  --surface:#141218; --surface-c-lowest:#0f0d13; --surface-c-low:#1d1b20; --surface-c:#211f26; --surface-c-high:#2b2930; --surface-c-highest:#36343b;
   --on-surface:#e6e0e9; --on-surface-v:#cac4d0; --outline:#938f99; --outline-v:#49454f;
-  --inverse-surface:#e6e0e9; --inverse-on-surface:#322f37;
-  --scrim:rgba(0,0,0,.5);
+  --inverse-surface:#e6e0e9; --inverse-on-surface:#322f37; --scrim:rgba(0,0,0,.55);
+  --shadow:0 1px 3px rgba(0,0,0,.5),0 4px 12px rgba(0,0,0,.3);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body,.card,.floor,.tf,.stepper,.si,.empty,.total,.dlg,.rc,.btn,.seg button{transition-property:background-color,color,border-color,border-radius,box-shadow;transition-duration:.3s}
-html,body{margin:0}
-body{font-family:'Roboto Flex',system-ui,sans-serif;background:var(--surface);color:var(--on-surface);font-size:15px;min-height:100vh}
-button,input,select{font:inherit;color:inherit}
-svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+html,body{margin:0;height:100%}
+body{font-family:'Roboto Flex',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--surface);color:var(--on-surface);font-size:14.5px;line-height:1.45;
+  transition:background-color .35s,color .35s}
+button,input,select,textarea{font:inherit;color:inherit}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;display:inline-block;vertical-align:middle}
+.ic.s{width:18px;height:18px}.ic.xs{width:15px;height:15px}.ic.l{width:28px;height:28px}
+.muted{color:var(--on-surface-v)}
+.num{font-variant-numeric:tabular-nums}
 
-/* top app bar */
-.bar{display:flex;align-items:center;gap:14px;padding:18px 28px}
-.logo{width:48px;height:48px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;
-  border-radius:16px;transition:border-radius .6s var(--spring),transform .6s var(--spring)}
-.logo:hover{border-radius:50%;transform:rotate(-12deg)}
-.bar h1{margin:0;font-size:24px;font-weight:800;font-variation-settings:"wdth" 118;letter-spacing:-.01em}
-.bar h1 span{color:var(--primary)}
-.bar .sub{font-size:13px;color:var(--on-surface-v)}
+/* ============ app shell ============ */
+.app{display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);min-height:100vh;transition:grid-template-columns .5s var(--emph)}
+.app.collapsed{--rail-w:96px}
+.rail{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:16px 12px;gap:4px;overflow-y:auto;overflow-x:hidden;background:var(--surface-c-low)}
+.rail-top{display:flex;align-items:center;gap:12px;padding:4px 10px 18px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{width:48px;height:48px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;border-radius:16px;flex:none;
+  transition:border-radius .6s var(--spring),transform .6s var(--spring)}
+.brand:hover .logo{border-radius:50%;transform:rotate(-12deg) scale(1.04)}
+.brand b{display:block;font-size:19px;font-weight:850;font-variation-settings:"wdth" 118;white-space:nowrap;letter-spacing:-.01em}
+.brand b span{color:var(--primary)}
+.brand small{display:block;font-size:11.5px;color:var(--on-surface-v);white-space:nowrap}
+.rail .fab-rail{margin:0 4px 14px;height:56px;border-radius:16px;justify-content:flex-start;padding:0 18px;gap:12px;background:var(--primary-container);color:var(--on-primary-container);font-weight:650;white-space:nowrap;overflow:hidden}
+.collapsed .rail .fab-rail{width:56px;padding:0;justify-content:center;margin-left:8px}
+.navi{position:relative;display:flex;align-items:center;gap:14px;height:52px;padding:0 18px;border-radius:999px;border:0;background:transparent;cursor:pointer;
+  color:var(--on-surface-v);font-weight:600;font-size:14.5px;text-align:left;white-space:nowrap;overflow:hidden;isolation:isolate}
+.navi::before{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--secondary-container);transform:scaleX(.3);opacity:0;z-index:-1;
+  transition:transform .55s var(--spring),opacity .25s}
+.navi:hover{color:var(--on-surface)}
+.navi:hover::after{content:"";position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:.06;z-index:-1}
+.navi.on{color:var(--on-secondary-container)}
+.navi.on::before{transform:none;opacity:1}
+.navi .badge-n{margin-left:auto;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--error);color:#fff;font-size:11.5px;font-weight:700;display:grid;place-items:center}
+:root[data-theme="dark"] .navi .badge-n{color:#410002}
+.navi .lbl{transition:opacity .3s}
+.collapsed .navi{width:56px;padding:0;justify-content:center;margin-left:8px}
+.collapsed .navi .lbl,.collapsed .navi .badge-n,.collapsed .brand-t,.collapsed .fab-rail .lbl,.collapsed .rail-foot{display:none}
+.collapsed .rail-top{padding-left:12px}
+.rail-sep{height:1px;background:var(--outline-v);margin:10px 18px;opacity:.7}
+.rail-foot{margin-top:auto;padding:14px 18px 4px;font-size:12px;color:var(--on-surface-v)}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:14px 28px;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(12px)}
+.topbar h1{margin:0;font-size:28px;font-weight:850;font-variation-settings:"wdth" 120;letter-spacing:-.015em;line-height:1.1}
+.topbar .sub{font-size:13px;color:var(--on-surface-v)}
+.search{display:flex;align-items:center;gap:10px;height:52px;min-width:min(360px,40vw);padding:0 8px 0 18px;border-radius:999px;background:var(--surface-c-high);
+  transition:background .2s,border-radius .4s var(--spring),box-shadow .2s}
+.search:focus-within{background:var(--surface-c-highest);border-radius:20px;box-shadow:var(--shadow)}
+.search input{border:0;outline:0;background:transparent;flex:1;min-width:0;font-size:15px}
 .spacer{flex:1}
+.page{padding:4px 28px 40px;min-width:0}
+.page.enter{animation:pageIn .55s var(--emph-dec) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.enter .stg{animation:rise .6s var(--emph-dec) both;animation-delay:calc(var(--i,0) * 45ms + 60ms)}
+@keyframes rise{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
 
-/* buttons */
-.btn{border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;
-  border-radius:999px;font-weight:600;font-size:15px;transition:border-radius .4s var(--fast-spatial),background .2s,box-shadow .2s}
-.btn:active{border-radius:14px}
+@media (max-width:900px){
+  .app,.app.collapsed{grid-template-columns:1fr}
+  .rail{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;z-index:40;padding:8px;overflow-x:auto;gap:2px;border-top:1px solid var(--outline-v)}
+  .rail-top,.rail-sep,.rail-foot,.fab-rail{display:none!important}
+  .navi{flex-direction:column;height:60px;min-width:72px;padding:6px 8px;gap:2px;font-size:11px;justify-content:center;border-radius:18px}
+  .navi .badge-n{position:absolute;top:4px;right:10px;margin:0}
+  .main{padding-bottom:84px}
+  .topbar{padding:12px 16px;flex-wrap:wrap}.search{min-width:0;flex:1 1 100%;order:3}
+  .page{padding:4px 16px 32px}
+}
+
+/* ============ components ============ */
+.btn{position:relative;overflow:hidden;isolation:isolate;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 22px;
+  border-radius:999px;font-weight:620;font-size:14.5px;white-space:nowrap;
+  transition:border-radius .45s var(--spatial),background-color .2s,box-shadow .2s,transform .45s var(--spring)}
+.btn:active{border-radius:12px}
+.btn::after{content:"";position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .2s;z-index:-1}
+.btn:hover::after{opacity:.08}
 .btn-filled{background:var(--primary);color:var(--on-primary)}
-.btn-filled:hover{box-shadow:0 2px 8px rgba(91,63,209,.35)}
+.btn-filled:hover{box-shadow:var(--shadow)}
 .btn-tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
-.btn-text{background:transparent;color:var(--primary);padding:0 16px}
-.btn-text:hover{background:color-mix(in srgb,var(--primary) 10%,transparent)}
-.btn-danger{background:var(--tertiary-container);color:var(--on-tertiary-container)}
-.btn-icon{width:48px;padding:0;background:var(--surface-c-high);color:var(--on-surface-v)}
-.btn-icon:hover{background:var(--surface-c-highest)}
-.btn[disabled]{opacity:.38;pointer-events:none}
-.fab{height:72px;width:100%;border-radius:24px;font-size:18px;font-weight:700;font-variation-settings:"wdth" 112}
-.fab:active{border-radius:40px}
+.btn-outline{background:transparent;color:var(--on-surface-v);box-shadow:inset 0 0 0 1px var(--outline)}
+.btn-text{background:transparent;color:var(--primary);padding:0 14px}
+.btn-err{background:var(--error-container);color:var(--on-error-container)}
+.btn-ok{background:var(--success-container);color:var(--on-success-container)}
+.btn-amber{background:var(--amber-container);color:var(--on-amber-container)}
+.btn-sm{height:36px;padding:0 14px;font-size:13.5px}
+.btn-lg{height:56px;padding:0 28px;font-size:16px;border-radius:20px}
+.btn-lg:active{border-radius:32px}
+.ibtn{position:relative;overflow:hidden;width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:var(--on-surface-v);cursor:pointer;display:inline-grid;place-items:center;flex:none;
+  transition:border-radius .4s var(--spring),background .2s}
+.ibtn:hover{background:var(--surface-c-high)}
+.ibtn:active{border-radius:12px}
+.ibtn.tonal{background:var(--surface-c-high)}
+.btn[disabled],.ibtn[disabled]{opacity:.38;pointer-events:none}
+.rip{position:absolute;border-radius:50%;background:currentColor;opacity:.18;transform:scale(0);pointer-events:none;animation:rip .6s var(--emph-dec) forwards;z-index:0}
+@keyframes rip{to{transform:scale(1);opacity:0}}
 
-/* layout */
-.wrap{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;padding:0 28px 32px;max-width:1500px;margin:0 auto}
-@media (max-width:1100px){.wrap{grid-template-columns:1fr}}
-.col{display:flex;flex-direction:column;gap:20px;min-width:0}
-.card{background:var(--surface-c-low);border-radius:32px;padding:24px}
-.title{margin:0 0 18px;font-size:28px;font-weight:800;font-variation-settings:"wdth" 120;letter-spacing:-.01em;line-height:1.1}
-.overline{font-size:12px;font-weight:600;color:var(--primary);letter-spacing:.04em;margin-bottom:4px}
+.card{background:var(--surface-c-low);border-radius:28px;padding:22px;position:relative;min-width:0}
+.card.hi{background:var(--surface-c)}
+.card.flat{background:var(--surface)}
+.card h3,.h3{margin:0 0 14px;font-size:18px;font-weight:750;font-variation-settings:"wdth" 110;display:flex;align-items:center;gap:10px}
+.card h3 .act{margin-left:auto}
+.overline{font-size:12px;font-weight:650;color:var(--primary);letter-spacing:.03em}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1280px){.g6{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.g2,.g3,.g4,.g6{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.g2,.g3{grid-template-columns:1fr}}
+.span2{grid-column:span 2}.span3{grid-column:span 3}.spanall{grid-column:1/-1}
 
-/* fields */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-@media (max-width:760px){.grid{grid-template-columns:1fr 1fr}}
-.tf{position:relative;background:var(--surface-c-highest);border-radius:16px 16px 4px 4px;border-bottom:2px solid var(--outline);
-  padding:22px 16px 8px;transition:border-color .2s,border-radius .4s var(--spring)}
-.tf:focus-within{border-color:var(--primary);border-radius:20px 20px 4px 4px}
-.tf label{position:absolute;top:8px;left:16px;font-size:12px;color:var(--on-surface-v)}
+.tf{position:relative;background:var(--surface-c-highest);border-radius:16px 16px 4px 4px;box-shadow:inset 0 -1px 0 var(--outline);padding:22px 14px 7px;
+  transition:box-shadow .2s,border-radius .4s var(--spring);min-width:0}
+.tf:focus-within{box-shadow:inset 0 -2px 0 var(--primary);border-radius:20px 20px 4px 4px}
+.tf label{position:absolute;top:7px;left:14px;font-size:12px;color:var(--on-surface-v);pointer-events:none}
 .tf:focus-within label{color:var(--primary)}
-.tf input,.tf select{border:0;background:transparent;outline:none;width:100%;font-size:16px;padding:2px 0}
-.tf select{appearance:none;cursor:pointer}
-.stepper{display:flex;align-items:center;justify-content:space-between;background:var(--surface-c-highest);border-radius:16px;padding:6px;height:62px}
-.stepper .lbl{font-size:12px;color:var(--on-surface-v);padding-left:10px;line-height:1.2}
-.stepper .lbl b{display:block;font-size:20px;color:var(--on-surface);font-weight:700}
-.stepper .bt{display:flex;gap:6px}
-.stepper button{width:40px;height:40px;border:0;border-radius:50%;background:var(--surface-c-low);cursor:pointer;font-size:20px;color:var(--primary);
+.tf input,.tf select,.tf textarea{border:0;background:transparent;outline:none;width:100%;font-size:15px;padding:2px 0}
+.tf select{appearance:none;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 9px) 55%,calc(100% - 4px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:20px}
+.tf select option{background:var(--surface-c-high);color:var(--on-surface)}
+.tf textarea{resize:vertical;min-height:52px}
+.stepper{display:flex;align-items:center;justify-content:space-between;background:var(--surface-c-highest);border-radius:16px;padding:6px;height:60px}
+.stepper .l{font-size:12px;color:var(--on-surface-v);padding-left:10px;line-height:1.15}
+.stepper .l b{display:block;font-size:19px;color:var(--on-surface);font-weight:700}
+.stepper button{width:38px;height:38px;border:0;border-radius:50%;background:var(--surface-c-low);cursor:pointer;font-size:19px;color:var(--primary);margin-left:4px;
   transition:border-radius .4s var(--spring),transform .4s var(--spring)}
 .stepper button:active{border-radius:12px;transform:scale(.9)}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
-.nights{height:40px;padding:0 16px;border-radius:12px;background:var(--tertiary-container);color:var(--on-tertiary-container);display:inline-flex;align-items:center;font-weight:700}
 
-/* segmented / chips */
-.seg{display:inline-flex;border:1px solid var(--outline);border-radius:999px;overflow:hidden;height:40px}
-.seg button{border:0;background:transparent;padding:0 16px;cursor:pointer;font-weight:500;font-size:14px;display:flex;align-items:center;gap:6px;
-  border-right:1px solid var(--outline);transition:background .25s}
-.seg button:last-child{border-right:0}
+.seg{display:inline-flex;border-radius:999px;box-shadow:inset 0 0 0 1px var(--outline);overflow:hidden;height:40px;max-width:100%;overflow-x:auto;flex:none}
+.seg button{border:0;background:transparent;padding:0 15px;cursor:pointer;font-weight:550;font-size:13.5px;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  box-shadow:inset -1px 0 0 var(--outline);transition:background .3s}
+.seg button:last-child{box-shadow:none}
 .seg button.on{background:var(--secondary-container);color:var(--on-secondary-container)}
-.seg button.on::before{content:"✓";font-weight:700}
+.seg button.on::before{content:"";width:14px;height:14px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+  animation:popIn .4s var(--spring)}
+@keyframes popIn{from{transform:scale(0)}to{transform:none}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;overflow:hidden;height:34px;padding:0 13px;border-radius:10px;border:0;box-shadow:inset 0 0 0 1px var(--outline-v);background:transparent;cursor:pointer;
+  font-weight:550;font-size:13px;color:var(--on-surface-v);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:all .4s var(--spring)}
+.chip:hover{box-shadow:inset 0 0 0 1px var(--outline);color:var(--on-surface)}
+.chip.on{background:var(--secondary-container);color:var(--on-secondary-container);box-shadow:none;border-radius:999px}
+.chip.static{cursor:default}
+.tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:650;white-space:nowrap}
+.t-pri{background:var(--primary-container);color:var(--on-primary-container)}
+.t-sec{background:var(--secondary-container);color:var(--on-secondary-container)}
+.t-ter{background:var(--tertiary-container);color:var(--on-tertiary-container)}
+.t-ok{background:var(--success-container);color:var(--on-success-container)}
+.t-amb{background:var(--amber-container);color:var(--on-amber-container)}
+.t-err{background:var(--error-container);color:var(--on-error-container)}
+.t-mute{background:var(--surface-c-highest);color:var(--on-surface-v)}
+.switch{position:relative;width:52px;height:32px;border-radius:999px;background:var(--surface-c-highest);box-shadow:inset 0 0 0 2px var(--outline);border:0;cursor:pointer;flex:none;transition:background .3s,box-shadow .3s}
+.switch::after{content:"";position:absolute;top:8px;left:8px;width:16px;height:16px;border-radius:50%;background:var(--outline);transition:all .45s var(--spring)}
+.switch.on{background:var(--primary);box-shadow:none}
+.switch.on::after{left:24px;top:4px;width:24px;height:24px;background:var(--on-primary)}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
 
-/* plan */
-.plan-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-.plan-head .title{margin:0}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--on-surface-v);margin:14px 0 6px}
-.legend i{display:inline-block;width:14px;height:14px;border-radius:5px;vertical-align:-2px;margin-right:6px}
-.floor{background:var(--surface);border-radius:28px;padding:16px 18px 18px;margin-top:14px}
-.floor h3{margin:0 0 8px;font-size:17px;font-weight:700;display:flex;align-items:center;gap:10px}
-.floor h3 .pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--success-container);color:var(--on-success-container)}
+/* KPI */
+.kpi{border-radius:28px;padding:18px 20px;background:var(--surface-c-low);position:relative;overflow:hidden;min-width:0}
+.kpi .k{font-size:13px;color:var(--on-surface-v);display:flex;align-items:center;gap:8px;font-weight:550}
+.kpi .k .ic{width:18px;height:18px}
+.kpi .v{font-size:clamp(24px,2.2vw,34px);font-weight:880;font-variation-settings:"wdth" 120;line-height:1.05;margin-top:10px;letter-spacing:-.02em;white-space:nowrap}
+.kpi .d{font-size:12.5px;color:var(--on-surface-v);margin-top:4px}
+.kpi.hero{background:var(--primary);color:var(--on-primary);border-radius:28px 56px 28px 28px}
+.kpi.hero .k,.kpi.hero .d{color:inherit;opacity:.82}
+.kpi.ter{background:var(--tertiary-container);color:var(--on-tertiary-container)}
+.kpi.ter .k,.kpi.ter .d{color:inherit;opacity:.8}
+.kpi .blob{position:absolute;right:-26px;bottom:-30px;width:110px;height:110px;opacity:.14;background:currentColor;
+  border-radius:42% 58% 63% 37% / 41% 44% 56% 59%;animation:blob 9s ease-in-out infinite}
+@keyframes blob{50%{border-radius:61% 39% 35% 65% / 57% 62% 38% 43%;transform:rotate(30deg)}}
+
+/* charts */
+.bars{display:flex;align-items:flex-end;gap:6px;height:180px;padding-top:10px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;height:100%;justify-content:flex-end}
+.bar .col{width:100%;max-width:34px;border-radius:12px 12px 6px 6px;background:var(--primary);transform-origin:bottom;position:relative;transition:height .6s var(--emph)}
+.bar .col.we{background:var(--tertiary)}
+.bar .col:hover{filter:brightness(1.1)}
+.enter .bar .col{animation:grow .9s var(--spring) both;animation-delay:calc(var(--i) * 35ms + 200ms)}
+@keyframes grow{from{transform:scaleY(0)}to{transform:none}}
+.bar small{font-size:11px;color:var(--on-surface-v);white-space:nowrap}
+.bar .pv{font-size:11px;font-weight:700;color:var(--on-surface-v)}
+.hbar{display:grid;grid-template-columns:110px 1fr 90px;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+.hbar .tr{height:14px;border-radius:999px;background:var(--surface-c-highest);overflow:hidden}
+.hbar .fl{height:100%;border-radius:999px;background:var(--primary);transform-origin:left}
+.enter .hbar .fl{animation:growX 1s var(--emph-dec) both;animation-delay:calc(var(--i) * 70ms + 250ms)}
+@keyframes growX{from{transform:scaleX(0)}to{transform:none}}
+.donut circle{transition:stroke-dasharray .9s var(--emph)}
+.enter .donut .seg-c{animation:donut 1.2s var(--emph-dec) both;animation-delay:calc(var(--i) * 90ms + 200ms)}
+@keyframes donut{from{stroke-dasharray:0 999}}
+.legend{display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:8px;vertical-align:-1px}
+.lg-row{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--on-surface-v)}
+.lg-row i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px}
+
+/* lists */
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:10px 6px;border-radius:16px;cursor:pointer;transition:background .2s}
+.li:hover{background:var(--surface-c-high)}
+.li + .li{border-top:1px solid color-mix(in srgb,var(--outline-v) 55%,transparent)}
+.li .av{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;flex:none;font-weight:750;font-size:14px}
+.li .t{flex:1;min-width:0}
+.li .t b{display:block;font-weight:620;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .t span{font-size:12.5px;color:var(--on-surface-v);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .t span.tag{display:inline-flex;vertical-align:1px;margin-left:4px}
+.empty{padding:26px 16px;border-radius:22px;background:var(--surface);text-align:center;color:var(--on-surface-v);font-size:14px}
+.empty .bl{width:56px;height:56px;margin:0 auto 10px;background:var(--primary-container);color:var(--on-primary-container);display:grid;place-items:center;
+  border-radius:42% 58% 63% 37% / 41% 44% 56% 59%;animation:blob 7s ease-in-out infinite}
+
+/* table */
+.tbl-wrap{overflow:auto;border-radius:22px;background:var(--surface)}
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px}
+.tbl th{position:sticky;top:0;background:var(--surface-c);text-align:left;font-weight:650;font-size:12.5px;color:var(--on-surface-v);padding:12px 12px;white-space:nowrap;z-index:1}
+.tbl td{padding:10px 12px;border-top:1px solid color-mix(in srgb,var(--outline-v) 55%,transparent);white-space:nowrap;vertical-align:middle}
+.tbl tr.click{cursor:pointer;transition:background .15s}
+.tbl tr.click:hover td{background:var(--surface-c-low)}
+.tbl .r{text-align:right}
+.cb{width:20px;height:20px;accent-color:var(--primary);cursor:pointer}
+
+/* floor plan */
+.bldg svg{width:100%;height:auto;display:block}
+.bldg .fl-row{cursor:pointer}
+.bldg .fl-row rect.hit{fill:transparent;transition:fill .2s}
+.bldg .fl-row:hover rect.hit{fill:color-mix(in srgb,var(--primary) 10%,transparent)}
+.bldg .fl-row.on rect.hit{fill:color-mix(in srgb,var(--primary) 16%,transparent)}
+.floor{background:var(--surface);border-radius:26px;padding:14px 16px 16px}
 .floor .sc{overflow-x:auto}
-.floor svg{display:block;width:100%;min-width:640px;height:auto}
+.floor svg.plan{display:block;width:100%;min-width:900px;height:auto}
 .room{cursor:pointer}
 .room .rb{transition:fill .25s,rx .5s var(--spring),ry .5s var(--spring)}
-.room:hover .rb{rx:26px;ry:26px}
-.room.sel .rb{rx:40px;ry:40px}
-.room.busy{cursor:pointer}
-.room.dim{opacity:.3;cursor:not-allowed}
-.room text{pointer-events:none}
-
-/* side */
-.sel{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.si{display:flex;align-items:center;gap:12px;padding:8px 8px 8px 8px;border-radius:20px;background:var(--surface);animation:pop .5s var(--spring)}
-@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
-.si .no{width:52px;height:52px;border-radius:16px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:800;font-size:17px}
-.si .t{flex:1}.si .t b{display:block}.si .t span{font-size:13px;color:var(--on-surface-v)}
-.si .x{width:40px;height:40px;border:0;border-radius:50%;background:transparent;cursor:pointer;color:var(--on-surface-v)}
-.si .x:hover{background:var(--surface-c-high)}
-.empty{padding:26px 18px;border-radius:24px;background:var(--surface);text-align:center;color:var(--on-surface-v);font-size:14px;line-height:1.5}
-.empty .blob{width:56px;height:56px;margin:0 auto 10px;background:var(--primary-container);color:var(--primary);display:grid;place-items:center;
-  border-radius:42% 58% 63% 37% / 41% 44% 56% 59%}
-.stack{display:flex;flex-direction:column;gap:12px}
-.total{margin:18px 0;padding:18px 20px;border-radius:24px;background:var(--primary-container);color:var(--on-primary-container)}
-.total .l{display:flex;justify-content:space-between;font-size:14px;padding:3px 0;opacity:.85}
+.room:hover .rb{rx:24px;ry:24px}
+.room.sel .rb{rx:38px;ry:38px}
+.room.dim{opacity:.25;cursor:not-allowed}
+.room text,.room path,.room g{pointer-events:none}
+.enter .room{animation:roomIn .55s var(--spring) both;animation-delay:calc(var(--i) * 18ms + 120ms);transform-box:fill-box;transform-origin:center}
+@keyframes roomIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.side{position:sticky;top:96px}
+.sel-it{display:flex;align-items:center;gap:12px;padding:8px;border-radius:20px;background:var(--surface);animation:popIt .5s var(--spring)}
+@keyframes popIt{from{transform:scale(.8);opacity:0}}
+.sel-it .no{width:50px;height:50px;border-radius:16px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:800;font-size:16px;flex:none}
+.sel-it .t{flex:1;min-width:0}.sel-it .t b{display:block}.sel-it .t span{font-size:12.5px;color:var(--on-surface-v)}
+.total{padding:18px 20px;border-radius:24px;background:var(--primary-container);color:var(--on-primary-container)}
+.total .l{display:flex;justify-content:space-between;font-size:13.5px;padding:2px 0;opacity:.86;gap:10px}
 .total .big{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px}
-.total .big b{font-size:34px;font-weight:900;font-variation-settings:"wdth" 120}
-.warn{font-size:13px;color:var(--tertiary);margin:-6px 4px 12px;display:none}
+.total .big b{font-size:32px;font-weight:900;font-variation-settings:"wdth" 120}
+.warnl{font-size:13px;color:var(--error);padding:0 4px}
+
+/* booking bottom bar */
+.bsheet{position:sticky;bottom:16px;z-index:25;margin-top:16px;display:flex;align-items:center;gap:14px;padding:12px 12px 12px 16px;border-radius:28px;
+  background:var(--inverse-surface);color:var(--inverse-on-surface);box-shadow:0 8px 28px rgba(0,0,0,.25);transform:translateY(140%);opacity:0;pointer-events:none;
+  transition:transform .6s var(--spring),opacity .3s}
+.bsheet.show{transform:none;opacity:1;pointer-events:auto}
+.bsheet .btn-filled{background:var(--primary-container);color:var(--on-primary-container)}
+.sel-chip{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 6px 0 14px;border-radius:14px;background:color-mix(in srgb,var(--inverse-on-surface) 14%,transparent);font-weight:800;white-space:nowrap;animation:popIt .5s var(--spring)}
+.sel-chip em{font-style:normal;font-weight:500;font-size:12px;opacity:.75}
+.sel-chip button{border:0;background:transparent;color:inherit;width:28px;height:28px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+.sel-chip button:hover{background:color-mix(in srgb,var(--inverse-on-surface) 18%,transparent)}
+@media (max-width:900px){.bsheet{bottom:92px;flex-wrap:wrap}}
+/* tape chart */
+.tape-wrap{overflow:auto;border-radius:22px;background:var(--surface);max-height:calc(100vh - 230px);min-height:300px}
+.tape{display:grid;position:relative;min-width:max-content}
+.tape .hc{position:sticky;top:0;z-index:3;background:var(--surface-c);height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:var(--on-surface-v)}
+.tape .hc b{font-size:15px;color:var(--on-surface)}
+.tape .hc.we b{color:var(--tertiary)}
+.tape .hc.td{background:var(--primary-container);color:var(--on-primary-container)}
+.tape .hc.td b{color:inherit}
+.tape .cn{position:sticky;left:0;top:0;z-index:5;background:var(--surface-c);display:flex;align-items:center;padding-left:16px;font-size:12.5px;color:var(--on-surface-v);font-weight:600}
+.tape .rl{position:sticky;left:0;z-index:2;background:var(--surface);height:42px;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:13px;cursor:pointer;
+  box-shadow:inset -1px 0 0 var(--outline-v)}
+.tape .rl b{font-weight:750}.tape .rl em{font-style:normal;color:var(--on-surface-v);font-size:11.5px}
+.tape .fh{position:sticky;left:0;grid-column:1/-1;height:32px;display:flex;align-items:center;padding-left:16px;background:var(--surface-c-low);font-size:12.5px;font-weight:700;color:var(--primary);z-index:2}
+.tape .cl{height:42px;border-bottom:1px solid color-mix(in srgb,var(--outline-v) 45%,transparent);border-right:1px solid color-mix(in srgb,var(--outline-v) 30%,transparent);cursor:pointer}
+.tape .cl:hover{background:color-mix(in srgb,var(--primary) 7%,transparent)}
+.tape .cl.tdc{background:color-mix(in srgb,var(--primary) 5%,transparent)}
+.tape .bar-r{position:absolute;height:30px;border-radius:12px;padding:0 10px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;cursor:pointer;z-index:1;
+  transition:transform .35s var(--spring),border-radius .35s var(--spring),box-shadow .2s}
+.tape .bar-r:hover{transform:translateY(-2px);border-radius:16px;box-shadow:var(--shadow);z-index:2}
+.enter .tape .bar-r{animation:barIn .6s var(--emph-dec) both;animation-delay:calc(var(--i) * 6ms + 150ms)}
+@keyframes barIn{from{opacity:0;transform:scaleX(.4)}}
+.b-conf{background:var(--secondary-container);color:var(--on-secondary-container)}
+.b-in{background:var(--primary);color:var(--on-primary)}
+.b-out{background:var(--surface-c-highest);color:var(--on-surface-v)}
+.b-mt{background:repeating-linear-gradient(-45deg,var(--amber-container) 0 8px,color-mix(in srgb,var(--amber-container) 70%,var(--surface)) 8px 16px);color:var(--on-amber-container)}
+
+/* housekeeping */
+.hk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.hk{position:relative;overflow:hidden;border:0;text-align:left;cursor:pointer;border-radius:20px;padding:12px 12px 10px;min-height:96px;display:flex;flex-direction:column;gap:2px;
+  transition:border-radius .45s var(--spring),transform .45s var(--spring),background .3s}
+.hk:hover{border-radius:30px;transform:translateY(-2px)}
+.hk b{font-size:20px;font-weight:850;font-variation-settings:"wdth" 115}
+.hk span{font-size:12px;opacity:.85}
+.hk .mini{position:absolute;right:10px;top:10px;display:flex;gap:4px}
+.hk-clean{background:var(--success-container);color:var(--on-success-container)}
+.hk-dirty{background:var(--amber-container);color:var(--on-amber-container)}
+.hk-inspect{background:var(--secondary-container);color:var(--on-secondary-container)}
+.hk-dnd{background:var(--surface-c-highest);color:var(--on-surface-v)}
+.hk-mt{background:var(--error-container);color:var(--on-error-container)}
+
+/* maintenance cards */
+.mt-card{border-radius:24px;padding:16px 18px;background:var(--surface);display:flex;gap:14px;align-items:flex-start;cursor:pointer;
+  transition:border-radius .45s var(--spring),box-shadow .2s,transform .45s var(--spring)}
+.mt-card:hover{border-radius:32px;box-shadow:var(--shadow);transform:translateY(-1px)}
+.mt-ic{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;flex:none}
+.mt-card .t{flex:1;min-width:0}
+.mt-card .t b{font-size:15.5px}
+.prog{height:8px;border-radius:999px;background:var(--surface-c-highest);overflow:hidden;margin-top:10px}
+.prog i{display:block;height:100%;border-radius:999px;background:var(--amber)}
 
 /* dialog */
-.scrim{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
-.scrim.open{display:flex}
-.dlg{width:min(480px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--surface-c-high);border-radius:28px;padding:24px;animation:dlg .5s var(--spring)}
-@keyframes dlg{from{transform:scale(.85);opacity:0;border-radius:80px}to{transform:none;opacity:1}}
-.dlg h2{margin:0 0 4px;font-size:26px;font-weight:800;font-variation-settings:"wdth" 118}
-.dlg .muted{color:var(--on-surface-v);font-size:14px}
-.rc{background:var(--surface);border-radius:20px;padding:16px;margin-top:14px}
-.rc b{font-size:17px}
-.rc .m{font-size:14px;color:var(--on-surface-v);margin-top:4px;line-height:1.5}
-.tag{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;float:right}
-.tag.c{background:var(--secondary-container);color:var(--on-secondary-container)}
-.tag.h{background:var(--tertiary-container);color:var(--on-tertiary-container)}
-.acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.acts .btn{height:40px;font-size:14px;padding:0 18px}
-.foot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
-.theme-seg{display:flex;width:100%;margin-top:10px}.theme-seg button{flex:1;justify-content:center}
-.ver{margin-right:auto;align-self:center;font-size:13px;color:var(--on-surface-v)}
-.sgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.scrim{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;padding:20px;z-index:60}
+.scrim.open{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+.dlg{width:min(560px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--surface-c-high);border-radius:28px;padding:24px;animation:dlg .55s var(--spring)}
+.dlg.wide{width:min(820px,100%)}
+@keyframes dlg{from{transform:translateY(30px) scale(.88);opacity:0;border-radius:72px}to{transform:none;opacity:1}}
+.dlg h2{margin:0;font-size:25px;font-weight:850;font-variation-settings:"wdth" 118;letter-spacing:-.01em}
+.dlg .dh{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+.dlg .dh .big{width:64px;height:64px;border-radius:22px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:850;font-size:20px;flex:none}
+.dfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;flex-wrap:wrap}
+.sec{background:var(--surface);border-radius:20px;padding:14px 16px;margin-top:12px}
+.sec .st{font-size:12.5px;font-weight:650;color:var(--on-surface-v);margin-bottom:8px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:13.5px}
+.kv dt{color:var(--on-surface-v)}.kv dd{margin:0}
 
-.snack{position:fixed;left:50%;bottom:24px;transform:translate(-50%,200%);background:var(--inverse-surface);color:var(--inverse-on-surface);padding:14px 22px;border-radius:16px;
-  z-index:60;transition:transform .5s var(--spring);font-size:14px;max-width:90vw}
+.snack{position:fixed;left:50%;bottom:24px;transform:translate(-50%,220%);background:var(--inverse-surface);color:var(--inverse-on-surface);padding:14px 20px;border-radius:16px;
+  z-index:70;transition:transform .55s var(--spring);font-size:14px;max-width:min(560px,92vw);display:flex;gap:10px;align-items:center;box-shadow:var(--shadow)}
 .snack.show{transform:translate(-50%,0)}
+@media (max-width:900px){.snack{bottom:96px}}
+
+/* splash: M3 expressive loading indicator */
+.splash{position:fixed;inset:0;z-index:100;background:var(--surface);display:grid;place-items:center;transition:opacity .5s var(--emph),visibility .5s}
+.splash.gone{opacity:0;visibility:hidden}
+.splash .in{display:flex;flex-direction:column;align-items:center;gap:22px}
+.loader{width:64px;height:64px;background:var(--primary);animation:morph 1.6s var(--emph) infinite}
+@keyframes morph{
+  0%{border-radius:50%;transform:rotate(0) scale(1)}
+  25%{border-radius:30% 70% 70% 30% / 30% 30% 70% 70%;transform:rotate(90deg) scale(.86)}
+  50%{border-radius:22%;transform:rotate(180deg) scale(1)}
+  75%{border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;transform:rotate(270deg) scale(.86)}
+  100%{border-radius:50%;transform:rotate(360deg) scale(1)}}
+.splash b{font-size:22px;font-weight:850;font-variation-settings:"wdth" 120}
+.splash b span{color:var(--primary)}
+
+/* ext FAB */
+.efab{position:fixed;right:28px;bottom:28px;z-index:30;height:64px;padding:0 24px 0 20px;border-radius:20px;background:var(--primary-container);color:var(--on-primary-container);
+  box-shadow:var(--shadow);font-size:16px;font-weight:700;gap:12px;transition:border-radius .45s var(--spatial),padding .45s var(--spring),width .45s var(--spring)}
+.efab .lbl{transition:opacity .25s,max-width .45s var(--spring);max-width:220px;overflow:hidden}
+.efab.small{padding:0 20px}.efab.small .lbl{max-width:0;opacity:0}
+@media (max-width:900px){.efab{bottom:96px;right:16px}}
+
+.no-motion *,.no-motion *::before,.no-motion *::after{animation-duration:1ms!important;animation-delay:0ms!important;transition-duration:1ms!important}
+@media (prefers-reduced-motion:reduce){.auto-motion *,.auto-motion *::before,.auto-motion *::after{animation-duration:1ms!important;animation-delay:0ms!important;transition-duration:1ms!important}}
 </style>
 </head>
 <body>
+<div class="splash" id="splash"><div class="in"><div class="loader"></div><b>Renstek <span>PMS</span></b></div></div>
 
-<header class="bar">
-  <div class="logo"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-5h6v5"/></svg></div>
-  <div><h1>Renstek <span>PMS</span></h1><div class="sub" id="propName"></div></div>
-  <div class="spacer"></div>
-  <button class="btn btn-icon" id="btnSettings" title="Otel ayarları"><svg class="i" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></button>
-</header>
-
-<div class="wrap">
-  <main class="col">
-    <section class="card">
-      <div class="overline">Rezervasyon</div>
-      <h2 class="title">Tarih ve misafir</h2>
-      <div class="grid">
-        <div class="tf"><label>Giriş</label><input type="date" id="qIn"></div>
-        <div class="tf"><label>Çıkış</label><input type="date" id="qOut"></div>
-        <div class="stepper"><div class="lbl">Yetişkin<b id="qAd">2</b></div><div class="bt"><button data-step="ad:-1">−</button><button data-step="ad:1">+</button></div></div>
-        <div class="stepper"><div class="lbl">Çocuk<b id="qCh">0</b></div><div class="bt"><button data-step="ch:-1">−</button><button data-step="ch:1">+</button></div></div>
-      </div>
-      <div class="row">
-        <span class="nights" id="qNights"></span>
-        <div class="seg" id="qType">
-          <button data-v="ALL" class="on">Tümü</button><button data-v="STD">Standart</button><button data-v="DLX">Deluxe</button><button data-v="STE">Suit</button>
-        </div>
-        <div class="tf" style="padding:18px 14px 6px;min-width:190px;flex:1;max-width:260px"><label>Pansiyon</label>
-          <select id="qBoard"><option value="RO">Sadece oda</option><option value="BB" selected>Oda + kahvaltı</option><option value="HB">Yarım pansiyon</option><option value="FB">Tam pansiyon</option><option value="AI">Her şey dahil</option></select>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="plan-head">
-        <div style="flex:1"><div class="overline">Kat planı</div><h2 class="title">Otel krokisi</h2></div>
-        <div class="seg" id="floorSeg"></div>
-      </div>
-      <div class="legend">
-        <span><i style="background:var(--surface-c-highest)"></i>Müsait</span>
-        <span><i style="background:var(--primary)"></i>Seçili</span>
-        <span><i style="background:var(--tertiary-container)"></i>Dolu</span>
-      </div>
-      <div id="floors"></div>
-    </section>
-  </main>
-
-  <aside class="col">
-    <section class="card" style="position:sticky;top:16px">
-      <div class="overline">Yeni rezervasyon</div>
-      <h2 class="title">Seçili odalar</h2>
-      <div class="sel" id="selList"></div>
-      <div class="stack">
-        <div class="tf"><label>Misafir adı soyadı</label><input id="gName" placeholder=" "></div>
-        <div class="tf"><label>Telefon</label><input id="gPhone" placeholder=" "></div>
-      </div>
-      <div class="total" id="sum"></div>
-      <div class="warn" id="warn"></div>
-      <button class="btn btn-filled fab" id="btnBook"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Rezervasyon oluştur</button>
-    </section>
-  </aside>
+<div class="app" id="app">
+  <nav class="rail" id="rail"></nav>
+  <div class="main">
+    <header class="topbar">
+      <div style="min-width:0"><h1 id="pgTitle">Genel bakış</h1><div class="sub" id="pgSub"></div></div>
+      <div class="spacer"></div>
+      <label class="search"><svg class="ic s"><use href="#i-search"/></svg><input id="gsearch" placeholder="Misafir, oda no, rezervasyon no ara…" autocomplete="off"></label>
+      <button class="ibtn tonal" data-a="theme" title="Temayı değiştir" id="themeBtn"></button>
+    </header>
+    <section class="page" id="page"></section>
+  </div>
 </div>
-
+<button class="btn efab" id="efab" style="display:none"></button>
 <div class="scrim" id="scrim"><div class="dlg" id="dlg"></div></div>
 <div class="snack" id="snack"></div>
 
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="i-dash" viewBox="0 0 24 24"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/></symbol>
+<symbol id="i-plan" viewBox="0 0 24 24"><path d="M3 21h18M5 21V5h14v16M9 9h2M13 9h2M9 13h2M13 13h2M10 21v-4h4v4"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><path d="M3 5h18v16H3zM16 3v4M8 3v4M3 10h18"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4zM9 9h7M9 13h5"/></symbol>
+<symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 18V7M3 14h18v4M21 18v-5a3 3 0 0 0-3-3h-7v4M7 12.5a1.5 1.5 0 1 0 0-.01"/></symbol>
+<symbol id="i-build" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
+<symbol id="i-clean" viewBox="0 0 24 24"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8zM19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9zM5 15l.7 1.3L7 17l-1.3.7L5 19l-.7-1.3L3 17l1.3-.7z"/></symbol>
+<symbol id="i-sell" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01"/></symbol>
+<symbol id="i-group" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+<symbol id="i-set" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-cl" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-cr" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-sea" viewBox="0 0 24 24"><path d="M2 8c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 13c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 18c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></symbol>
+<symbol id="i-balcony" viewBox="0 0 24 24"><path d="M2 11h20M4 11v10M20 11v10M9 11v10M15 11v10M2 21h20M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="i-tub" viewBox="0 0 24 24"><path d="M3 13h18v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5zM7 9c0-2 2-2 2-4M12 9c0-2 2-2 2-4M17 9c0-2 2-2 2-4"/></symbol>
+<symbol id="i-access" viewBox="0 0 24 24"><path d="M12 4.5a1.5 1.5 0 1 0 0-.01M9 8h6M12 8v6h4l2 5M10.5 11.5A5 5 0 1 0 15 20"/></symbol>
+<symbol id="i-smoke" viewBox="0 0 24 24"><path d="M2 16h15v4H2zM19.5 16v4M22 16v4M18 12c0-2-2-2-2-4s2-2 2-4M21 12c0-2-2-2-2-4s2-2 2-4"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+<symbol id="i-pet" viewBox="0 0 24 24"><path d="M8 7a2 2 0 1 0 0-.01M16 7a2 2 0 1 0 0-.01M4.5 12a2 2 0 1 0 0-.01M19.5 12a2 2 0 1 0 0-.01M12 13c-3 0-5 3-5 5a2 2 0 0 0 2 2c1 0 2-1 3-1s2 1 3 1a2 2 0 0 0 2-2c0-2-2-5-5-5z"/></symbol>
+<symbol id="i-kitchen" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM5 10h14M9 6v1M9 13v3"/></symbol>
+<symbol id="i-money" viewBox="0 0 24 24"><path d="M2 6h20v12H2zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 12h.01M18 12h.01"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol>
+<symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 16V4M3 8l4-4 4 4M17 8v12M21 16l-4 4-4-4"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+<symbol id="i-hist" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></symbol>
+<symbol id="i-dnd" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM7 12h10"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><path d="M9 9h12v12H9zM5 15H3V3h12v2"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+<symbol id="i-hotel" viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-5h6v5"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></symbol>
+<symbol id="i-auto" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18v18zM12 3a9 9 0 0 1 0 18"/></symbol>
+<symbol id="i-ban" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM5.6 5.6l12.8 12.8"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 6.3 8.3a8 8 0 1 0 11.4 0z"/></symbol>
+<symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M4.9 4.9l14.2 14.2M2 12h20M4.9 19.1 19.1 4.9"/></symbol>
+<symbol id="i-sofa" viewBox="0 0 24 24"><path d="M4 11V8a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3M2 13a2 2 0 0 1 4 0v2h12v-2a2 2 0 0 1 4 0v5H2zM5 18v2M19 18v2"/></symbol>
+<symbol id="i-paint" viewBox="0 0 24 24"><path d="M4 3h14v5H4zM18 5h2v6h-8v3M10 14h4v7h-4z"/></symbol>
+<symbol id="i-tv" viewBox="0 0 24 24"><path d="M2 5h20v13H2zM8 21h8M12 18v3"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+<symbol id="i-moneyin" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></symbol>
+</defs>
+</svg>
+
 <script>
-const $ = s => document.querySelector(s);
-const p2 = n => String(n).padStart(2,'0');
-const iso = d => d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
-const parse = s => { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
-const addDays = (s,n) => { const d=parse(s); d.setDate(d.getDate()+n); return iso(d); };
-const diff = (a,b) => Math.round((parse(b)-parse(a))/864e5);
-const MON=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
-const fmt = s => { const d=parse(s); return d.getDate()+' '+MON[d.getMonth()]; };
-const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* =====================================================================
+   Renstek PMS — v1.0.2  (yönetim paneli)
+   ===================================================================== */
+const VERSION = '1.0.2';
+const KEY = 'renstek-pms-v102';
+
+/* ---------- küçük yardımcılar ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const p2 = n => String(n).padStart(2, '0');
+const iso = d => d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate());
+const parse = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate() + n); return iso(d); };
+const diff = (a, b) => Math.round((parse(b) - parse(a)) / 864e5);
+const MON = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+const MONL = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const DOW = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+const DOWL = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+const fmt = s => { const d = parse(s); return d.getDate() + ' ' + MON[d.getMonth()]; };
+const fmtL = s => { const d = parse(s); return d.getDate() + ' ' + MONL[d.getMonth()] + ' ' + d.getFullYear(); };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const ic = (n, cls = '') => `<svg class="ic ${cls}"><use href="#i-${n}"/></svg>`;
 const TODAY = iso(new Date());
-const TYPES = { STD:{name:'Standart',cap:2}, DLX:{name:'Deluxe',cap:3}, STE:{name:'Suit',cap:4} };
-const BOARD = { RO:'Sadece oda', BB:'Oda + kahvaltı', HB:'Yarım pansiyon', FB:'Tam pansiyon', AI:'Her şey dahil' };
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const uid = p => p + Math.random().toString(36).slice(2, 8);
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
-const VERSION='1.0.1';
-const KEY='renstek-pms-m3';
-function defaults(){ return { config:{name:'Renstek Demo Otel',floors:2,rows:2,perRow:6,rates:{STD:2400,DLX:3200,STE:5200},board:{RO:0,BB:300,HB:650,FB:950,AI:1400}}, res:[], seq:1001 }; }
-let S; try{ S=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
-if(!S){ S=defaults(); seed(); }
-if(!S.config.theme) S.config.theme='auto';
-const mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
-function applyTheme(){ const t=S.config.theme; const dark = t==='dark' || (t==='auto' && mq && mq.matches); document.documentElement.dataset.theme = dark?'dark':'light'; }
-applyTheme();
-if(mq){ (mq.addEventListener?mq.addEventListener('change',applyTheme):mq.addListener(applyTheme)); }
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
+/* ---------- sabitler ---------- */
+const FEATURES = [
+  { k:'sea', n:'Deniz manzarası', i:'sea' }, { k:'balcony', n:'Balkon', i:'balcony' }, { k:'jacuzzi', n:'Jakuzi', i:'tub' },
+  { k:'access', n:'Engelli erişimi', i:'access' }, { k:'connect', n:'Bağlantılı oda', i:'link' }, { k:'kitchen', n:'Mutfak', i:'kitchen' },
+  { k:'pet', n:'Evcil hayvan', i:'pet' }, { k:'smoke', n:'Sigara içilebilir', i:'smoke' }
+];
+const FEAT = Object.fromEntries(FEATURES.map(f => [f.k, f]));
+const BOARD = { RO:'Sadece oda', BB:'Oda + kahvaltı', HB:'Yarım pansiyon', FB:'Tam pansiyon', AI:'Her şey dahil', UAI:'Ultra her şey dahil' };
+const CHANNELS = ['Direkt','Web sitesi','Booking.com','Expedia','Acente','Airbnb','Walk-in'];
+const ST = {
+  confirmed:{ n:'Onaylı', c:'t-sec' }, inhouse:{ n:'Konaklıyor', c:'t-pri' }, out:{ n:'Çıkış yaptı', c:'t-mute' },
+  cancelled:{ n:'İptal', c:'t-err' }, noshow:{ n:'Gelmedi', c:'t-amb' }
+};
+const MCAT = { 'Klima':'snow', 'Tesisat':'drop', 'Elektrik':'bolt', 'Mobilya':'sofa', 'Boya / Tadilat':'paint', 'Elektronik':'tv', 'Genel bakım':'build' };
+const PRIO = { low:{ n:'Düşük', c:'t-mute' }, mid:{ n:'Orta', c:'t-amb' }, high:{ n:'Acil', c:'t-err' } };
+const HK = { clean:{ n:'Temiz', i:'check' }, dirty:{ n:'Kirli', i:'clean' }, inspect:{ n:'Kontrol bekliyor', i:'eye' }, dnd:{ n:'Rahatsız etmeyin', i:'dnd' } };
 
-let Q = { in:TODAY, out:addDays(TODAY,3), ad:2, ch:0, type:'ALL', board:'BB' };
-let selected = new Set(), floorView='ALL';
+/* ---------- durum ---------- */
+let S = null;
+try { S = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+if (!S || !S.rooms) { S = seed(); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function log(msg, icon = 'hist') { S.log.unshift({ t: Date.now(), msg, icon }); S.log = S.log.slice(0, 60); }
 
-function rooms(){
-  const c=S.config, out=[];
-  for(let f=1;f<=c.floors;f++) for(let r=0;r<c.rows;r++) for(let i=0;i<c.perRow;i++){
-    let type = r===0 ? 'DLX' : 'STD';
-    if(r===0 && i===c.perRow-1) type='STE';
-    out.push({ no:f*100 + r*c.perRow + i + 1, floor:f, row:r, idx:i, type });
+const UI = {
+  page: 'panel', enter: true, sel: new Set(), floor: 1,
+  q: { in: TODAY, out: addDays(TODAY, 3), ad: 2, ch: 0, type: 'ALL', board: 'BB', feats: new Set() },
+  tapeStart: addDays(TODAY, -3), tapeFloor: 1,
+  rez: { q: '', st: 'live', when: 'upcoming', limit: 80 },
+  rooms: { floor: 'ALL', type: 'ALL', feat: 'ALL', q: '', bulk: new Set() },
+  mt: 'open', hkFloor: 'ALL', guests: { q: '' }, priceType: 'DLX'
+};
+
+/* ---------- oda üretimi ---------- */
+function defaultTypes() {
+  return {
+    STD:{ n:'Standart', cap:2, base:2800 }, SUP:{ n:'Superior', cap:2, base:3400 }, DLX:{ n:'Deluxe', cap:3, base:4200 },
+    FAM:{ n:'Aile odası', cap:4, base:4900 }, JRS:{ n:'Junior suit', cap:3, base:6400 }, STE:{ n:'Suit', cap:4, base:8800 },
+    KNG:{ n:'Kral dairesi', cap:6, base:19500 }
+  };
+}
+function genRoom(f, r, i, st) {
+  const top = f === st.floors && st.floors > 2;
+  let type, feats = [];
+  if (r === 0) {
+    feats.push('sea');
+    if (top) { type = i === st.perRow - 1 ? 'KNG' : 'STE'; feats.push('balcony', 'jacuzzi'); if (i === st.perRow - 1) feats.push('kitchen'); }
+    else if (i === 0 || i === st.perRow - 1) { type = 'JRS'; feats.push('balcony', 'jacuzzi'); }
+    else { type = f <= 2 ? 'SUP' : 'DLX'; if (f > 1) feats.push('balcony'); }
+  } else {
+    if (top) { type = 'JRS'; feats.push('balcony'); }
+    else if (i % 4 === 1) { type = 'FAM'; feats.push('connect'); }
+    else type = 'STD';
+    if (f === 1 && i < 2) feats.push('access');
+    if (f === 1 && i >= st.perRow - 2) feats.push('pet');
+    if (f === 2 && i === st.perRow - 1) feats.push('smoke');
+  }
+  return { no: f * 100 + r * st.perRow + i + 1, floor: f, row: r, idx: i, type, feats, hk: 'clean', note: '' };
+}
+function buildRooms(st, keep = []) {
+  const old = Object.fromEntries(keep.map(r => [r.no, r]));
+  const out = [];
+  for (let f = 1; f <= st.floors; f++) for (let r = 0; r < st.rows; r++) for (let i = 0; i < st.perRow; i++) {
+    const g = genRoom(f, r, i, st);
+    const o = old[g.no];
+    out.push(o ? { ...g, type: o.type, feats: o.feats, hk: o.hk, note: o.note } : g);
   }
   return out;
 }
-const room = no => rooms().find(r=>r.no===no);
-function live(){ return S.res.filter(r=>r.status!=='cancelled' && r.status!=='out'); }
-const _live = () => S.res.filter(r=>r.status!=='cancelled' && r.status!=='out');
-const busy = (no,a,b) => live().filter(r=>r.room===no && r.in<b && r.out>a);
-function price(type,n,ad,ch,board){ return n*(S.config.rates[type] + (ad+ch*.5)*S.config.board[board]); }
-const money = v => '₺' + Math.round(v).toLocaleString('tr-TR');
 
-function seed(){
-  const names=['Mehmet Yılmaz','Anna Schmidt','Elif Kaya','James Carter','Burak Öztürk','Zeynep Arslan','Thomas Müller','Can Aydın','Deniz Şahin','Emre Koç'];
-  [[101,-2,3],[102,0,4],[104,1,2],[105,-1,5],[110,0,2],[201,-3,4],[203,2,3],[206,0,6],[209,-1,2],[212,1,3]].forEach((p,k)=>{
-    const a=addDays(TODAY,p[1]), b=addDays(a,p[2]), t=rooms().find(r=>r.no===p[0]).type;
-    S.res.push({id:'R'+(S.seq++),room:p[0],in:a,out:b,guest:names[k],phone:'',ad:2,ch:0,board:'BB',status:a<TODAY?'inhouse':'confirmed',total:price(t,p[2],2,0,'BB')});
+/* ---------- demo veri ---------- */
+function seed() {
+  const R = rng(20261119);
+  const pick = a => a[Math.floor(R() * a.length)];
+  const Y = parse(TODAY).getFullYear();
+  const st = { floors: 8, rows: 2, perRow: 12 };
+  const s = {
+    v: 102, seq: 10001,
+    hotel: { name: 'Renstek Grand Resort', stars: 5, city: 'Antalya', cin: '14:00', cout: '12:00' },
+    structure: st, types: defaultTypes(), rooms: buildRooms(st),
+    pricing: {
+      board: { RO:0, BB:450, HB:900, FB:1300, AI:1900, UAI:2600 }, weekendOn: true, weekendPct: 15, childPct: 50,
+      seasons: [
+        { id: 's1', name: 'Düşük sezon', from: `${Y}-11-01`, to: `${Y + 1}-03-31`, mult: 85 },
+        { id: 's2', name: 'Yılbaşı', from: `${Y}-12-28`, to: `${Y + 1}-01-02`, mult: 165 },
+        { id: 's3', name: 'Yüksek sezon', from: `${Y + 1}-06-15`, to: `${Y + 1}-09-15`, mult: 140 }
+      ]
+    },
+    staff: [
+      { id:'p1', name:'Ayşe Kaya', role:'Kat şefi' }, { id:'p2', name:'Fatma Demir', role:'Oda görevlisi' }, { id:'p3', name:'Hülya Çelik', role:'Oda görevlisi' },
+      { id:'p4', name:'Merve Aksoy', role:'Oda görevlisi' }, { id:'p5', name:'Selin Yurt', role:'Oda görevlisi' },
+      { id:'p6', name:'Kemal Arslan', role:'Teknik servis' }, { id:'p7', name:'Murat Doğan', role:'Teknik servis' }, { id:'p8', name:'Deniz Er', role:'Resepsiyon' }
+    ],
+    hkFloor: {}, res: [], maint: [], vip: {}, log: [], theme: 'auto', motion: 'auto'
+  };
+  for (let f = 1; f <= st.floors; f++) s.hkFloor[f] = ['p2','p3','p4','p5'][(f - 1) % 4];
+
+  // bakım planı (sahibin gözünden: planlı tadilatlar, arızalar)
+  const M = (rooms, from, to, cat, prio, reason, status, who) => s.maint.push({ id: 'M' + (s.seq++), rooms, from, to, cat, prio, reason, status, who, note: '', created: Date.now() });
+  M([305], addDays(TODAY, -1), addDays(TODAY, 1), 'Klima', 'high', 'Klima gaz kaçağı, kompresör değişimi', 'active', 'p6');
+  M([214], TODAY, TODAY, 'Tesisat', 'mid', 'Banyo gideri tıkalı', 'active', 'p7');
+  M([601, 602, 603, 604], addDays(TODAY, 8), addDays(TODAY, 14), 'Boya / Tadilat', 'mid', 'Planlı yenileme: boya, halı değişimi', 'planned', 'p6');
+  M([812], addDays(TODAY, 3), addDays(TODAY, 4), 'Tesisat', 'mid', 'Jakuzi pompa bakımı', 'planned', 'p7');
+  M([118, 119, 120, 121, 122, 123, 124], addDays(TODAY, 20), addDays(TODAY, 26), 'Mobilya', 'low', 'Zemin kat B blok mobilya yenileme', 'planned', 'p6');
+  M([407], addDays(TODAY, 5), addDays(TODAY, 5), 'Elektronik', 'low', 'TV ve kasa değişimi', 'planned', 'p7');
+  M([209, 210], addDays(TODAY, -9), addDays(TODAY, -6), 'Elektrik', 'high', 'Priz ve aydınlatma arızası', 'done', 'p6');
+
+  // rezervasyonlar
+  const first = ['Mehmet','Ayşe','Elif','Can','Zeynep','Burak','Deniz','Emre','Selin','Oğuz','Ece','Kerem','Gizem','Barış','Derya','Tolga','İrem','Serkan','Pınar','Onur'];
+  const last = ['Yılmaz','Kaya','Demir','Şahin','Çelik','Arslan','Koç','Aydın','Öztürk','Kılıç','Aslan','Doğan','Kurt','Özdemir','Polat','Erdem'];
+  const foreign = ['Anna Schmidt','Thomas Müller','James Carter','Olga Ivanova','Sophie de Vries','Lukas Becker','Emma Johansson','Igor Petrov','Laura Rossi','Jan Novak','Marie Dubois','Oliver Smith','Hans Weber','Natalia Sokolova'];
+  const natOf = n => /Schmidt|Müller|Becker|Weber/.test(n) ? 'DE' : /Ivanova|Petrov|Sokolova/.test(n) ? 'RU' : /Vries/.test(n) ? 'NL' : /Carter|Smith/.test(n) ? 'GB' : /Johansson/.test(n) ? 'SE' : /Rossi/.test(n) ? 'IT' : /Novak/.test(n) ? 'CZ' : /Dubois/.test(n) ? 'FR' : 'TR';
+  const guests = [];
+  for (let i = 0; i < 260; i++) {
+    const n = R() < .42 ? pick(foreign) : pick(first) + ' ' + pick(last);
+    if (!guests.find(g => g.n === n)) guests.push({ n, phone: '+90 5' + Math.floor(30 + R() * 69) + ' ' + Math.floor(100 + R() * 899) + ' ' + p2(Math.floor(R() * 99)) + ' ' + p2(Math.floor(R() * 99)), nat: natOf(n) });
+  }
+  const chanW = [['Booking.com', 30], ['Direkt', 18], ['Web sitesi', 16], ['Expedia', 12], ['Acente', 16], ['Airbnb', 5], ['Walk-in', 3]];
+  const pickCh = () => { let x = R() * 100; for (const [c, w] of chanW) { if ((x -= w) < 0) return c; } return 'Direkt'; };
+  const boards = ['BB','BB','HB','AI','AI','UAI','FB','RO'];
+  const tmp = { ...s };
+  s.rooms.forEach(room => {
+    let d = addDays(TODAY, -48 + Math.floor(R() * 4));
+    const end = addDays(TODAY, 40);
+    while (d < end) {
+      const gap = R() < .32 ? 0 : 1 + Math.floor(R() * 4);
+      d = addDays(d, gap);
+      const nights = 1 + Math.floor(R() * (room.type === 'KNG' ? 4 : 7));
+      const a = d, b = addDays(d, nights);
+      const fut = diff(TODAY, a);
+      // gelecek tarihler giderek seyrekleşsin
+      if (fut > 0 && R() < fut / 60) { d = addDays(d, 1 + Math.floor(R() * 3)); continue; }
+      const blocked = s.maint.some(m => m.status !== 'done' && m.rooms.includes(room.no) && m.from < b && m.to >= a);
+      // 601'de bilerek bir çakışma bırak (bakım uyarısı demosu)
+      const allowConflict = room.no === 602 && a <= addDays(TODAY, 9) && b > addDays(TODAY, 8);
+      if (blocked && !allowConflict) { d = addDays(d, 1); continue; }
+      const g = pick(guests), cap = s.types[room.type].cap;
+      const ad = clamp(1 + Math.floor(R() * cap), 1, cap), ch = cap - ad > 0 && R() < .35 ? 1 : 0;
+      const board = pick(boards), channel = pickCh();
+      let status = 'confirmed';
+      if (b <= TODAY) status = R() < .03 ? 'noshow' : 'out';
+      else if (a < TODAY) status = 'inhouse';
+      else if (a === TODAY) status = R() < .45 ? 'inhouse' : 'confirmed';
+      if (b === TODAY && R() < .5) status = 'inhouse';
+      if (a > TODAY && R() < .04) status = 'cancelled';
+      const total = stayPriceWith(tmp, room.type, a, b, ad, ch, board);
+      const paid = status === 'out' ? total : status === 'inhouse' ? Math.round(total * (R() < .5 ? 1 : .3)) : (R() < .5 ? Math.round(total * .3) : 0);
+      s.res.push({ id: 'R' + (s.seq++), room: room.no, in: a, out: b, guest: g.n, phone: g.phone, email: '', nat: g.nat, ad, ch, board, channel, status, total, paid, note: '', created: Date.now() - Math.floor(R() * 40) * 864e5 });
+      d = b;
+    }
+  });
+  // kat hizmetleri durumu
+  s.rooms.forEach(r => {
+    const dep = s.res.find(x => x.room === r.no && x.out === TODAY && x.status === 'out');
+    const inh = s.res.find(x => x.room === r.no && x.status === 'inhouse' && x.in < TODAY);
+    if (dep) r.hk = 'dirty';
+    else if (inh) r.hk = R() < .12 ? 'dnd' : R() < .45 ? 'dirty' : 'clean';
+    else r.hk = R() < .08 ? 'inspect' : 'clean';
+  });
+  s.vip = {}; s.vip[key(guests[0].n, guests[0].phone)] = true; s.vip[key(guests[3].n, guests[3].phone)] = true;
+  const now = Date.now();
+  s.log = [
+    { t: now - 4 * 6e4, msg: '305 numaralı oda bakıma alındı (Klima)', icon: 'build' },
+    { t: now - 22 * 6e4, msg: 'Yeni rezervasyon: 4 gece, Booking.com', icon: 'book' },
+    { t: now - 61 * 6e4, msg: '214 numaralı odada tesisat arızası kaydı açıldı', icon: 'alert' },
+    { t: now - 3 * 36e5, msg: 'Yüksek sezon fiyatı %140 olarak güncellendi', icon: 'sell' }
+  ];
+  return s;
+}
+function key(n, p) { return (String(n).trim().toLowerCase() + '|' + String(p || '').replace(/\D/g, '')); }
+
+/* ---------- iş kuralları ---------- */
+const room = no => S.rooms.find(r => r.no === +no);
+const live = r => r.status === 'confirmed' || r.status === 'inhouse';
+const earning = r => r.status === 'confirmed' || r.status === 'inhouse' || r.status === 'out';
+function seasonFor(s, d) {
+  let best = null;
+  for (const x of s.pricing.seasons) if (x.from <= d && x.to >= d) { if (!best || diff(x.from, x.to) < diff(best.from, best.to)) best = x; }
+  return best;
+}
+function rateWith(s, type, d) {
+  let r = s.types[type].base; const se = seasonFor(s, d); if (se) r *= se.mult / 100;
+  const wd = parse(d).getDay(); if (s.pricing.weekendOn && (wd === 5 || wd === 6)) r *= 1 + s.pricing.weekendPct / 100;
+  return Math.round(r / 10) * 10;
+}
+function stayPriceWith(s, type, a, b, ad, ch, board) {
+  let t = 0; for (let d = a; d < b; d = addDays(d, 1)) t += rateWith(s, type, d);
+  return t + diff(a, b) * (ad + ch * s.pricing.childPct / 100) * s.pricing.board[board];
+}
+const rate = (type, d) => rateWith(S, type, d);
+const stayPrice = (...a) => stayPriceWith(S, ...a);
+const money = v => '₺' + Math.round(v).toLocaleString('tr-TR');
+const moneyK = v => v >= 1e6 ? '₺' + (v / 1e6).toLocaleString('tr-TR', { maximumFractionDigits: 1 }) + ' Mn' : v >= 1e4 ? '₺' + Math.round(v / 1e3).toLocaleString('tr-TR') + ' B' : money(v);
+
+const resOn = (no, a, b, ex) => S.res.filter(r => r.room === no && live(r) && r.in < b && r.out > a && r.id !== ex);
+const nightRes = (no, d) => S.res.find(r => r.room === no && (live(r) || r.status === 'out') && r.in <= d && r.out > d && r.status !== 'noshow');
+const mtOn = (no, a, b) => S.maint.filter(m => m.status !== 'done' && m.rooms.includes(no) && m.from < b && m.to >= a);
+const mtDay = (no, d) => S.maint.find(m => m.status !== 'done' && m.rooms.includes(no) && m.from <= d && m.to >= d);
+const isFree = (no, a, b, ex) => !resOn(no, a, b, ex).length && !mtOn(no, a, b).length;
+function mtStatus(m) { if (m.status === 'done') return 'done'; if (m.from <= TODAY && m.to >= TODAY) return 'active'; if (m.to < TODAY) return 'overdue'; return 'planned'; }
+function mtConflicts(m) { return S.res.filter(r => live(r) && m.rooms.includes(r.room) && r.in <= m.to && r.out > m.from); }
+function openMaintConflicts() { return S.maint.filter(m => m.status !== 'done').flatMap(m => mtConflicts(m).map(r => ({ m, r }))); }
+function dayStats(d) {
+  const total = S.rooms.length, mt = S.rooms.filter(r => mtDay(r.no, d)).length;
+  let occ = 0, rev = 0;
+  S.rooms.forEach(r => { const x = nightRes(r.no, d); if (x && earning(x)) { occ++; rev += x.total / Math.max(1, diff(x.in, x.out)); } });
+  const avail = total - mt;
+  return { total, mt, occ, rev, avail, pct: avail ? occ / avail * 100 : 0, adr: occ ? rev / occ : 0, revpar: avail ? rev / avail : 0 };
+}
+function monthRevenue(y, m) {
+  const a = `${y}-${p2(m + 1)}-01`, b = iso(new Date(y, m + 1, 1));
+  let t = 0;
+  S.res.forEach(r => { if (!earning(r)) return; const s = r.in > a ? r.in : a, e = r.out < b ? r.out : b; const n = diff(s, e); if (n > 0) t += r.total / diff(r.in, r.out) * n; });
+  return t;
+}
+function findAlt(r, avoid = []) {
+  const g = r.ad + r.ch, t = S.types;
+  const cands = S.rooms.filter(x => x.no !== r.room && !avoid.includes(x.no) && t[x.type].cap >= g && isFree(x.no, r.in, r.out, r.id));
+  const orig = room(r.room);
+  cands.sort((a, b) => (a.type === orig.type ? 0 : 1) - (b.type === orig.type ? 0 : 1) || Math.abs(t[a.type].base - t[orig.type].base) - Math.abs(t[b.type].base - t[orig.type].base) || Math.abs(a.floor - orig.floor) - Math.abs(b.floor - orig.floor));
+  return cands[0] || null;
+}
+function parseRooms(txt) {
+  const out = new Set();
+  String(txt).split(/[,\s;]+/).filter(Boolean).forEach(p => {
+    const m = p.match(/^(\d+)\s*-\s*(\d+)$/);
+    if (m) { for (let i = +m[1]; i <= +m[2] && i - +m[1] < 400; i++) if (room(i)) out.add(i); }
+    else if (room(+p)) out.add(+p);
+  });
+  return [...out].sort((a, b) => a - b);
+}
+function roomsLabel(list) {
+  const a = [...list].sort((x, y) => x - y), out = []; let s = a[0], p = a[0];
+  for (let i = 1; i <= a.length; i++) { if (a[i] === p + 1) { p = a[i]; continue; } out.push(s === p ? s : s + '–' + p); s = p = a[i]; }
+  return out.join(', ');
+}
+const staff = id => S.staff.find(x => x.id === id);
+
+/* ---------- tema & hareket ---------- */
+const mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+function applyTheme() {
+  const dark = S.theme === 'dark' || (S.theme === 'auto' && mq && mq.matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const b = $('#themeBtn'); if (b) b.innerHTML = ic(S.theme === 'dark' ? 'moon' : S.theme === 'light' ? 'sun' : 'auto');
+}
+function applyMotion() { const a = $('#app').parentElement; document.body.classList.toggle('no-motion', S.motion === 'off'); document.body.classList.toggle('auto-motion', S.motion === 'auto'); }
+if (mq) (mq.addEventListener ? mq.addEventListener('change', applyTheme) : mq.addListener(applyTheme));
+
+/* ---------- navigasyon ---------- */
+const PAGES = [
+  { id:'panel', n:'Genel bakış', i:'dash' }, { id:'kroki', n:'Kat planı', i:'plan' }, { id:'takvim', n:'Doluluk takvimi', i:'cal' },
+  { id:'rezervasyonlar', n:'Rezervasyonlar', i:'book' }, { sep:1 },
+  { id:'odalar', n:'Odalar', i:'bed' }, { id:'bakim', n:'Bakım & arıza', i:'build' }, { id:'kat-hizmetleri', n:'Kat hizmetleri', i:'clean' }, { sep:1 },
+  { id:'fiyatlar', n:'Fiyat & sezon', i:'sell' }, { id:'misafirler', n:'Misafirler', i:'group' }, { id:'ayarlar', n:'Ayarlar', i:'set' }
+];
+function renderRail() {
+  const badges = {
+    bakim: S.maint.filter(m => ['active', 'overdue'].includes(mtStatus(m))).length + openMaintConflicts().length,
+    'kat-hizmetleri': S.rooms.filter(r => r.hk === 'dirty').length,
+    rezervasyonlar: S.res.filter(r => r.in === TODAY && r.status === 'confirmed').length
+  };
+  $('#rail').innerHTML = `
+    <div class="rail-top"><button class="ibtn" data-a="rail" title="Menüyü daralt / genişlet">${ic('menu')}</button>
+      <div class="brand"><div class="logo">${ic('hotel')}</div><div class="brand-t"><b>Renstek <span>PMS</span></b><small>${esc(S.hotel.name)}</small></div></div></div>
+    <button class="btn fab-rail" data-a="go" data-p="kroki" data-new="1">${ic('plus')}<span class="lbl">Yeni rezervasyon</span></button>
+    ${PAGES.map(p => p.sep ? '<div class="rail-sep"></div>' : `<button class="navi${UI.page === p.id ? ' on' : ''}" data-a="go" data-p="${p.id}" title="${p.n}">${ic(p.i)}<span class="lbl">${p.n}</span>${badges[p.id] ? `<span class="badge-n">${badges[p.id]}</span>` : ''}</button>`).join('')}
+    <div class="rail-foot">Renstek PMS v${VERSION}<br>© ${parse(TODAY).getFullYear()} Renstek</div>`;
+}
+function go(p, opts = {}) {
+  if (!PAGES.find(x => x.id === p)) p = 'panel';
+  UI.page = p; UI.enter = true;
+  if (location.hash.slice(1) !== p) { try { history.replaceState(null, '', '#' + p); } catch (e) { location.hash = p; } }
+  render(); window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+window.addEventListener('hashchange', () => { const p = location.hash.slice(1); if (p && p !== UI.page) go(p); });
+
+/* ---------- ana render ---------- */
+function render() {
+  const act = document.activeElement, aid = act && act.id, sp = act && act.selectionStart;
+  const P = PAGE_FN[UI.page]();
+  $('#pgTitle').textContent = P.title; $('#pgSub').textContent = P.sub || '';
+  const pg = $('#page');
+  pg.classList.remove('enter');
+  pg.innerHTML = P.html;
+  if (UI.enter) { void pg.offsetWidth; pg.classList.add('enter'); countUp(pg); }
+  renderRail(); setFab(P.fab);
+  UI.enter = false;
+  if (aid && aid !== 'gsearch') { const el = document.getElementById(aid); if (el) { el.focus(); try { el.setSelectionRange(sp, sp); } catch (e) {} } }
+}
+function countUp(root) {
+  $$('[data-count]', root).forEach(el => {
+    const to = +el.dataset.count, f = el.dataset.f || 'int', dur = S.motion === 'off' ? 1 : 1100, t0 = performance.now();
+    const show = v => el.textContent = f === 'money' ? moneyK(v) : f === 'pct' ? '%' + Math.round(v) : Math.round(v).toLocaleString('tr-TR');
+    const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); show(to * e); if (k < 1) requestAnimationFrame(step); };
+    show(0); requestAnimationFrame(step);
   });
 }
+function setFab(f) {
+  const b = $('#efab');
+  if (!f) { b.style.display = 'none'; return; }
+  b.style.display = ''; b.innerHTML = ic(f.i || 'plus') + `<span class="lbl">${f.n}</span>`; b.dataset.a = f.a; b.className = 'btn efab' + (window.scrollY > 120 ? ' small' : '');
+}
+window.addEventListener('scroll', () => { const b = $('#efab'); if (b) b.classList.toggle('small', window.scrollY > 120); }, { passive: true });
 
-/* ---------- simple line-drawn floor plan ---------- */
-const RW=110, RH=96, CW=48, P=14, STAIR=70;
-function plan(f){
-  const c=S.config, list=rooms().filter(r=>r.floor===f);
-  const W=P*2+STAIR+c.perRow*RW, H=P*2+c.rows*RH+CW;
-  const x0=P+STAIR, yA=P, yC=P+RH, yB=P+RH+CW;
-  const line='var(--outline)', soft='var(--outline-v)';
-  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Roboto Flex, sans-serif">`;
-  // outline
-  s+=`<rect x="${P}" y="${P}" width="${W-2*P}" height="${H-2*P}" rx="22" fill="none" style="stroke:${line}" stroke-width="2"/>`;
-  // stairs
-  s+=`<line x1="${x0}" y1="${P}" x2="${x0}" y2="${H-P}" style="stroke:${line}" stroke-width="1.5"/>`;
-  for(let k=1;k<8;k++){ const y=P+18+k*((H-2*P-36)/8); s+=`<line x1="${P+14}" y1="${y}" x2="${x0-14}" y2="${y}" style="stroke:${soft}" stroke-width="1.5"/>`; }
-  s+=`<text x="${P+STAIR/2}" y="${P+16}" text-anchor="middle" font-size="10" style="fill:var(--outline)">MERDİVEN</text>`;
-  // corridor
-  const cy = c.rows===2 ? yC : yA+RH;
-  s+=`<line x1="${x0}" y1="${cy}" x2="${W-P}" y2="${cy}" style="stroke:${line}" stroke-width="1.5"/>`;
-  if(c.rows===2) s+=`<line x1="${x0}" y1="${yB}" x2="${W-P}" y2="${yB}" style="stroke:${line}" stroke-width="1.5"/>`;
-  s+=`<line x1="${x0+12}" y1="${cy+CW/2}" x2="${W-P-12}" y2="${cy+CW/2}" style="stroke:${soft}" stroke-width="1.5" stroke-dasharray="6 8"/>
-      <text x="${x0+(W-P-x0)/2}" y="${cy+CW/2-8}" text-anchor="middle" font-size="10" letter-spacing="2" style="fill:var(--outline)">KORİDOR</text>`;
-  // room dividers + rooms
-  list.forEach(r=>{
-    const x=x0+r.idx*RW, y=r.row===0?yA:yB;
-    if(r.idx>0) s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+RH}" style="stroke:${line}" stroke-width="1.5"/>`;
-    const st=state(r);
-    s+=`<g class="room${st.cls}" data-no="${r.no}">
-      <rect class="rb" x="${x+7}" y="${y+7}" width="${RW-14}" height="${RH-14}" rx="16" ry="16" style="fill:${st.fill}"/>
-      <text x="${x+RW/2}" y="${y+RH/2-2}" text-anchor="middle" font-size="22" font-weight="800" style="fill:${st.ink}">${r.no}</text>
-      <text x="${x+RW/2}" y="${y+RH/2+18}" text-anchor="middle" font-size="11" font-weight="500" style="fill:${st.ink}" opacity=".8">${esc(st.sub||TYPES[r.type].name)}</text>
+/* =====================================================================
+   SAYFALAR
+   ===================================================================== */
+const PAGE_FN = {};
+const greet = () => { const h = new Date().getHours(); return h < 6 ? 'İyi geceler' : h < 12 ? 'Günaydın' : h < 18 ? 'İyi günler' : 'İyi akşamlar'; };
+const subDate = () => { const d = parse(TODAY); return `${DOWL[d.getDay()]}, ${fmtL(TODAY)} · ${S.hotel.name}`; };
+
+/* ---------- 1. Genel bakış ---------- */
+PAGE_FN.panel = () => {
+  const t = dayStats(TODAY), y = dayStats(addDays(TODAY, -1));
+  const arr = S.res.filter(r => r.in === TODAY && live(r)).sort((a, b) => (a.status === 'confirmed' ? 0 : 1) - (b.status === 'confirmed' ? 0 : 1)), dep = S.res.filter(r => r.out === TODAY && (r.status === 'inhouse' || r.status === 'out')).sort((a, b) => (a.status === 'inhouse' ? 0 : 1) - (b.status === 'inhouse' ? 0 : 1));
+  const now = parse(TODAY), mRev = monthRevenue(now.getFullYear(), now.getMonth()), pmRev = monthRevenue(now.getMonth() ? now.getFullYear() : now.getFullYear() - 1, (now.getMonth() + 11) % 12);
+  const inhouseG = S.res.filter(r => r.status === 'inhouse').reduce((a, r) => a + r.ad + r.ch, 0);
+  const balance = S.res.filter(r => live(r) && r.in <= TODAY).reduce((a, r) => a + Math.max(0, r.total - r.paid), 0);
+  const days = Array.from({ length: 14 }, (_, i) => { const d = addDays(TODAY, i); return { d, ...dayStats(d) }; });
+  const counts = { occ: 0, free: 0, mt: 0, dirty: 0 };
+  S.rooms.forEach(r => { if (mtDay(r.no, TODAY)) counts.mt++; else if (nightRes(r.no, TODAY)) counts.occ++; else if (r.hk === 'dirty' || r.hk === 'inspect') counts.dirty++; else counts.free++; });
+  const segs = [['Dolu', counts.occ, 'var(--primary)'], ['Müsait', counts.free, 'var(--success)'], ['Temizlik bekliyor', counts.dirty, 'var(--amber)'], ['Bakımda', counts.mt, 'var(--error)']];
+  const C = 2 * Math.PI * 52; let off = 0;
+  const donut = segs.map(([n, v, c], i) => { const len = v / S.rooms.length * C; const s = `<circle class="seg-c" style="--i:${i}" cx="70" cy="70" r="52" fill="none" stroke="${c}" stroke-width="18" stroke-dasharray="${Math.max(0, len - 3)} ${C}" stroke-dashoffset="${-off}" stroke-linecap="round" transform="rotate(-90 70 70)"/>`; off += len; return s; }).join('');
+  const chan = {}; S.res.filter(r => earning(r) && r.in >= addDays(TODAY, -30) && r.in <= addDays(TODAY, 30)).forEach(r => chan[r.channel] = (chan[r.channel] || 0) + r.total);
+  const chanArr = Object.entries(chan).sort((a, b) => b[1] - a[1]); const chMax = chanArr[0] ? chanArr[0][1] : 1;
+  const mts = S.maint.filter(m => m.status !== 'done' && m.from <= addDays(TODAY, 14)).sort((a, b) => a.from < b.from ? -1 : 1);
+  const conflicts = openMaintConflicts();
+  const delta = (a, b, f) => { const d = a - b; if (Math.abs(d) < .5) return 'dünle aynı'; const s = d > 0 ? '▲ ' : '▼ '; return s + (f === 'pct' ? Math.abs(d).toFixed(0) + ' puan' : moneyK(Math.abs(d))) + ' düne göre'; };
+  const html = `
+  <div class="grid g6" style="margin-bottom:16px">
+    <div class="kpi hero stg span2" style="--i:0"><div class="k">${ic('bed')} Bu gece doluluk</div><div class="v num" data-count="${t.pct.toFixed(1)}" data-f="pct">%0</div>
+      <div class="d">${t.occ} / ${t.avail} satılabilir oda · ${delta(t.pct, y.pct, 'pct')}</div><div class="blob"></div></div>
+    <div class="kpi stg" style="--i:1"><div class="k">${ic('money')} ADR</div><div class="v num" data-count="${Math.round(t.adr)}" data-f="money">₺0</div><div class="d">Ortalama oda fiyatı</div></div>
+    <div class="kpi stg" style="--i:2"><div class="k">${ic('trend')} RevPAR</div><div class="v num" data-count="${Math.round(t.revpar)}" data-f="money">₺0</div><div class="d">Oda başı gelir</div></div>
+    <div class="kpi stg" style="--i:3"><div class="k">${ic('moneyin')} Bu ay gelir</div><div class="v num" data-count="${Math.round(mRev)}" data-f="money">₺0</div><div class="d">Geçen ay ${moneyK(pmRev)}</div></div>
+    <div class="kpi ter stg" style="--i:4"><div class="k">${ic('group')} Oteldeki misafir</div><div class="v num" data-count="${inhouseG}">0</div><div class="d">${S.res.filter(r => r.status === 'inhouse').length} oda konaklıyor</div><div class="blob"></div></div>
+  </div>
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card stg span2" style="--i:5"><h3>${ic('cal')} Önümüzdeki 14 gün doluluk <span class="act lg-row"><span><i style="background:var(--primary)"></i>Hafta içi</span><span><i style="background:var(--tertiary)"></i>Hafta sonu</span></span></h3>
+      <div class="bars">${days.map((x, i) => { const wd = parse(x.d).getDay(); return `<div class="bar" title="${fmt(x.d)} · %${x.pct.toFixed(0)} · ${x.occ} oda"><span class="pv">%${x.pct.toFixed(0)}</span><div class="col${wd === 5 || wd === 6 ? ' we' : ''}" style="--i:${i};height:${Math.max(3, x.pct)}%"></div><small>${i === 0 ? 'Bugün' : DOW[wd] + ' ' + parse(x.d).getDate()}</small></div>`; }).join('')}</div></div>
+    <div class="card stg" style="--i:6"><h3>${ic('bed')} Odalar şu an</h3>
+      <div class="row" style="flex-wrap:nowrap;gap:18px"><svg class="donut" viewBox="0 0 140 140" width="140" height="140"><circle cx="70" cy="70" r="52" fill="none" stroke="var(--surface-c-highest)" stroke-width="18"/>${donut}
+        <text x="70" y="66" text-anchor="middle" font-size="26" font-weight="850" fill="var(--on-surface)">${S.rooms.length}</text><text x="70" y="86" text-anchor="middle" font-size="12" fill="var(--on-surface-v)">oda</text></svg>
+        <div class="legend">${segs.map(([n, v, c]) => `<div><i style="background:${c}"></i>${n} <b class="num">${v}</b></div>`).join('')}</div></div></div>
+  </div>
+  <div class="grid g3">
+    <div class="card stg" style="--i:7"><h3>${ic('in')} Bugün giriş <span class="tag t-sec">${arr.length}</span><button class="btn btn-text btn-sm act" data-a="go" data-p="rezervasyonlar">Tümü</button></h3>
+      ${listRes(arr.slice(0, 6), 'in') || emptyBox('Bugün beklenen giriş yok.')}</div>
+    <div class="card stg" style="--i:8"><h3>${ic('out')} Bugün çıkış <span class="tag t-sec">${dep.length}</span></h3>
+      ${listRes(dep.slice(0, 6), 'out') || emptyBox('Bugün çıkış yok.')}</div>
+    <div class="card stg" style="--i:9"><h3>${ic('build')} Bakım takvimi <button class="btn btn-text btn-sm act" data-a="go" data-p="bakim">Yönet</button></h3>
+      ${conflicts.length ? `<div class="sec" style="background:var(--error-container);color:var(--on-error-container);margin:0 0 10px;cursor:pointer" data-a="go" data-p="bakim"><b>${ic('alert', 's')} ${conflicts.length} rezervasyon bakımla çakışıyor</b><div style="font-size:12.5px;margin-top:2px">Bu misafirleri başka odalara taşımanız gerekiyor.</div></div>` : ''}
+      ${mts.length ? `<div class="list">${mts.slice(0, 5).map(m => { const s = mtStatus(m); return `<div class="li" data-a="mt" data-id="${m.id}"><div class="av" style="background:${s === 'active' ? 'var(--error-container)' : 'var(--amber-container)'};color:${s === 'active' ? 'var(--on-error-container)' : 'var(--on-amber-container)'}">${ic(MCAT[m.cat] || 'build', 's')}</div><div class="t"><b>Oda ${roomsLabel(m.rooms)}</b><span>${fmt(m.from)}${m.to !== m.from ? ' – ' + fmt(m.to) : ''} · ${esc(m.cat)}</span></div><span class="tag ${s === 'active' ? 't-err' : 't-amb'}">${s === 'active' ? 'Şu an' : diff(TODAY, m.from) + ' gün sonra'}</span></div>`; }).join('')}</div>` : emptyBox('Önümüzdeki 14 günde bakım yok.')}</div>
+    <div class="card stg span2" style="--i:10"><h3>${ic('trend')} Kanal bazında gelir <span class="muted" style="font-size:12.5px;font-weight:500">son 30 + önümüzdeki 30 gün</span></h3>
+      ${chanArr.map(([c, v], i) => `<div class="hbar"><span>${c}</span><div class="tr"><div class="fl" style="--i:${i};width:${v / chMax * 100}%;background:${['var(--primary)','var(--tertiary)','var(--secondary)','var(--success)','var(--amber)','var(--outline)','var(--error)'][i % 7]}"></div></div><b class="num" style="text-align:right">${moneyK(v)}</b></div>`).join('')}
+      <div class="row" style="margin-top:14px;gap:22px;font-size:13px"><span class="muted">Tahsil edilmemiş bakiye (oteldekiler)</span><b class="num">${money(balance)}</b></div></div>
+    <div class="card stg" style="--i:11"><h3>${ic('hist')} Son işlemler</h3>
+      <div class="list">${S.log.slice(0, 6).map(l => `<div class="li" style="cursor:default"><div class="av" style="background:var(--surface-c-highest)">${ic(l.icon || 'hist', 's')}</div><div class="t"><b style="white-space:normal;font-weight:520;font-size:13.5px">${esc(l.msg)}</b><span>${ago(l.t)}</span></div></div>`).join('')}</div></div>
+  </div>`;
+  return { title: `${greet()} 👋`, sub: subDate(), html };
+};
+function ago(t) { const m = Math.round((Date.now() - t) / 6e4); return m < 1 ? 'şimdi' : m < 60 ? m + ' dk önce' : m < 1440 ? Math.round(m / 60) + ' sa önce' : Math.round(m / 1440) + ' gün önce'; }
+function emptyBox(t) { return `<div class="empty"><div class="bl">${ic('check')}</div>${t}</div>`; }
+function avatar(n) { const p = String(n).trim().split(/\s+/); return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase(); }
+function listRes(list, mode) {
+  if (!list.length) return '';
+  return `<div class="list">${list.map(r => {
+    const vip = S.vip[key(r.guest, r.phone)];
+    const btn = mode === 'in' && r.status === 'confirmed' ? `<button class="btn btn-tonal btn-sm" data-a="ci" data-id="${r.id}">Giriş</button>`
+      : mode === 'out' && r.status === 'inhouse' ? `<button class="btn btn-tonal btn-sm" data-a="co" data-id="${r.id}">Çıkış</button>` : `<span class="tag t-mute">${ic('check', 'xs')} Tamam</span>`;
+    return `<div class="li" data-a="res" data-id="${r.id}"><div class="av" style="background:var(--primary-container);color:var(--on-primary-container)">${avatar(r.guest)}</div>
+      <div class="t"><b>${esc(r.guest)} ${vip ? '<span class="tag t-ter" style="height:20px;padding:0 7px">VIP</span>' : ''}</b><span>Oda ${r.room} · ${S.types[room(r.room).type].n} · ${r.board}</span></div>${btn}</div>`; }).join('')}</div>`;
+}
+
+/* ---------- 2. Kat planı + rezervasyon ---------- */
+const RW = 100, RH = 108, CW = 50, P = 14, STAIR = 72;
+function roomState(r) {
+  const q = UI.q;
+  if (UI.sel.has(r.no)) return { k: 'sel', fill: 'var(--primary)', ink: 'var(--on-primary)', sub: 'Seçili' };
+  const m = mtOn(r.no, q.in, q.out)[0];
+  if (m) return { k: 'mt', fill: 'var(--amber-container)', ink: 'var(--on-amber-container)', sub: 'Bakımda', hatch: true };
+  const b = resOn(r.no, q.in, q.out)[0];
+  if (b) { const p = b.guest.split(' '); return { k: 'busy', fill: b.status === 'inhouse' ? 'var(--tertiary-container)' : 'var(--secondary-container)', ink: b.status === 'inhouse' ? 'var(--on-tertiary-container)' : 'var(--on-secondary-container)', sub: p[0][0] + '. ' + p[p.length - 1] }; }
+  const typeOk = q.type === 'ALL' || q.type === r.type;
+  const featOk = [...q.feats].every(f => r.feats.includes(f));
+  const capOk = S.types[r.type].cap >= 1;
+  return { k: 'free', fill: 'var(--surface-c-highest)', ink: 'var(--on-surface)', sub: S.types[r.type].n, dim: !(typeOk && featOk && capOk) };
+}
+function planSVG(f) {
+  const st = S.structure, list = S.rooms.filter(r => r.floor === f);
+  const W = P * 2 + STAIR + st.perRow * RW, H = P * 2 + st.rows * RH + CW;
+  const x0 = P + STAIR, yA = P, yC = P + RH, yB = P + RH + CW;
+  const L = 'var(--outline)', SF = 'var(--outline-v)';
+  let s = `<svg class="plan" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Roboto Flex, system-ui, sans-serif">
+    <defs><pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="9" style="stroke:var(--on-amber-container)" stroke-width="2" opacity=".18"/></pattern></defs>
+    <rect x="${P}" y="${P}" width="${W - 2 * P}" height="${H - 2 * P}" rx="24" fill="none" style="stroke:${L}" stroke-width="2"/>
+    <line x1="${x0}" y1="${P}" x2="${x0}" y2="${H - P}" style="stroke:${L}" stroke-width="1.5"/>`;
+  for (let k = 1; k < 9; k++) { const y = P + 24 + k * ((H - 2 * P - 40) / 9); s += `<line x1="${P + 14}" y1="${y}" x2="${x0 - 14}" y2="${y}" style="stroke:${SF}" stroke-width="1.5"/>`; }
+  s += `<text x="${P + STAIR / 2}" y="${P + 18}" text-anchor="middle" font-size="10" style="fill:var(--outline)">MERDİVEN</text>
+        <rect x="${P + 14}" y="${H - P - 52}" width="${STAIR - 28}" height="38" rx="6" fill="none" style="stroke:${SF}" stroke-width="1.5"/>
+        <text x="${P + STAIR / 2}" y="${H - P - 29}" text-anchor="middle" font-size="9.5" style="fill:var(--outline)">ASANSÖR</text>`;
+  const cy = st.rows === 2 ? yC : yA + RH;
+  s += `<line x1="${x0}" y1="${cy}" x2="${W - P}" y2="${cy}" style="stroke:${L}" stroke-width="1.5"/>`;
+  if (st.rows === 2) s += `<line x1="${x0}" y1="${yB}" x2="${W - P}" y2="${yB}" style="stroke:${L}" stroke-width="1.5"/>`;
+  s += `<line x1="${x0 + 12}" y1="${cy + CW / 2}" x2="${W - P - 12}" y2="${cy + CW / 2}" style="stroke:${SF}" stroke-width="1.5" stroke-dasharray="6 8"/>
+        <text x="${x0 + (W - P - x0) / 2}" y="${cy + CW / 2 - 8}" text-anchor="middle" font-size="10" letter-spacing="2" style="fill:var(--outline)">KORİDOR · ${f}. KAT</text>
+        <text x="${x0 + 10}" y="${P - 3}" font-size="9.5" style="fill:var(--outline)">${st.rows === 2 ? 'A BLOK · DENİZ CEPHESİ' : ''}</text>`;
+  list.forEach((r, n) => {
+    const x = x0 + r.idx * RW, y = r.row === 0 ? yA : yB;
+    if (r.idx > 0) s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + RH}" style="stroke:${L}" stroke-width="1.5"/>`;
+    const k = roomState(r);
+    const icons = r.feats.slice(0, 4).map((fk, j) => `<svg x="${x + 12 + j * 19}" y="${y + RH - 30}" width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:${k.ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"><use href="#i-${FEAT[fk].i}"/></svg>`).join('');
+    const hk = r.hk === 'dirty' && k.k !== 'mt' ? `<circle cx="${x + RW - 17}" cy="${y + 20}" r="5" style="fill:var(--amber)"/>` : '';
+    s += `<g class="room${k.k === 'sel' ? ' sel' : ''}${k.dim ? ' dim' : ''}" data-a="proom" data-no="${r.no}" data-k="${k.k}" style="--i:${n}">
+      <rect class="rb" x="${x + 6}" y="${y + 6}" width="${RW - 12}" height="${RH - 12}" rx="16" ry="16" style="fill:${k.fill}"/>
+      ${k.hatch ? `<rect x="${x + 6}" y="${y + 6}" width="${RW - 12}" height="${RH - 12}" rx="16" fill="url(#hatch)"/>` : ''}
+      <text x="${x + 14}" y="${y + 34}" font-size="21" font-weight="850" style="fill:${k.ink}">${r.no}</text>
+      <text x="${x + 14}" y="${y + 52}" font-size="11" font-weight="550" style="fill:${k.ink}" opacity=".85">${esc(k.sub)}</text>
+      ${k.k === 'mt' ? `<svg x="${x + RW - 34}" y="${y + 16}" width="18" height="18" viewBox="0 0 24 24" fill="none" style="stroke:${k.ink}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-build"/></svg>` : hk}
+      ${icons}
     </g>`;
   });
-  return s+'</svg>';
+  return s + '</svg>';
 }
-function state(r){
-  if(selected.has(r.no)) return {fill:'var(--primary)',ink:'var(--on-primary)',cls:' sel',sub:'Seçili'};
-  const b=busy(r.no,Q.in,Q.out);
-  if(b.length){ const n=b[0].guest.split(' '); return {fill:'var(--tertiary-container)',ink:'var(--on-tertiary-container)',cls:' busy',sub:n[0][0]+'. '+n[n.length-1]}; }
-  const dim = Q.type!=='ALL' && Q.type!==r.type;
-  return {fill:'var(--surface-c-highest)',ink:'var(--on-surface)',cls:dim?' dim':'',sub:''};
+function buildingSVG() {
+  const st = S.structure, q = UI.q, cw = 168 / (st.perRow * st.rows), fh = 26, W = 200, H = 46 + st.floors * fh + 16;
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Roboto Flex, system-ui">
+    <path d="M16 ${40} L${W / 2} 8 L${W - 16} 40" fill="none" style="stroke:var(--outline)" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="12" y="40" width="${W - 24}" height="${st.floors * fh + 6}" rx="10" fill="none" style="stroke:var(--outline)" stroke-width="2"/>`;
+  for (let f = st.floors; f >= 1; f--) {
+    const y = 44 + (st.floors - f) * fh, rs = S.rooms.filter(r => r.floor === f);
+    const free = rs.filter(r => isFree(r.no, q.in, q.out)).length;
+    s += `<g class="fl-row${UI.floor === f ? ' on' : ''}" data-a="floor" data-f="${f}"><rect class="hit" x="14" y="${y - 1}" width="${W - 28}" height="${fh}" rx="7"/>
+      <text x="22" y="${y + 16}" font-size="11" font-weight="700" style="fill:${UI.floor === f ? 'var(--primary)' : 'var(--on-surface-v)'}">${f}</text>`;
+    rs.forEach((r, i) => {
+      const k = mtOn(r.no, q.in, q.out).length ? 'var(--amber)' : resOn(r.no, q.in, q.out).length ? 'var(--primary)' : 'var(--outline-v)';
+      const cx = 32 + i * cw;
+      s += `<rect x="${cx}" y="${y + 5}" width="${Math.max(1.5, cw - 1.5)}" height="${fh - 12}" rx="1.5" style="fill:${k}"/>`;
+    });
+    s += `</g>`;
+    void free;
+  }
+  s += `<rect x="${W / 2 - 14}" y="${H - 16}" width="28" height="10" rx="2" style="fill:var(--outline-v)"/></svg>`;
+  return s;
 }
-
-function render(){
-  const c=S.config;
-  $('#propName').textContent=c.name;
-  $('#qIn').value=Q.in; $('#qOut').value=Q.out; $('#qOut').min=addDays(Q.in,1);
-  $('#qAd').textContent=Q.ad; $('#qCh').textContent=Q.ch;
-  const n=diff(Q.in,Q.out);
-  $('#qNights').textContent=n+' gece';
-  document.querySelectorAll('#qType button').forEach(b=>b.classList.toggle('on',b.dataset.v===Q.type));
-
-  const opts=['ALL',...Array.from({length:c.floors},(_,i)=>i+1)];
-  $('#floorSeg').innerHTML=opts.map(v=>`<button data-v="${v}" class="${String(v)===String(floorView)?'on':''}">${v==='ALL'?'Tümü':v+'. kat'}</button>`).join('');
-  const fl = floorView==='ALL' ? Array.from({length:c.floors},(_,i)=>c.floors-i) : [+floorView];
-  $('#floors').innerHTML=fl.map(f=>{
-    const free=rooms().filter(r=>r.floor===f && !busy(r.no,Q.in,Q.out).length && !selected.has(r.no)).length;
-    return `<div class="floor"><h3>${f}. Kat <span class="pill">${free} müsait</span></h3><div class="sc">${plan(f)}</div></div>`;
-  }).join('');
-
-  const sel=[...selected].map(room).filter(Boolean).sort((a,b)=>a.no-b.no);
-  $('#selList').innerHTML = sel.length ? sel.map(r=>`
-    <div class="si"><div class="no">${r.no}</div><div class="t"><b>${TYPES[r.type].name}</b><span>${r.floor}. kat · ${TYPES[r.type].cap} kişilik · ${money(c.rates[r.type])}/gece</span></div>
-    <button class="x" data-unsel="${r.no}" title="Kaldır">✕</button></div>`).join('')
-    : `<div class="empty"><div class="blob"><svg class="i" viewBox="0 0 24 24"><path d="M3 10h18M3 10v9h18v-9M7 10V6h10v4"/></svg></div>Krokiden müsait bir odaya dokunun.</div>`;
-
-  const roomT=sel.reduce((a,r)=>a+c.rates[r.type]*n,0);
-  const boardT= sel.length ? n*(Q.ad+Q.ch*.5)*c.board[Q.board] : 0;
-  $('#sum').innerHTML=`
-    <div class="l"><span>${fmt(Q.in)} – ${fmt(Q.out)}</span><span>${n} gece</span></div>
-    <div class="l"><span>${Q.ad} yetişkin${Q.ch?', '+Q.ch+' çocuk':''}</span><span>${BOARD[Q.board]}</span></div>
-    <div class="big"><span>Toplam</span><b>${money(roomT+boardT)}</b></div>`;
-  const cap=sel.reduce((a,r)=>a+TYPES[r.type].cap,0);
-  const w = sel.length && cap<Q.ad+Q.ch ? `Seçili odalar ${cap} kişilik, misafir sayısı ${Q.ad+Q.ch}.` : '';
-  $('#warn').textContent=w; $('#warn').style.display=w?'block':'none';
-  $('#btnBook').disabled=!sel.length || n<=0;
-}
-
-/* ---------- dialogs ---------- */
-const open = h => { $('#dlg').innerHTML=h; $('#scrim').classList.add('open'); };
-const close = () => $('#scrim').classList.remove('open');
-$('#scrim').addEventListener('click',e=>{ if(e.target.id==='scrim') close(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
-function toast(m){ const s=$('#snack'); s.textContent=m; s.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>s.classList.remove('show'),2400); }
-
-function roomDlg(no){
-  const r=room(no), list=live().filter(x=>x.room===no).sort((a,b)=>a.in<b.in?-1:1);
-  open(`<h2>Oda ${no}</h2><div class="muted">${TYPES[r.type].name} · ${r.floor}. kat · ${TYPES[r.type].cap} kişilik</div>
-    ${list.length?list.map(x=>`<div class="rc"><span class="tag ${x.status==='inhouse'?'h':'c'}">${x.status==='inhouse'?'Konaklıyor':'Onaylı'}</span>
-      <b>${esc(x.guest)}</b><div class="m">${fmt(x.in)} – ${fmt(x.out)} · ${diff(x.in,x.out)} gece<br>${x.ad} yetişkin${x.ch?', '+x.ch+' çocuk':''} · ${BOARD[x.board]} · ${money(x.total)}</div>
-      <div class="acts">${x.status==='confirmed'?`<button class="btn btn-tonal" data-act="in" data-id="${x.id}">Giriş yap</button><button class="btn btn-danger" data-act="cancel" data-id="${x.id}">İptal</button>`
-        :`<button class="btn btn-filled" data-act="out" data-id="${x.id}">Çıkış yap</button>`}</div></div>`).join('')
-      :'<div class="rc"><div class="m">Bu oda için rezervasyon yok.</div></div>'}
-    <div class="foot"><button class="btn btn-text" data-close>Kapat</button></div>`);
-}
-function settingsDlg(){
-  const c=S.config;
-  open(`<h2>Otel ayarları</h2><div class="muted">Kat planı bu ayarlara göre çizilir.</div>
-    <div class="tf" style="margin-top:16px"><label>Otel adı</label><input id="sName" value="${esc(c.name)}"></div>
-    <div class="sgrid">
-      <div class="tf"><label>Kat</label><input id="sF" type="number" min="1" max="8" value="${c.floors}"></div>
-      <div class="tf"><label>Sıra</label><select id="sR"><option value="1" ${c.rows==1?'selected':''}>1</option><option value="2" ${c.rows==2?'selected':''}>2</option></select></div>
-      <div class="tf"><label>Sıradaki oda</label><input id="sP" type="number" min="2" max="12" value="${c.perRow}"></div>
-      <div class="tf"><label>Standart ₺</label><input id="rSTD" type="number" value="${c.rates.STD}"></div>
-      <div class="tf"><label>Deluxe ₺</label><input id="rDLX" type="number" value="${c.rates.DLX}"></div>
-      <div class="tf"><label>Suit ₺</label><input id="rSTE" type="number" value="${c.rates.STE}"></div>
+PAGE_FN.kroki = () => {
+  const q = UI.q, n = Math.max(0, diff(q.in, q.out)), f = UI.floor;
+  const sel = [...UI.sel].map(room).filter(Boolean).sort((a, b) => a.no - b.no);
+  const sum = bookingSum(sel);
+  const floorRooms = S.rooms.filter(r => r.floor === f);
+  const freeCnt = floorRooms.filter(r => isFree(r.no, q.in, q.out)).length;
+  const se = seasonFor(S, q.in);
+  const html = `
+  <div class="grid" style="grid-template-columns:minmax(0,1fr) 230px;gap:16px;margin-bottom:16px" id="krokiTop">
+    <div class="card stg" style="--i:0">
+      <div class="grid g4">
+        <div class="tf"><label>Giriş</label><input type="date" id="qIn" value="${q.in}" data-in="qIn"></div>
+        <div class="tf"><label>Çıkış</label><input type="date" id="qOut" value="${q.out}" min="${addDays(q.in, 1)}" data-in="qOut"></div>
+        <div class="stepper"><div class="l">Yetişkin<b>${q.ad}</b></div><div><button data-a="step" data-k="ad" data-v="-1">−</button><button data-a="step" data-k="ad" data-v="1">+</button></div></div>
+        <div class="stepper"><div class="l">Çocuk<b>${q.ch}</b></div><div><button data-a="step" data-k="ch" data-v="-1">−</button><button data-a="step" data-k="ch" data-v="1">+</button></div></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <span class="tag t-ter" style="height:36px;padding:0 14px;font-size:13.5px">${n} gece</span>
+        ${se ? `<span class="tag t-amb" style="height:36px;padding:0 14px">${esc(se.name)} · %${se.mult}</span>` : ''}
+        <div class="tf" style="padding:18px 14px 5px;min-width:210px"><label>Pansiyon</label><select data-in="qBoard">${Object.entries(BOARD).map(([k, v]) => `<option value="${k}" ${q.board === k ? 'selected' : ''}>${k} · ${v}</option>`).join('')}</select></div>
+        <div class="tf" style="padding:18px 14px 5px;min-width:170px"><label>Oda tipi</label><select data-in="qType"><option value="ALL">Tümü</option>${Object.entries(S.types).map(([k, v]) => `<option value="${k}" ${q.type === k ? 'selected' : ''}>${v.n}</option>`).join('')}</select></div>
+      </div>
+      <div class="chips" style="margin-top:12px">${FEATURES.map(x => `<button class="chip${q.feats.has(x.k) ? ' on' : ''}" data-a="feat" data-k="${x.k}">${ic(x.i, 'xs')}${x.n}</button>`).join('')}</div>
     </div>
-    <div style="margin-top:20px;font-size:13px;color:var(--on-surface-v)">Tema</div>
-    <div class="seg theme-seg" id="themeSeg">
-      ${[['light','Açık'],['dark','Karanlık'],['auto','Otomatik']].map(([v,l])=>`<button data-theme="${v}" class="${c.theme===v?'on':''}">${l}</button>`).join('')}
+    <div class="card bldg stg" style="--i:1;padding:16px"><div class="muted" style="font-size:12px;margin-bottom:4px">Bina kesiti · kata dokunun</div>${buildingSVG()}</div>
+  </div>
+  <div class="card stg" style="--i:2">
+    <div class="between" style="margin-bottom:12px;flex-wrap:wrap">
+      <h3 style="margin:0">${f}. kat <span class="tag t-ok">${freeCnt} müsait</span> <span class="muted" style="font-size:13px;font-weight:500">${fmt(q.in)} – ${fmt(q.out)}</span></h3>
+      <div class="row"><button class="ibtn tonal" data-a="floor" data-f="${Math.max(1, f - 1)}" title="Alt kat" ${f <= 1 ? 'disabled' : ''}>${ic('cl')}</button>
+      <div class="seg">${Array.from({ length: S.structure.floors }, (_, i) => `<button class="${f === i + 1 ? 'on' : ''}" data-a="floor" data-f="${i + 1}">${i + 1}</button>`).join('')}</div>
+      <button class="ibtn tonal" data-a="floor" data-f="${Math.min(S.structure.floors, f + 1)}" title="Üst kat" ${f >= S.structure.floors ? 'disabled' : ''}>${ic('cr')}</button></div>
     </div>
-    <div class="foot"><span class="ver">Renstek PMS v${VERSION}</span><button class="btn btn-text" data-close>Vazgeç</button><button class="btn btn-filled" id="sSave">Kaydet</button></div>`);
+    <div class="floor"><div class="sc">${planSVG(f)}</div></div>
+    <div class="lg-row" style="margin-top:12px"><span><i style="background:var(--surface-c-highest)"></i>Müsait</span><span><i style="background:var(--primary)"></i>Seçili</span>
+      <span><i style="background:var(--secondary-container)"></i>Rezerve</span><span><i style="background:var(--tertiary-container)"></i>Konaklıyor</span>
+      <span><i style="background:var(--amber-container)"></i>Bakımda</span><span><i style="background:var(--amber);border-radius:50%"></i>Kirli</span>
+      <span>${FEATURES.slice(0, 4).map(x => ic(x.i, 'xs') + ' ' + x.n).join(' &nbsp; ')}</span></div>
+  </div>
+  <div class="bsheet${sel.length ? ' show' : ''}">
+    <div class="row" style="flex:1;min-width:0;flex-wrap:nowrap;overflow-x:auto">${sel.map(r => `<span class="sel-chip">${r.no}<em>${S.types[r.type].n}</em><button data-a="unsel" data-no="${r.no}" title="Kaldır">${ic('x', 'xs')}</button></span>`).join('')}</div>
+    <div style="text-align:right;white-space:nowrap"><div style="font-size:12px;opacity:.8">${sel.length} oda · ${n} gece</div><b style="font-size:22px;font-variation-settings:'wdth' 118" class="num">${money(sum.total)}</b></div>
+    <button class="btn btn-text" data-a="clearSel" style="color:inherit">Temizle</button>
+    <button class="btn btn-filled btn-lg" data-a="bookDlg">Devam ${ic('cr', 's')}</button>
+  </div>`;
+  return { title: 'Kat planı', sub: `${S.structure.floors} kat · ${S.rooms.length} oda · müsait odalara dokunarak seçin`, html };
+};
+function bookingSum(sel) {
+  const q = UI.q; let ad = q.ad, ch = q.ch, total = 0, roomOnly = 0;
+  sel.forEach((r, i) => { const left = sel.length - i, a = clamp(Math.ceil(ad / left), 1, S.types[r.type].cap), c = Math.min(Math.ceil(ch / left), Math.max(0, S.types[r.type].cap - a)); ad -= a; ch -= c;
+    total += stayPrice(r.type, q.in, q.out, a, c, q.board); for (let d = q.in; d < q.out; d = addDays(d, 1)) roomOnly += rate(r.type, d); });
+  return { total, roomOnly, cap: sel.reduce((a, r) => a + S.types[r.type].cap, 0) };
+}
+function bookDlg() {
+  const q = UI.q, n = diff(q.in, q.out), sel = [...UI.sel].map(room).filter(Boolean).sort((a, b) => a.no - b.no), s = bookingSum(sel), b = UI.bf || {};
+  const warn = [];
+  if (s.cap < q.ad + q.ch) warn.push(`Seçili odalar ${s.cap} kişilik, misafir sayısı ${q.ad + q.ch}. Ek oda seçin.`);
+  if (sel.length > q.ad) warn.push('Her odaya en az bir yetişkin gerekir.');
+  openDlg(`${dhead(sel.length, 'Rezervasyonu tamamla', `${sel.map(r => r.no).join(', ')} · ${fmt(q.in)} – ${fmt(q.out)} · ${n} gece`)}
+    <div class="grid" style="gap:10px">
+      <div class="tf"><label>Misafir adı soyadı *</label><input id="bName" data-in="bName" value="${esc(b.name || '')}" autofocus></div>
+      <div class="grid g2" style="gap:10px"><div class="tf"><label>Telefon</label><input id="bPhone" data-in="bPhone" value="${esc(b.phone || '')}"></div>
+        <div class="tf"><label>Uyruk</label><select data-in="bNat">${['TR','DE','GB','RU','NL','FR','IT','SE','Diğer'].map(x => `<option ${(b.nat || 'TR') === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div></div>
+      <div class="grid g2" style="gap:10px"><div class="tf"><label>Satış kanalı</label><select data-in="bCh">${CHANNELS.map(c => `<option ${(b.ch || 'Direkt') === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+        <div class="tf"><label>Kapora / ön ödeme (₺)</label><input id="bPaid" type="number" min="0" data-in="bPaid" value="${b.paid || ''}"></div></div>
+      <div class="tf"><label>Not (geç giriş, bebek yatağı vb.)</label><input id="bNote" data-in="bNote" value="${esc(b.note || '')}"></div>
+    </div>
+    <div class="total" style="margin-top:14px">
+      <div class="l"><span>Oda bedeli · ${sel.length} oda</span><span class="num">${money(s.roomOnly)}</span></div>
+      <div class="l"><span>${BOARD[q.board]} · ${q.ad} yetişkin${q.ch ? ', ' + q.ch + ' çocuk' : ''}</span><span class="num">${money(Math.max(0, s.total - s.roomOnly))}</span></div>
+      <div class="big"><span>Toplam</span><b class="num">${money(s.total)}</b></div>
+    </div>
+    ${warn.map(w => `<div class="warnl" style="margin-top:10px">${ic('alert', 'xs')} ${w}</div>`).join('')}
+    <div class="dfoot"><button class="btn btn-text" data-a="close">Geri</button><button class="btn btn-filled btn-lg" data-a="book" ${warn.length && sel.length > q.ad ? 'disabled' : ''}>${ic('check', 's')} Rezervasyonu oluştur</button></div>`);
+  setTimeout(() => $('#bName')?.focus(), 80);
 }
 
-/* ---------- events ---------- */
-$('#qIn').addEventListener('change',e=>{ if(!e.target.value) return; Q.in=e.target.value; if(Q.out<=Q.in) Q.out=addDays(Q.in,1); prune(); render(); });
-$('#qOut').addEventListener('change',e=>{ if(!e.target.value) return; Q.out=e.target.value<=Q.in?addDays(Q.in,1):e.target.value; prune(); render(); });
-$('#qBoard').addEventListener('change',e=>{ Q.board=e.target.value; render(); });
-function prune(){ [...selected].forEach(no=>{ if(busy(no,Q.in,Q.out).length) selected.delete(no); }); }
+/* ---------- 3. Doluluk takvimi ---------- */
+const TD = 21, TCW = 56, TLW = 140;
+PAGE_FN.takvim = () => {
+  const fl = UI.tapeFloor, start = UI.tapeStart, end = addDays(start, TD);
+  const rooms = S.rooms.filter(r => fl === 'ALL' || r.floor === fl);
+  let h = `<div class="cn">Oda</div>`;
+  for (let i = 0; i < TD; i++) { const d = addDays(start, i), dd = parse(d), we = dd.getDay() === 0 || dd.getDay() === 6;
+    h += `<div class="hc${we ? ' we' : ''}${d === TODAY ? ' td' : ''}">${DOW[dd.getDay()]}<b>${dd.getDate()}</b>${MON[dd.getMonth()]}</div>`; }
+  const top = {}; let y = 54, lastF = 0;
+  rooms.forEach(r => {
+    if (r.floor !== lastF) { h += `<div class="fh">${r.floor}. kat</div>`; y += 32; lastF = r.floor; }
+    top[r.no] = y;
+    h += `<div class="rl" data-a="room" data-no="${r.no}"><b>${r.no}</b><em>${S.types[r.type].n}</em>${r.hk === 'dirty' ? '<span style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></span>' : ''}</div>`;
+    for (let i = 0; i < TD; i++) { const d = addDays(start, i); h += `<div class="cl${d === TODAY ? ' tdc' : ''}" data-a="cell" data-no="${r.no}" data-d="${d}"></div>`; }
+    y += 42;
+  });
+  let bi = 0;
+  const pos = (a, b) => { const s = Math.max(0, diff(start, a)), e = Math.min(TD, diff(start, b)); return { l: TLW + s * TCW + (a >= start ? TCW / 2 : 0) + 2, r: TLW + e * TCW + (b <= end ? TCW / 2 : 0) - 2 }; };
+  S.res.forEach(r => {
+    if (top[r.room] === undefined || !(earning(r)) || !(r.in < end && r.out > start)) return;
+    const p = pos(r.in, r.out), cls = r.status === 'inhouse' ? 'b-in' : r.status === 'out' ? 'b-out' : 'b-conf';
+    const vip = S.vip[key(r.guest, r.phone)];
+    h += `<div class="bar-r ${cls}" data-a="res" data-id="${r.id}" style="--i:${bi++};top:${top[r.room] + 6}px;left:${p.l}px;width:${Math.max(20, p.r - p.l)}px" title="${esc(r.guest)} · ${fmt(r.in)}–${fmt(r.out)} · ${r.channel}">${vip ? ic('star', 'xs') : ''}${esc(r.guest)} <span style="opacity:.7;font-size:10.5px">${r.board}</span></div>`;
+  });
+  S.maint.filter(m => m.status !== 'done').forEach(m => m.rooms.forEach(no => {
+    if (top[no] === undefined || !(m.from < end && m.to >= start)) return;
+    const s = Math.max(0, diff(start, m.from)), e = Math.min(TD, diff(start, m.to) + 1);
+    h += `<div class="bar-r b-mt" data-a="mt" data-id="${m.id}" style="--i:${bi++};top:${top[no] + 6}px;left:${TLW + s * TCW + 2}px;width:${(e - s) * TCW - 4}px" title="Bakım: ${esc(m.reason)}">${ic(MCAT[m.cat] || 'build', 'xs')} ${esc(m.cat)}</div>`;
+  }));
+  const html = `
+  <div class="card stg" style="--i:0;padding:16px">
+    <div class="between" style="margin-bottom:12px;flex-wrap:wrap">
+      <div class="seg"><button class="${fl === 'ALL' ? 'on' : ''}" data-a="tfloor" data-f="ALL">Tümü</button>${Array.from({ length: S.structure.floors }, (_, i) => `<button class="${fl === i + 1 ? 'on' : ''}" data-a="tfloor" data-f="${i + 1}">${i + 1}. kat</button>`).join('')}</div>
+      <div class="row"><span class="muted" style="font-size:13px">${fmt(start)} – ${fmt(addDays(end, -1))}</span>
+        <button class="ibtn tonal" data-a="tnav" data-v="-7" title="Önceki hafta">${ic('cl')}</button><button class="btn btn-tonal btn-sm" data-a="tnav" data-v="0">Bugün</button><button class="ibtn tonal" data-a="tnav" data-v="7" title="Sonraki hafta">${ic('cr')}</button></div>
+    </div>
+    <div class="lg-row" style="margin-bottom:10px"><span><i style="background:var(--secondary-container)"></i>Onaylı</span><span><i style="background:var(--primary)"></i>Konaklıyor</span><span><i style="background:var(--surface-c-highest)"></i>Çıkış yaptı</span><span><i style="background:var(--amber-container)"></i>Bakım</span><span>Boş hücreye dokunarak o tarihten rezervasyon başlatın</span></div>
+    <div class="tape-wrap"><div class="tape" style="grid-template-columns:${TLW}px repeat(${TD},${TCW}px)">${h}</div></div>
+  </div>`;
+  return { title: 'Doluluk takvimi', sub: `${rooms.length} oda · 3 hafta`, html };
+};
 
-document.addEventListener('click',e=>{
-  const t=e.target.closest('#themeSeg button,[data-step],#qType button,#floorSeg button,.room,[data-unsel],[data-close],[data-act],#sSave');
-  if(!t) return;
-  if(t.matches('#themeSeg button')){ S.config.theme=t.dataset.theme; applyTheme(); save(); document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b===t)); return; }
-  if(t.dataset.step){ const [k,v]=t.dataset.step.split(':'); if(k==='ad') Q.ad=Math.max(1,Math.min(12,Q.ad+ +v)); else Q.ch=Math.max(0,Math.min(8,Q.ch+ +v)); render(); return; }
-  if(t.matches('#qType button')){ Q.type=t.dataset.v; render(); return; }
-  if(t.matches('#floorSeg button')){ floorView=t.dataset.v; render(); return; }
-  if(t.matches('.room')){ const no=+t.dataset.no;
-    if(selected.has(no)) selected.delete(no);
-    else if(t.classList.contains('busy')) return roomDlg(no);
-    else if(t.classList.contains('dim')) return toast('Bu oda seçili oda tipine uymuyor');
-    else selected.add(no);
-    render(); return; }
-  if(t.dataset.unsel){ selected.delete(+t.dataset.unsel); render(); return; }
-  if(t.hasAttribute('data-close')){ close(); return; }
-  if(t.dataset.act){ const r=S.res.find(x=>x.id===t.dataset.id);
-    if(t.dataset.act==='in'){ r.status='inhouse'; toast(r.guest+' giriş yaptı'); }
-    if(t.dataset.act==='out'){ r.status='out'; toast(r.guest+' çıkış yaptı'); }
-    if(t.dataset.act==='cancel'){ r.status='cancelled'; toast('Rezervasyon iptal edildi'); }
-    save(); render(); roomDlg(r.room); return; }
-  if(t.id==='sSave'){ const c=S.config, num=(id,a,b)=>Math.max(a,Math.min(b,parseInt($(id).value)||a));
-    c.name=$('#sName').value.trim()||'Otel'; c.floors=num('#sF',1,8); c.rows=num('#sR',1,2); c.perRow=num('#sP',2,12);
-    ['STD','DLX','STE'].forEach(k=>c.rates[k]=Math.max(0,+$('#r'+k).value||0));
-    const ok=new Set(rooms().map(r=>r.no)); selected=new Set([...selected].filter(n=>ok.has(n)));
-    if(floorView!=='ALL' && +floorView>c.floors) floorView='ALL';
-    save(); close(); render(); toast('Ayarlar kaydedildi'); }
+/* ---------- 4. Rezervasyonlar ---------- */
+PAGE_FN.rezervasyonlar = () => {
+  const f = UI.rez, q = f.q.trim().toLowerCase();
+  let list = S.res.filter(r => {
+    if (f.st === 'live' && !live(r)) return false;
+    if (f.st !== 'live' && f.st !== 'all' && r.status !== f.st) return false;
+    if (f.when === 'today' && !(r.in === TODAY || r.out === TODAY)) return false;
+    if (f.when === 'upcoming' && r.out < TODAY) return false;
+    if (f.when === 'past' && r.out >= TODAY) return false;
+    if (q && !(r.guest.toLowerCase().includes(q) || String(r.room).includes(q) || r.id.toLowerCase().includes(q) || (r.phone || '').replace(/\D/g, '').includes(q.replace(/\D/g, '') || '#') || r.channel.toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a, b) => a.in < b.in ? -1 : a.in > b.in ? 1 : a.room - b.room);
+  const tot = list.reduce((a, r) => a + r.total, 0), bal = list.reduce((a, r) => a + Math.max(0, r.total - r.paid), 0);
+  const shown = list.slice(0, f.limit);
+  const html = `
+  <div class="card stg" style="--i:0">
+    <div class="row" style="margin-bottom:14px">
+      <div class="tf" style="flex:1;min-width:220px;padding:18px 14px 6px"><label>Ara: misafir, oda, telefon, kanal, no</label><input id="rezQ" data-in="rezQ" value="${esc(f.q)}"></div>
+      <div class="seg">${[['upcoming','Güncel'],['today','Bugün'],['past','Geçmiş'],['all','Tümü']].map(([k, n]) => `<button class="${f.when === k ? 'on' : ''}" data-a="rezWhen" data-v="${k}">${n}</button>`).join('')}</div>
+    </div>
+    <div class="chips" style="margin-bottom:14px">${[['live','Aktif'],['confirmed','Onaylı'],['inhouse','Konaklıyor'],['out','Çıkış yaptı'],['cancelled','İptal'],['noshow','Gelmedi'],['all','Hepsi']].map(([k, n]) => `<button class="chip${f.st === k ? ' on' : ''}" data-a="rezSt" data-v="${k}">${n}</button>`).join('')}
+      <span class="spacer"></span><span class="muted" style="font-size:13px;align-self:center">${list.length} kayıt · ${money(tot)} · bakiye ${money(bal)}</span></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>No</th><th>Misafir</th><th>Oda</th><th>Giriş</th><th>Çıkış</th><th class="r">Gece</th><th>Pansiyon</th><th>Kanal</th><th class="r">Tutar</th><th class="r">Bakiye</th><th>Durum</th><th></th></tr></thead><tbody>
+    ${shown.map(r => { const vip = S.vip[key(r.guest, r.phone)], b = r.total - r.paid; return `<tr class="click" data-a="res" data-id="${r.id}"><td class="muted">${r.id}</td><td><b style="font-weight:620">${esc(r.guest)}</b> ${vip ? '<span class="tag t-ter" style="height:20px;padding:0 7px">VIP</span>' : ''}<div class="muted" style="font-size:12px">${r.nat} · ${r.ad + r.ch} kişi</div></td>
+      <td><b>${r.room}</b> <span class="muted">${S.types[room(r.room)?.type]?.n || ''}</span></td><td>${fmt(r.in)}</td><td>${fmt(r.out)}</td><td class="r num">${diff(r.in, r.out)}</td><td>${r.board}</td><td>${r.channel}</td>
+      <td class="r num">${money(r.total)}</td><td class="r num" style="${b > 0 && live(r) ? 'color:var(--error);font-weight:650' : ''}">${b > 0 ? money(b) : '—'}</td><td><span class="tag ${ST[r.status].c}">${ST[r.status].n}</span></td>
+      <td>${r.status === 'confirmed' && r.in <= TODAY ? `<button class="btn btn-tonal btn-sm" data-a="ci" data-id="${r.id}">Giriş</button>` : r.status === 'inhouse' && r.out <= addDays(TODAY, 0) ? `<button class="btn btn-tonal btn-sm" data-a="co" data-id="${r.id}">Çıkış</button>` : ''}</td></tr>`; }).join('')}
+    </tbody></table>${!list.length ? emptyBox('Bu filtrelerle rezervasyon bulunamadı.') : ''}</div>
+    ${list.length > f.limit ? `<div style="text-align:center;margin-top:14px"><button class="btn btn-tonal" data-a="more">${list.length - f.limit} kayıt daha göster</button></div>` : ''}
+  </div>`;
+  return { title: 'Rezervasyonlar', sub: `${S.res.filter(live).length} aktif rezervasyon`, html, fab: { n: 'Yeni rezervasyon', a: 'newres' } };
+};
+
+/* ---------- 5. Odalar ---------- */
+PAGE_FN.odalar = () => {
+  const f = UI.rooms, q = f.q.trim();
+  const list = S.rooms.filter(r => (f.floor === 'ALL' || r.floor === +f.floor) && (f.type === 'ALL' || r.type === f.type) && (f.feat === 'ALL' || r.feats.includes(f.feat)) && (!q || String(r.no).includes(q) || (r.note || '').toLowerCase().includes(q.toLowerCase())));
+  const typeCounts = Object.keys(S.types).map(k => [k, S.rooms.filter(r => r.type === k).length]).filter(x => x[1]);
+  const bulk = f.bulk;
+  const html = `
+  <div class="grid g4" style="margin-bottom:16px">${typeCounts.slice(0, 4).map(([k, c], i) => `<div class="kpi stg" style="--i:${i}"><div class="k">${ic('bed')} ${S.types[k].n}</div><div class="v num" data-count="${c}">0</div><div class="d">${S.types[k].cap} kişilik · ${money(S.types[k].base)} taban</div></div>`).join('')}</div>
+  <div class="card stg" style="--i:4">
+    <div class="row" style="margin-bottom:12px">
+      <div class="tf" style="width:180px;padding:18px 14px 6px"><label>Oda no / not</label><input id="roomQ" data-in="roomQ" value="${esc(f.q)}"></div>
+      <div class="tf" style="width:140px;padding:18px 14px 6px"><label>Kat</label><select data-in="roomFloor"><option value="ALL">Tümü</option>${Array.from({ length: S.structure.floors }, (_, i) => `<option value="${i + 1}" ${+f.floor === i + 1 ? 'selected' : ''}>${i + 1}. kat</option>`).join('')}</select></div>
+      <div class="tf" style="width:170px;padding:18px 14px 6px"><label>Tip</label><select data-in="roomType"><option value="ALL">Tümü</option>${Object.entries(S.types).map(([k, v]) => `<option value="${k}" ${f.type === k ? 'selected' : ''}>${v.n}</option>`).join('')}</select></div>
+      <div class="tf" style="width:190px;padding:18px 14px 6px"><label>Özellik</label><select data-in="roomFeat"><option value="ALL">Tümü</option>${FEATURES.map(x => `<option value="${x.k}" ${f.feat === x.k ? 'selected' : ''}>${x.n}</option>`).join('')}</select></div>
+      <span class="spacer"></span>
+      ${bulk.size ? `<span class="tag t-pri" style="height:36px;padding:0 14px">${bulk.size} oda seçili</span><button class="btn btn-amber" data-a="bulkMt">${ic('build', 's')} Bakım planla</button><button class="btn btn-tonal" data-a="bulkType">Tip değiştir</button><button class="btn btn-text" data-a="bulkClear">Temizle</button>` : `<span class="muted" style="font-size:13px">${list.length} oda</span>`}
+    </div>
+    <div class="tbl-wrap" style="max-height:calc(100vh - 330px)"><table class="tbl"><thead><tr><th><input type="checkbox" class="cb" data-a="bulkAll" ${list.length && list.every(r => bulk.has(r.no)) ? 'checked' : ''}></th><th>Oda</th><th>Kat</th><th>Tip</th><th class="r">Kapasite</th><th>Özellikler</th><th>Bu gece</th><th>Kat hizmeti</th><th>Sıradaki bakım</th><th class="r">Bu gece fiyat</th></tr></thead><tbody>
+    ${list.map(r => { const x = nightRes(r.no, TODAY), m = mtDay(r.no, TODAY), nm = S.maint.filter(z => z.status !== 'done' && z.rooms.includes(r.no) && z.to >= TODAY).sort((a, b) => a.from < b.from ? -1 : 1)[0];
+      return `<tr class="click" data-a="room" data-no="${r.no}"><td data-stop="1"><input type="checkbox" class="cb" data-a="bulk" data-no="${r.no}" ${bulk.has(r.no) ? 'checked' : ''}></td><td><b style="font-size:15px">${r.no}</b></td><td>${r.floor}</td><td>${S.types[r.type].n}</td><td class="r">${S.types[r.type].cap}</td>
+      <td><div class="row" style="gap:4px;flex-wrap:nowrap">${r.feats.map(k => `<span class="tag t-mute" title="${FEAT[k].n}" style="padding:0 7px">${ic(FEAT[k].i, 'xs')}</span>`).join('') || '<span class="muted">—</span>'}</div></td>
+      <td>${m ? '<span class="tag t-err">Bakımda</span>' : x ? `<span class="tag ${x.status === 'inhouse' ? 't-pri' : 't-sec'}">${esc(x.guest.split(' ')[0])}</span>` : '<span class="tag t-ok">Boş</span>'}</td>
+      <td><span class="tag ${r.hk === 'clean' ? 't-ok' : r.hk === 'dirty' ? 't-amb' : 't-mute'}">${HK[r.hk].n}</span></td>
+      <td>${nm ? `<span class="${mtStatus(nm) === 'active' ? '' : 'muted'}">${fmt(nm.from)} · ${esc(nm.cat)}</span>` : '<span class="muted">—</span>'}</td><td class="r num">${money(rate(r.type, TODAY))}</td></tr>`; }).join('')}
+    </tbody></table></div>
+  </div>`;
+  return { title: 'Odalar', sub: `${S.rooms.length} oda · ${S.structure.floors} kat · ${Object.keys(S.types).length} oda tipi`, html };
+};
+
+/* ---------- 6. Bakım & arıza ---------- */
+PAGE_FN.bakim = () => {
+  const tab = UI.mt, all = S.maint.map(m => ({ m, s: mtStatus(m) }));
+  const sets = { open: all.filter(x => x.s !== 'done'), active: all.filter(x => x.s === 'active' || x.s === 'overdue'), planned: all.filter(x => x.s === 'planned'), done: all.filter(x => x.s === 'done') };
+  const list = sets[tab].sort((a, b) => tab === 'done' ? (a.m.to < b.m.to ? 1 : -1) : (a.m.from < b.m.from ? -1 : 1));
+  const conf = openMaintConflicts();
+  const roomNights = all.filter(x => x.s !== 'done').reduce((a, x) => a + x.m.rooms.length * (diff(x.m.from, x.m.to) + 1), 0);
+  const lost = all.filter(x => x.s !== 'done').reduce((a, x) => { let t = 0; x.m.rooms.forEach(no => { for (let d = x.m.from; d <= x.m.to; d = addDays(d, 1)) t += rate(room(no).type, d); }); return a + t; }, 0);
+  const html = `
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="kpi hero stg" style="--i:0;background:var(--error-container);color:var(--on-error-container)"><div class="k">${ic('build')} Şu an bakımda</div><div class="v num" data-count="${sets.active.reduce((a, x) => a + x.m.rooms.length, 0)}">0</div><div class="d">${sets.active.length} iş emri</div><div class="blob"></div></div>
+    <div class="kpi stg" style="--i:1"><div class="k">${ic('cal')} Planlı</div><div class="v num" data-count="${sets.planned.length}">0</div><div class="d">${sets.planned.reduce((a, x) => a + x.m.rooms.length, 0)} oda</div></div>
+    <div class="kpi stg" style="--i:2"><div class="k">${ic('ban')} Satışa kapalı gece</div><div class="v num" data-count="${roomNights}">0</div><div class="d">oda × gece</div></div>
+    <div class="kpi stg" style="--i:3"><div class="k">${ic('money')} Kayıp potansiyel</div><div class="v num" data-count="${Math.round(lost)}" data-f="money">₺0</div><div class="d">raf fiyatıyla</div></div>
+  </div>
+  ${conf.length ? `<div class="card stg" style="--i:4;background:var(--error-container);color:var(--on-error-container);margin-bottom:16px">
+    <h3>${ic('alert')} ${conf.length} rezervasyon bakım tarihleriyle çakışıyor <button class="btn btn-filled btn-sm act" style="background:var(--error);color:var(--surface)" data-a="fixAll">Hepsini uygun odalara taşı</button></h3>
+    <div class="list">${conf.map(({ m, r }) => `<div class="li" data-a="res" data-id="${r.id}"><div class="av" style="background:var(--surface);color:var(--on-surface)">${r.room}</div><div class="t"><b>${esc(r.guest)}</b><span style="color:inherit;opacity:.8">${fmt(r.in)}–${fmt(r.out)} · bakım: ${fmt(m.from)}–${fmt(m.to)} ${esc(m.cat)}</span></div><button class="btn btn-sm" style="background:var(--surface);color:var(--on-surface)" data-a="fixOne" data-id="${r.id}">${ic('swap', 's')} Taşı</button></div>`).join('')}</div></div>` : ''}
+  <div class="card stg" style="--i:5">
+    <div class="between" style="margin-bottom:14px;flex-wrap:wrap"><div class="seg">${[['open','Açık işler', sets.open.length],['active','Devam eden', sets.active.length],['planned','Planlı', sets.planned.length],['done','Tamamlanan', sets.done.length]].map(([k, n, c]) => `<button class="${tab === k ? 'on' : ''}" data-a="mtTab" data-v="${k}">${n} · ${c}</button>`).join('')}</div>
+      <button class="btn btn-filled" data-a="newmt">${ic('plus', 's')} Bakım planla</button></div>
+    <div class="grid g2">${list.map(({ m, s }, i) => { const c = mtConflicts(m).length, days = diff(m.from, m.to) + 1, done = s === 'done' ? 1 : s === 'active' ? (diff(m.from, TODAY) + 1) / days : 0;
+      const col = s === 'active' || s === 'overdue' ? ['var(--error-container)', 'var(--on-error-container)'] : s === 'done' ? ['var(--success-container)', 'var(--on-success-container)'] : ['var(--amber-container)', 'var(--on-amber-container)'];
+      return `<div class="mt-card stg" style="--i:${6 + i}" data-a="mt" data-id="${m.id}"><div class="mt-ic" style="background:${col[0]};color:${col[1]}">${ic(MCAT[m.cat] || 'build')}</div>
+        <div class="t"><div class="between"><b>Oda ${roomsLabel(m.rooms)}</b><span class="tag ${PRIO[m.prio].c}">${PRIO[m.prio].n}</span></div>
+        <div style="font-size:13.5px;margin-top:2px">${esc(m.reason)}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:4px">${fmt(m.from)}${m.to !== m.from ? ' – ' + fmt(m.to) : ''} · ${days} gün · ${esc(m.cat)} · ${esc(staff(m.who)?.name || 'Atanmadı')}</div>
+        <div class="row" style="margin-top:8px;gap:6px">${s === 'active' ? '<span class="tag t-err">Devam ediyor</span>' : s === 'overdue' ? '<span class="tag t-err">Süresi geçti</span>' : s === 'done' ? '<span class="tag t-ok">Tamamlandı</span>' : `<span class="tag t-amb">${diff(TODAY, m.from)} gün sonra</span>`}${c ? `<span class="tag t-err">${ic('alert', 'xs')} ${c} çakışma</span>` : ''}</div>
+        ${s !== 'planned' ? `<div class="prog"><i style="width:${Math.round(done * 100)}%;${s === 'done' ? 'background:var(--success)' : ''}"></i></div>` : ''}</div></div>`; }).join('') || `<div class="spanall">${emptyBox('Bu sekmede kayıt yok.')}</div>`}</div>
+  </div>`;
+  return { title: 'Bakım & arıza', sub: 'Odaları belirli tarihlerde satışa kapatın, iş emirlerini takip edin', html };
+};
+
+/* ---------- 7. Kat hizmetleri ---------- */
+PAGE_FN['kat-hizmetleri'] = () => {
+  const fl = UI.hkFloor, cnt = k => S.rooms.filter(r => r.hk === k).length;
+  const depToday = new Set(S.res.filter(r => r.out === TODAY && (r.status === 'inhouse' || r.status === 'out')).map(r => r.room));
+  const arrToday = new Set(S.res.filter(r => r.in === TODAY && live(r)).map(r => r.room));
+  const floors = Array.from({ length: S.structure.floors }, (_, i) => i + 1).filter(f => fl === 'ALL' || f === fl);
+  const hkStaff = S.staff.filter(s => /oda|kat/i.test(s.role));
+  const html = `
+  <div class="grid g4" style="margin-bottom:16px">
+    ${[['dirty','Kirli','t-amb'],['inspect','Kontrol bekliyor','t-sec'],['clean','Temiz','t-ok'],['dnd','Rahatsız etmeyin','t-mute']].map(([k, n], i) => `<div class="kpi stg" style="--i:${i}"><div class="k">${ic(HK[k].i)} ${n}</div><div class="v num" data-count="${cnt(k)}">0</div><div class="d">${k === 'dirty' ? [...depToday].filter(no => room(no).hk === 'dirty').length + ' tanesi bugün çıkış' : k === 'clean' ? 'satışa hazır' : '&nbsp;'}</div></div>`).join('')}
+  </div>
+  <div class="card stg" style="--i:4">
+    <div class="between" style="margin-bottom:14px;flex-wrap:wrap">
+      <div class="seg"><button class="${fl === 'ALL' ? 'on' : ''}" data-a="hkFloor" data-f="ALL">Tüm katlar</button>${Array.from({ length: S.structure.floors }, (_, i) => `<button class="${fl === i + 1 ? 'on' : ''}" data-a="hkFloor" data-f="${i + 1}">${i + 1}</button>`).join('')}</div>
+      <div class="row"><span class="muted" style="font-size:13px">Odaya dokunarak durumunu değiştirin</span><button class="btn btn-tonal btn-sm" data-a="hkAllInspect">Temizlenenleri onayla</button></div>
+    </div>
+    ${floors.map(f => { const rs = S.rooms.filter(r => r.floor === f); return `<div style="margin-bottom:18px"><div class="between" style="margin-bottom:8px"><b style="font-size:15px">${f}. kat <span class="muted" style="font-weight:500;font-size:13px">· ${rs.filter(r => r.hk === 'dirty').length} kirli</span></b>
+      <div class="tf" style="padding:16px 12px 4px;width:200px"><label>Sorumlu</label><select data-in="hkStaff" data-f="${f}">${hkStaff.map(s => `<option value="${s.id}" ${S.hkFloor[f] === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div></div>
+      <div class="hk-grid">${rs.map((r, i) => { const m = mtDay(r.no, TODAY), occ = nightRes(r.no, TODAY); const cls = m ? 'hk-mt' : 'hk-' + r.hk;
+        return `<button class="hk ${cls} stg" style="--i:${i}" data-a="hk" data-no="${r.no}"><b>${r.no}</b><span>${m ? 'Bakımda' : HK[r.hk].n}</span><span>${occ && occ.status === 'inhouse' ? 'Dolu' : 'Boş'}${depToday.has(r.no) ? ' · çıkış' : ''}${arrToday.has(r.no) ? ' · giriş' : ''}</span>
+          <span class="mini">${arrToday.has(r.no) ? ic('in', 'xs') : ''}${depToday.has(r.no) ? ic('out', 'xs') : ''}</span></button>`; }).join('')}</div></div>`; }).join('')}
+  </div>`;
+  return { title: 'Kat hizmetleri', sub: `${cnt('dirty')} oda temizlik bekliyor`, html };
+};
+
+/* ---------- 8. Fiyat & sezon ---------- */
+PAGE_FN.fiyatlar = () => {
+  const pr = S.pricing, t = UI.priceType;
+  const days = Array.from({ length: 60 }, (_, i) => addDays(TODAY, i)), vals = days.map(d => rate(t, d)), mx = Math.max(...vals);
+  const html = `
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card stg span2" style="--i:0"><h3>${ic('bed')} Oda tipleri ve taban fiyatlar</h3>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Tip</th><th>Ad</th><th class="r">Kapasite</th><th class="r">Taban fiyat (₺/gece)</th><th class="r">Oda sayısı</th><th class="r">Bu gece</th></tr></thead><tbody>
+      ${Object.entries(S.types).map(([k, v]) => `<tr><td><span class="tag t-pri">${k}</span></td><td><div class="tf" style="padding:6px 10px;border-radius:12px"><input data-in="typeName" data-k="${k}" value="${esc(v.n)}"></div></td>
+        <td class="r"><div class="tf" style="padding:6px 10px;border-radius:12px;width:80px;margin-left:auto"><input type="number" min="1" max="12" data-in="typeCap" data-k="${k}" value="${v.cap}"></div></td>
+        <td class="r"><div class="tf" style="padding:6px 10px;border-radius:12px;width:130px;margin-left:auto"><input type="number" min="0" step="50" data-in="typeBase" data-k="${k}" value="${v.base}"></div></td>
+        <td class="r num">${S.rooms.filter(r => r.type === k).length}</td><td class="r num"><b>${money(rate(k, TODAY))}</b></td></tr>`).join('')}
+      </tbody></table></div></div>
+    <div class="card stg" style="--i:1"><h3>${ic('sell')} Kurallar</h3>
+      <div class="between" style="margin-bottom:12px"><div><b>Hafta sonu farkı</b><div class="muted" style="font-size:12.5px">Cuma ve cumartesi geceleri</div></div><button class="switch${pr.weekendOn ? ' on' : ''}" data-a="wkToggle"></button></div>
+      <div class="tf" style="margin-bottom:12px"><label>Hafta sonu artışı (%)</label><input type="number" min="0" max="200" data-in="wkPct" value="${pr.weekendPct}"></div>
+      <div class="tf" style="margin-bottom:16px"><label>Çocuk pansiyon oranı (%)</label><input type="number" min="0" max="100" data-in="childPct" value="${pr.childPct}"></div>
+      <b>Pansiyon · kişi başı / gece</b>
+      <div class="grid g2" style="gap:10px;margin-top:10px">${Object.keys(BOARD).map(k => `<div class="tf"><label>${k} · ${BOARD[k]}</label><input type="number" min="0" step="50" data-in="boardP" data-k="${k}" value="${pr.board[k]}"></div>`).join('')}</div>
+    </div>
+  </div>
+  <div class="grid g2">
+    <div class="card stg" style="--i:2"><h3>${ic('cal')} Sezonlar <button class="btn btn-text btn-sm act" data-a="addSeason">${ic('plus', 's')} Ekle</button></h3>
+      <div class="grid" style="gap:10px">${pr.seasons.map(s => `<div class="sec" style="margin:0"><div class="between"><div class="tf" style="padding:6px 10px;border-radius:12px;flex:1"><input data-in="sName" data-id="${s.id}" value="${esc(s.name)}"></div><button class="ibtn" data-a="delSeason" data-id="${s.id}" title="Sil">${ic('trash', 's')}</button></div>
+        <div class="grid g3" style="gap:8px;margin-top:8px"><div class="tf"><label>Başlangıç</label><input type="date" data-in="sFrom" data-id="${s.id}" value="${s.from}"></div><div class="tf"><label>Bitiş</label><input type="date" data-in="sTo" data-id="${s.id}" value="${s.to}"></div><div class="tf"><label>Fiyat %</label><input type="number" min="10" max="500" data-in="sMult" data-id="${s.id}" value="${s.mult}"></div></div></div>`).join('') || emptyBox('Sezon tanımlı değil.')}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">Sezonlar çakışırsa en kısa süreli olan geçerli olur (örn. yılbaşı, düşük sezonun içinde).</div></div>
+    <div class="card stg" style="--i:3"><h3>${ic('trend')} Önümüzdeki 60 gün fiyat önizlemesi
+      <div class="tf act" style="padding:16px 12px 4px;width:180px;font-weight:400;font-size:14px"><label>Oda tipi</label><select data-in="priceType">${Object.entries(S.types).map(([k, v]) => `<option value="${k}" ${t === k ? 'selected' : ''}>${v.n}</option>`).join('')}</select></div></h3>
+      <div class="bars" style="gap:2px;height:220px">${vals.map((v, i) => { const d = days[i], wd = parse(d).getDay(), se = seasonFor(S, d); return `<div class="bar" title="${fmt(d)} ${DOW[wd]} · ${money(v)}${se ? ' · ' + se.name : ''}"><div class="col${wd === 5 || wd === 6 ? ' we' : ''}" style="--i:${i * .4};height:${v / mx * 100}%;max-width:14px;border-radius:6px 6px 3px 3px;${se && se.mult > 100 ? 'background:var(--amber)' : ''}"></div>${i % 7 === 0 ? `<small>${fmt(d)}</small>` : '<small>&nbsp;</small>'}</div>`; }).join('')}</div>
+      <div class="lg-row" style="margin-top:8px"><span><i style="background:var(--primary)"></i>Normal</span><span><i style="background:var(--tertiary)"></i>Hafta sonu</span><span><i style="background:var(--amber)"></i>Yüksek sezon / özel gün</span><span>En yüksek ${money(mx)} · en düşük ${money(Math.min(...vals))}</span></div></div>
+  </div>`;
+  return { title: 'Fiyat & sezon', sub: 'Değişiklikler yeni rezervasyonlara uygulanır', html };
+};
+
+/* ---------- 9. Misafirler ---------- */
+PAGE_FN.misafirler = () => {
+  const map = {};
+  S.res.forEach(r => { const k = key(r.guest, r.phone); const g = map[k] || (map[k] = { k, n: r.guest, phone: r.phone, nat: r.nat, stays: 0, nights: 0, spend: 0, last: '', next: '', inhouse: false, cancels: 0 });
+    if (r.status === 'cancelled' || r.status === 'noshow') { g.cancels++; return; }
+    g.stays++; g.nights += diff(r.in, r.out); g.spend += r.total; if (r.status === 'inhouse') g.inhouse = true;
+    if (r.out <= TODAY && r.out > g.last) g.last = r.out; if (r.in > TODAY && (!g.next || r.in < g.next)) g.next = r.in; });
+  const q = UI.guests.q.trim().toLowerCase();
+  const list = Object.values(map).filter(g => !q || g.n.toLowerCase().includes(q) || g.phone.replace(/\D/g, '').includes(q.replace(/\D/g, '') || '#') || g.nat.toLowerCase() === q).sort((a, b) => b.spend - a.spend);
+  const nat = {}; Object.values(map).forEach(g => nat[g.nat] = (nat[g.nat] || 0) + g.nights); const natA = Object.entries(nat).sort((a, b) => b[1] - a[1]); const nmax = natA[0]?.[1] || 1;
+  const html = `
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="kpi stg" style="--i:0"><div class="k">${ic('group')} Toplam misafir</div><div class="v num" data-count="${Object.keys(map).length}">0</div><div class="d">${list.filter(g => g.stays > 1).length} tekrar eden</div></div>
+    <div class="kpi ter stg" style="--i:1"><div class="k">${ic('star')} VIP</div><div class="v num" data-count="${Object.values(map).filter(g => S.vip[g.k]).length}">0</div><div class="d">yıldızlı misafir</div><div class="blob"></div></div>
+    <div class="card stg" style="--i:2;padding:16px 20px"><div class="muted" style="font-size:13px;margin-bottom:6px">Uyruğa göre geceleme</div>${natA.slice(0, 4).map(([k, v], i) => `<div class="hbar" style="grid-template-columns:40px 1fr 50px;margin:5px 0"><b>${k}</b><div class="tr"><div class="fl" style="--i:${i};width:${v / nmax * 100}%"></div></div><span class="num muted" style="text-align:right">${v}</span></div>`).join('')}</div>
+  </div>
+  <div class="card stg" style="--i:3">
+    <div class="tf" style="max-width:420px;margin-bottom:14px;padding:18px 14px 6px"><label>Misafir ara: ad, telefon, uyruk</label><input id="gQ" data-in="gQ" value="${esc(UI.guests.q)}"></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th></th><th>Misafir</th><th>Uyruk</th><th>Telefon</th><th class="r">Konaklama</th><th class="r">Gece</th><th class="r">Harcama</th><th>Son konaklama</th><th>Durum</th></tr></thead><tbody>
+    ${list.slice(0, 150).map(g => `<tr class="click" data-a="guest" data-k="${esc(g.k)}"><td data-stop="1"><button class="ibtn" data-a="vip" data-k="${esc(g.k)}" title="VIP" style="width:36px;height:36px;color:${S.vip[g.k] ? 'var(--tertiary)' : 'var(--outline)'}"><svg class="ic s" style="${S.vip[g.k] ? 'fill:currentColor' : ''}"><use href="#i-star"/></svg></button></td>
+      <td><b style="font-weight:620">${esc(g.n)}</b></td><td>${g.nat}</td><td class="muted">${esc(g.phone)}</td><td class="r num">${g.stays}</td><td class="r num">${g.nights}</td><td class="r num"><b>${money(g.spend)}</b></td><td>${g.last ? fmt(g.last) : '—'}</td>
+      <td>${g.inhouse ? '<span class="tag t-pri">Otelde</span>' : g.next ? `<span class="tag t-sec">${fmt(g.next)} geliyor</span>` : g.cancels ? `<span class="tag t-amb">${g.cancels} iptal</span>` : ''}</td></tr>`).join('')}
+    </tbody></table></div>
+  </div>`;
+  return { title: 'Misafirler', sub: 'Harcamaya göre sıralı', html };
+};
+
+/* ---------- 10. Ayarlar ---------- */
+PAGE_FN.ayarlar = () => {
+  const h = S.hotel, st = S.structure;
+  const html = `
+  <div class="grid g2">
+    <div class="card stg" style="--i:0"><h3>${ic('hotel')} Otel bilgileri</h3>
+      <div class="grid" style="gap:10px"><div class="tf"><label>Otel adı</label><input data-in="hName" value="${esc(h.name)}"></div>
+        <div class="grid g3" style="gap:10px"><div class="tf"><label>Şehir</label><input data-in="hCity" value="${esc(h.city)}"></div><div class="tf"><label>Giriş saati</label><input type="time" data-in="hCin" value="${h.cin}"></div><div class="tf"><label>Çıkış saati</label><input type="time" data-in="hCout" value="${h.cout}"></div></div>
+        <div class="between"><span>Yıldız</span><div class="row" style="gap:2px">${[1,2,3,4,5].map(i => `<button class="ibtn" data-a="stars" data-v="${i}" style="color:${i <= h.stars ? 'var(--amber)' : 'var(--outline-v)'}"><svg class="ic" style="${i <= h.stars ? 'fill:currentColor' : ''}"><use href="#i-star"/></svg></button>`).join('')}</div></div></div></div>
+    <div class="card stg" style="--i:1"><h3>${ic('plan')} Bina yapısı</h3>
+      <div class="grid g3" style="gap:10px"><div class="tf"><label>Kat sayısı</label><input type="number" id="stF" min="1" max="30" value="${st.floors}"></div>
+        <div class="tf"><label>Kattaki sıra</label><select id="stR"><option value="1" ${st.rows === 1 ? 'selected' : ''}>1 sıra</option><option value="2" ${st.rows === 2 ? 'selected' : ''}>2 sıra</option></select></div>
+        <div class="tf"><label>Sıradaki oda</label><input type="number" id="stP" min="2" max="20" value="${st.perRow}"></div></div>
+      <div class="muted" style="font-size:12.5px;margin:10px 0">Mevcut odaların tip, özellik ve notları korunur. Kaldırılan odalardaki rezervasyonlar silinmez, listede kalır.</div>
+      <button class="btn btn-tonal" data-a="saveStruct">Yapıyı güncelle (${st.floors * st.rows * st.perRow} oda)</button></div>
+    <div class="card stg" style="--i:2"><h3>${ic('group')} Personel <button class="btn btn-text btn-sm act" data-a="addStaff">${ic('plus', 's')} Ekle</button></h3>
+      <div class="list">${S.staff.map(p => `<div class="li" style="cursor:default"><div class="av" style="background:var(--secondary-container);color:var(--on-secondary-container)">${avatar(p.name)}</div>
+        <div class="t"><div class="grid g2" style="gap:8px"><div class="tf" style="padding:6px 10px;border-radius:12px"><input data-in="stName" data-id="${p.id}" value="${esc(p.name)}"></div>
+        <div class="tf" style="padding:6px 10px;border-radius:12px"><select data-in="stRole" data-id="${p.id}">${['Kat şefi','Oda görevlisi','Teknik servis','Resepsiyon','Müdür'].map(r => `<option ${p.role === r ? 'selected' : ''}>${r}</option>`).join('')}</select></div></div></div>
+        <button class="ibtn" data-a="delStaff" data-id="${p.id}" title="Sil">${ic('trash', 's')}</button></div>`).join('')}</div></div>
+    <div class="card stg" style="--i:3"><h3>${ic('auto')} Görünüm</h3>
+      <div class="muted" style="font-size:13px;margin-bottom:8px">Tema</div>
+      <div class="seg" style="width:100%"><button style="flex:1;justify-content:center" class="${S.theme === 'light' ? 'on' : ''}" data-a="setTheme" data-v="light">Açık</button><button style="flex:1;justify-content:center" class="${S.theme === 'dark' ? 'on' : ''}" data-a="setTheme" data-v="dark">Karanlık</button><button style="flex:1;justify-content:center" class="${S.theme === 'auto' ? 'on' : ''}" data-a="setTheme" data-v="auto">Otomatik</button></div>
+      <div class="muted" style="font-size:13px;margin:16px 0 8px">Animasyonlar</div>
+      <div class="seg" style="width:100%"><button style="flex:1;justify-content:center" class="${S.motion === 'on' ? 'on' : ''}" data-a="setMotion" data-v="on">Açık</button><button style="flex:1;justify-content:center" class="${S.motion === 'auto' ? 'on' : ''}" data-a="setMotion" data-v="auto">Cihaza göre</button><button style="flex:1;justify-content:center" class="${S.motion === 'off' ? 'on' : ''}" data-a="setMotion" data-v="off">Kapalı</button></div>
+      <h3 style="margin-top:24px">${ic('down')} Veri</h3>
+      <div class="muted" style="font-size:12.5px;margin-bottom:10px">Veriler bu tarayıcıda saklanır. Yedek almak için dışa aktarın; başka bir bilgisayara içe aktarabilirsiniz.</div>
+      <div class="row"><button class="btn btn-tonal" data-a="export">${ic('copy', 's')} Dışa aktar</button><button class="btn btn-tonal" data-a="import">İçe aktar</button><button class="btn btn-err" data-a="reset">Demo veriye sıfırla</button></div>
+      <div class="muted" style="font-size:12.5px;margin-top:16px">Renstek PMS v${VERSION}</div></div>
+  </div>`;
+  return { title: 'Ayarlar', sub: 'Otel, bina, personel ve görünüm', html };
+};
+
+/* =====================================================================
+   DİYALOGLAR
+   ===================================================================== */
+function openDlg(html, wide) { const d = $('#dlg'); d.className = 'dlg' + (wide ? ' wide' : ''); d.innerHTML = html; $('#scrim').classList.add('open'); }
+function closeDlg() { $('#scrim').classList.remove('open'); }
+$('#scrim').addEventListener('click', e => { if (e.target.id === 'scrim') closeDlg(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDlg(); });
+function toast(m) { const s = $('#snack'); s.innerHTML = esc(m); s.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => s.classList.remove('show'), 3200); }
+const dhead = (big, title, sub) => `<div class="dh"><div class="big">${big}</div><div style="flex:1;min-width:0"><h2>${title}</h2><div class="muted" style="font-size:13.5px">${sub}</div></div><button class="ibtn" data-a="close" title="Kapat">${ic('x')}</button></div>`;
+
+function resDlg(id) {
+  const r = S.res.find(x => x.id === id); if (!r) return;
+  const rm = room(r.room), n = diff(r.in, r.out), bal = r.total - r.paid, vip = S.vip[key(r.guest, r.phone)];
+  const alts = live(r) ? S.rooms.filter(x => x.no !== r.room && S.types[x.type].cap >= r.ad + r.ch && isFree(x.no, r.in, r.out, r.id)).slice(0, 60) : [];
+  const mc = live(r) ? mtOn(r.room, r.in, r.out) : [];
+  openDlg(`${dhead(r.room, esc(r.guest) + (vip ? ' <span class="tag t-ter">VIP</span>' : ''), `${r.id} · ${S.types[rm?.type]?.n || ''} · ${r.channel}`)}
+    <div class="row" style="margin-bottom:6px"><span class="tag ${ST[r.status].c}">${ST[r.status].n}</span><span class="tag t-mute">${fmt(r.in)} – ${fmt(r.out)} · ${n} gece</span><span class="tag t-mute">${r.ad} yetişkin${r.ch ? ' · ' + r.ch + ' çocuk' : ''}</span><span class="tag t-mute">${BOARD[r.board]}</span></div>
+    ${mc.length ? `<div class="sec" style="background:var(--error-container);color:var(--on-error-container)">${ic('alert', 's')} <b>Bu oda ${fmt(mc[0].from)}–${fmt(mc[0].to)} arasında bakımda.</b> Misafiri başka odaya taşıyın.</div>` : ''}
+    <div class="grid g2" style="gap:12px">
+      <div class="sec"><div class="st">Ödeme</div><dl class="kv"><dt>Tutar</dt><dd class="num"><b>${money(r.total)}</b></dd><dt>Ödenen</dt><dd class="num">${money(r.paid)}</dd><dt>Bakiye</dt><dd class="num" style="${bal > 0 ? 'color:var(--error);font-weight:700' : ''}">${money(Math.max(0, bal))}</dd></dl>
+        ${bal > 0 && r.status !== 'cancelled' ? `<div class="row" style="margin-top:10px;flex-wrap:nowrap"><div class="tf" style="padding:6px 10px;border-radius:12px;flex:1"><input type="number" id="payAmt" value="${Math.round(bal)}" min="1"></div><button class="btn btn-ok btn-sm" data-a="pay" data-id="${r.id}">Tahsil et</button></div>` : ''}</div>
+      <div class="sec"><div class="st">İletişim</div><dl class="kv"><dt>Telefon</dt><dd>${esc(r.phone || '—')}</dd><dt>Uyruk</dt><dd>${r.nat}</dd><dt>Not</dt><dd>${esc(r.note || '—')}</dd></dl></div>
+    </div>
+    ${live(r) ? `<div class="sec"><div class="st">Tarih değiştir</div><div class="row" style="flex-wrap:nowrap"><div class="tf" style="flex:1"><label>Giriş</label><input type="date" id="edIn" value="${r.in}"></div><div class="tf" style="flex:1"><label>Çıkış</label><input type="date" id="edOut" value="${r.out}"></div><button class="btn btn-tonal btn-sm" data-a="redate" data-id="${r.id}">Güncelle</button></div></div>
+    <div class="sec"><div class="st">Oda değiştir · ${alts.length ? 'bu tarihlerde boş ve uygun odalar' : 'uygun boş oda yok'}</div><div class="chips" style="max-height:120px;overflow:auto">${alts.map(x => `<button class="chip" data-a="move" data-id="${r.id}" data-no="${x.no}">${x.no} · ${S.types[x.type].n}${x.type === rm.type ? '' : ' ↕'}</button>`).join('')}</div></div>` : ''}
+    <div class="dfoot">
+      <button class="btn btn-text" data-a="vipRes" data-id="${r.id}">${ic('star', 's')} ${vip ? 'VIP kaldır' : 'VIP yap'}</button><span class="spacer"></span>
+      ${r.status === 'confirmed' && r.in <= TODAY ? `<button class="btn btn-amber" data-a="noshow" data-id="${r.id}">Gelmedi</button>` : ''}
+      ${r.status === 'confirmed' ? `<button class="btn btn-err" data-a="cancel" data-id="${r.id}">İptal et</button><button class="btn btn-filled" data-a="ci" data-id="${r.id}" ${r.in > TODAY ? 'disabled title="Giriş tarihi gelmedi"' : ''}>${ic('in', 's')} Giriş yap</button>` : ''}
+      ${r.status === 'inhouse' ? `<button class="btn btn-filled" data-a="co" data-id="${r.id}">${ic('out', 's')} Çıkış yap</button>` : ''}
+    </div>`, true);
+}
+
+function roomDlg(no) {
+  const r = room(no); if (!r) return;
+  const up = S.res.filter(x => x.room === r.no && live(x) && x.out >= TODAY).sort((a, b) => a.in < b.in ? -1 : 1);
+  const ms = S.maint.filter(m => m.rooms.includes(r.no) && m.status !== 'done').sort((a, b) => a.from < b.from ? -1 : 1);
+  openDlg(`${dhead(r.no, `Oda ${r.no}`, `${r.floor}. kat · ${r.row === 0 ? 'A blok (deniz cephesi)' : 'B blok'} · bu gece ${money(rate(r.type, TODAY))}`)}
+    <div class="grid g2" style="gap:12px">
+      <div class="tf"><label>Oda tipi</label><select id="rmType">${Object.entries(S.types).map(([k, v]) => `<option value="${k}" ${r.type === k ? 'selected' : ''}>${v.n} · ${v.cap} kişi</option>`).join('')}</select></div>
+      <div class="tf"><label>Oda notu (sadece personel görür)</label><input id="rmNote" value="${esc(r.note)}" placeholder=" "></div>
+    </div>
+    <div class="sec"><div class="st">Özellikler</div><div class="chips" id="rmFeats">${FEATURES.map(f => `<button class="chip${r.feats.includes(f.k) ? ' on' : ''}" data-a="rmFeat" data-k="${f.k}">${ic(f.i, 'xs')}${f.n}</button>`).join('')}</div></div>
+    <div class="sec"><div class="st">Kat hizmeti</div><div class="seg">${Object.entries(HK).map(([k, v]) => `<button class="${r.hk === k ? 'on' : ''}" data-a="rmHk" data-no="${r.no}" data-v="${k}">${v.n}</button>`).join('')}</div></div>
+    <div class="grid g2" style="gap:12px">
+      <div class="sec"><div class="st">Yaklaşan rezervasyonlar</div>${up.length ? `<div class="list">${up.slice(0, 5).map(x => `<div class="li" data-a="res" data-id="${x.id}"><div class="t"><b>${esc(x.guest)}</b><span>${fmt(x.in)} – ${fmt(x.out)} · ${ST[x.status].n}</span></div></div>`).join('')}</div>` : '<span class="muted" style="font-size:13px">Yok</span>'}</div>
+      <div class="sec"><div class="st">Bakım</div>${ms.length ? `<div class="list">${ms.map(m => `<div class="li" data-a="mt" data-id="${m.id}"><div class="t"><b>${esc(m.cat)}</b><span>${fmt(m.from)} – ${fmt(m.to)} · ${esc(m.reason)}</span></div></div>`).join('')}</div>` : '<span class="muted" style="font-size:13px">Planlı bakım yok</span>'}</div>
+    </div>
+    <div class="dfoot"><button class="btn btn-amber" data-a="newmt" data-rooms="${r.no}">${ic('build', 's')} Bakım planla</button><span class="spacer"></span>
+      <button class="btn btn-tonal" data-a="bookRoom" data-no="${r.no}">Rezerve et</button><button class="btn btn-filled" data-a="saveRoom" data-no="${r.no}">Kaydet</button></div>`, true);
+}
+
+function mtDlg(id, preset = {}) {
+  const m = id ? S.maint.find(x => x.id === id) : { rooms: preset.rooms || [], from: preset.from || TODAY, to: preset.to || TODAY, cat: 'Genel bakım', prio: 'mid', reason: '', who: S.staff.find(s => s.role === 'Teknik servis')?.id || '', note: '', status: 'planned' };
+  UI.mtDraft = { ...m, rooms: [...m.rooms], id: id || null };
+  const tech = S.staff.filter(s => s.role === 'Teknik servis' || s.role === 'Müdür');
+  openDlg(`${dhead(ic('build', 'l'), id ? 'Bakım kaydı' : 'Bakım planla', id ? `${m.id} · ${mtStatus(m) === 'done' ? 'Tamamlandı' : mtStatus(m) === 'active' ? 'Devam ediyor' : 'Planlı'}` : 'Seçilen tarihlerde odalar satışa kapanır')}
+    <div class="grid" style="gap:12px">
+      <div class="tf"><label>Odalar — örn. 305, 601-604</label><input id="mtRooms" data-in="mtRooms" value="${m.rooms.length ? roomsLabel(m.rooms).replace(/–/g, '-') : ''}" placeholder=" "></div>
+      <div class="grid g2" style="gap:12px"><div class="tf"><label>Başlangıç (dahil)</label><input type="date" id="mtFrom" data-in="mtFrom" value="${m.from}"></div><div class="tf"><label>Bitiş (dahil)</label><input type="date" id="mtTo" data-in="mtTo" value="${m.to}" min="${m.from}"></div></div>
+      <div class="grid g2" style="gap:12px"><div class="tf"><label>Kategori</label><select id="mtCat">${Object.keys(MCAT).map(c => `<option ${m.cat === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+        <div class="tf"><label>Sorumlu</label><select id="mtWho"><option value="">Atanmadı</option>${tech.map(s => `<option value="${s.id}" ${m.who === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div></div>
+      <div class="tf"><label>Açıklama</label><input id="mtReason" value="${esc(m.reason)}" placeholder=" "></div>
+      <div><div class="muted" style="font-size:12.5px;margin-bottom:6px">Öncelik</div><div class="seg" id="mtPrio">${Object.entries(PRIO).map(([k, v]) => `<button class="${m.prio === k ? 'on' : ''}" data-a="mtPrio" data-v="${k}">${v.n}</button>`).join('')}</div></div>
+    </div>
+    <div id="mtConf"></div>
+    <div class="dfoot">${id ? `<button class="btn btn-text" data-a="delMt" data-id="${id}" style="color:var(--error)">${ic('trash', 's')} Sil</button><span class="spacer"></span>${m.status !== 'done' ? `<button class="btn btn-ok" data-a="doneMt" data-id="${id}">${ic('check', 's')} Tamamlandı</button>` : ''}` : '<span class="spacer"></span>'}
+      <button class="btn btn-text" data-a="close">Vazgeç</button><button class="btn btn-filled" data-a="saveMt">${id ? 'Kaydet' : 'Planla'}</button></div>`, true);
+  mtConfRender();
+}
+function mtConfRender() {
+  const d = UI.mtDraft, box = $('#mtConf'); if (!box) return;
+  const rooms = parseRooms($('#mtRooms').value), from = $('#mtFrom').value, to = $('#mtTo').value;
+  if (!rooms.length || !from || !to || to < from) { box.innerHTML = `<div class="sec muted" style="font-size:13px">${!rooms.length ? 'Geçerli bir oda numarası girin.' : 'Bitiş tarihi başlangıçtan önce olamaz.'}</div>`; return; }
+  const c = S.res.filter(r => live(r) && rooms.includes(r.room) && r.in <= to && r.out > from);
+  const lost = rooms.reduce((a, no) => { let t = 0; for (let x = from; x <= to; x = addDays(x, 1)) t += rate(room(no).type, x); return a + t; }, 0);
+  box.innerHTML = `<div class="sec" style="${c.length ? 'background:var(--error-container);color:var(--on-error-container)' : ''}">
+    <div class="between"><b>${rooms.length} oda · ${diff(from, to) + 1} gün · ${rooms.length * (diff(from, to) + 1)} oda-gece satışa kapanacak</b><span class="num" style="font-size:13px">≈ ${money(lost)}</span></div>
+    ${c.length ? `<div style="margin-top:8px;font-size:13.5px">${ic('alert', 's')} ${c.length} rezervasyon bu tarihlerle çakışıyor:</div><div class="list" style="margin-top:4px">${c.slice(0, 6).map(r => `<div class="li" style="cursor:default;padding:6px"><div class="t"><b>${r.room} · ${esc(r.guest)}</b><span style="color:inherit;opacity:.8">${fmt(r.in)}–${fmt(r.out)} · ${ST[r.status].n}${findAlt(r, rooms) ? ' · uygun oda var' : ' · uygun oda yok!'}</span></div></div>`).join('')}${c.length > 6 ? `<div style="font-size:12.5px;padding:4px 6px">+${c.length - 6} rezervasyon daha</div>` : ''}</div>
+      <label class="row" style="margin-top:10px;cursor:pointer;flex-wrap:nowrap"><input type="checkbox" class="cb" id="mtMove" checked> <span>Kaydederken çakışan misafirleri aynı tipte (yoksa en yakın) boş odalara taşı</span></label>` : `<div class="muted" style="font-size:12.5px;margin-top:4px">${ic('check', 'xs')} Çakışan rezervasyon yok.</div>`}</div>`;
+}
+
+/* =====================================================================
+   İŞLEMLER
+   ===================================================================== */
+function relocate(r, avoid = []) {
+  const alt = findAlt(r, avoid); if (!alt) return false;
+  const from = r.room; r.room = alt.no; log(`${esc(r.guest)} ${from} → ${alt.no} odasına taşındı (bakım)`, 'swap'); return alt.no;
+}
+function afterChange(msg) { save(); if (msg) toast(msg); render(); }
+const A = {
+  go: t => { if (t.dataset.new) { UI.sel.clear(); } go(t.dataset.p); },
+  rail: () => $('#app').classList.toggle('collapsed'),
+  theme: () => { S.theme = S.theme === 'auto' ? 'light' : S.theme === 'light' ? 'dark' : 'auto'; applyTheme(); save(); toast('Tema: ' + { auto: 'Otomatik', light: 'Açık', dark: 'Karanlık' }[S.theme]); if (UI.page === 'ayarlar') render(); },
+  close: () => closeDlg(),
+  // kroki
+  step: t => { const k = t.dataset.k, v = +t.dataset.v; UI.q[k] = k === 'ad' ? clamp(UI.q.ad + v, 1, 30) : clamp(UI.q.ch + v, 0, 20); render(); },
+  feat: t => { const k = t.dataset.k; UI.q.feats.has(k) ? UI.q.feats.delete(k) : UI.q.feats.add(k); render(); },
+  floor: t => { UI.floor = +t.dataset.f; UI.enter = true; render(); },
+  proom: t => { const no = +t.dataset.no, k = t.dataset.k;
+    if (k === 'sel') { UI.sel.delete(no); render(); return; }
+    if (k === 'busy') { const r = resOn(no, UI.q.in, UI.q.out)[0]; if (r) resDlg(r.id); return; }
+    if (k === 'mt') { const m = mtOn(no, UI.q.in, UI.q.out)[0]; if (m) mtDlg(m.id); return; }
+    if (t.classList.contains('dim')) { toast('Bu oda seçili filtrelere uymuyor'); return; }
+    UI.sel.add(no); render(); },
+  unsel: t => { UI.sel.delete(+t.dataset.no); render(); },
+  book: () => {
+    const bf = UI.bf || {}, name = (bf.name || '').trim();
+    if (!name) { toast('Misafir adını girin'); $('#bName')?.focus(); return; }
+    const q = UI.q, sel = [...UI.sel].map(room).sort((a, b) => a.no - b.no);
+    const bad = sel.find(r => !isFree(r.no, q.in, q.out)); if (bad) { toast(`${bad.no} artık müsait değil`); UI.sel.delete(bad.no); render(); return; }
+    let ad = q.ad, ch = q.ch, paidLeft = +bf.paid || 0;
+    sel.forEach((r, i) => { const left = sel.length - i, a = clamp(Math.ceil(ad / left), 1, S.types[r.type].cap), c = Math.min(Math.ceil(ch / left), Math.max(0, S.types[r.type].cap - a)); ad -= a; ch -= c;
+      const total = stayPrice(r.type, q.in, q.out, a, c, q.board), paid = Math.min(total, paidLeft); paidLeft -= paid;
+      S.res.push({ id: 'R' + (S.seq++), room: r.no, in: q.in, out: q.out, guest: name, phone: bf.phone || '', email: '', nat: bf.nat || 'TR', ad: a, ch: c, board: q.board, channel: bf.ch || 'Direkt', status: 'confirmed', total, paid, note: bf.note || '', created: Date.now() }); });
+    log(`Yeni rezervasyon: ${name}, ${sel.map(r => r.no).join(', ')} (${diff(q.in, q.out)} gece)`, 'book');
+    UI.sel.clear(); UI.bf = {}; closeDlg(); afterChange(`${sel.length} oda rezerve edildi · ${name}`);
+  },
+  newres: () => go('kroki'),
+  bookDlg: () => bookDlg(),
+  clearSel: () => { UI.sel.clear(); render(); },
+  // takvim
+  tfloor: t => { UI.tapeFloor = t.dataset.f === 'ALL' ? 'ALL' : +t.dataset.f; UI.enter = true; render(); },
+  tnav: t => { const v = +t.dataset.v; UI.tapeStart = v === 0 ? addDays(TODAY, -3) : addDays(UI.tapeStart, v); render(); },
+  cell: t => { const no = +t.dataset.no, d = t.dataset.d;
+    const r = S.res.find(x => x.room === no && earning(x) && x.in <= d && x.out > d); if (r) { resDlg(r.id); return; }
+    const m = mtDay(no, d); if (m) { mtDlg(m.id); return; }
+    UI.q.in = d; UI.q.out = addDays(d, Math.max(1, diff(UI.q.in, UI.q.out) || 2)); if (UI.q.out <= d) UI.q.out = addDays(d, 2);
+    UI.sel.clear(); if (isFree(no, UI.q.in, UI.q.out)) UI.sel.add(no); UI.floor = room(no).floor; go('kroki'); },
+  // rezervasyon
+  res: t => resDlg(t.dataset.id),
+  ci: t => { const r = S.res.find(x => x.id === t.dataset.id); if (mtDay(r.room, TODAY)) { toast(`${r.room} bakımda — önce odayı değiştirin`); resDlg(r.id); return; }
+    r.status = 'inhouse'; log(`${r.guest} ${r.room} odasına giriş yaptı`, 'in'); closeDlg(); afterChange(`${r.guest} · ${r.room} giriş yaptı${room(r.room).hk === 'dirty' ? ' (oda kirli görünüyor!)' : ''}`); },
+  co: t => { const r = S.res.find(x => x.id === t.dataset.id); const bal = r.total - r.paid;
+    r.status = 'out'; if (r.out > TODAY) r.out = TODAY > r.in ? TODAY : addDays(r.in, 1); room(r.room).hk = 'dirty'; log(`${r.guest} ${r.room} odasından çıkış yaptı`, 'out'); closeDlg(); afterChange(`${r.guest} çıkış yaptı · oda kirliye alındı${bal > 0 ? ' · ' + money(bal) + ' bakiye açık!' : ''}`); },
+  cancel: t => { const r = S.res.find(x => x.id === t.dataset.id); r.status = 'cancelled'; log(`${r.id} (${r.guest}) iptal edildi`, 'ban'); closeDlg(); afterChange('Rezervasyon iptal edildi'); },
+  noshow: t => { const r = S.res.find(x => x.id === t.dataset.id); r.status = 'noshow'; log(`${r.guest} gelmedi (no-show)`, 'ban'); closeDlg(); afterChange('Gelmedi olarak işaretlendi'); },
+  pay: t => { const r = S.res.find(x => x.id === t.dataset.id), v = Math.max(0, +$('#payAmt').value || 0); r.paid = Math.min(r.total, r.paid + v); log(`${r.guest}: ${money(v)} tahsil edildi`, 'money'); save(); toast(money(v) + ' tahsil edildi'); render(); resDlg(r.id); },
+  redate: t => { const r = S.res.find(x => x.id === t.dataset.id), a = $('#edIn').value, b = $('#edOut').value;
+    if (!a || !b || b <= a) { toast('Geçerli bir tarih aralığı seçin'); return; }
+    if (!isFree(r.room, a, b, r.id)) { toast(`${r.room} bu tarihlerde dolu ya da bakımda`); return; }
+    r.in = a; r.out = b; r.total = stayPrice(room(r.room).type, a, b, r.ad, r.ch, r.board); log(`${r.guest}: tarih ${fmt(a)}–${fmt(b)} olarak güncellendi`, 'cal'); save(); render(); resDlg(r.id); toast('Tarihler güncellendi · yeni tutar ' + money(r.total)); },
+  move: t => { const r = S.res.find(x => x.id === t.dataset.id), from = r.room; r.room = +t.dataset.no; log(`${r.guest} ${from} → ${r.room} odasına taşındı`, 'swap'); save(); render(); resDlg(r.id); toast(`${from} → ${r.room}`); },
+  vipRes: t => { const r = S.res.find(x => x.id === t.dataset.id), k = key(r.guest, r.phone); S.vip[k] ? delete S.vip[k] : S.vip[k] = true; save(); render(); resDlg(r.id); },
+  rezWhen: t => { UI.rez.when = t.dataset.v; UI.rez.limit = 80; render(); },
+  rezSt: t => { UI.rez.st = t.dataset.v; UI.rez.limit = 80; render(); },
+  more: () => { UI.rez.limit += 120; render(); },
+  // odalar
+  room: t => roomDlg(t.dataset.no),
+  bulk: (t, e) => { e.stopPropagation(); const no = +t.dataset.no; UI.rooms.bulk.has(no) ? UI.rooms.bulk.delete(no) : UI.rooms.bulk.add(no); render(); },
+  bulkAll: (t, e) => { e.stopPropagation(); const f = UI.rooms; const list = $$('input[data-a="bulk"]').map(x => +x.dataset.no); const all = list.every(n => f.bulk.has(n)); list.forEach(n => all ? f.bulk.delete(n) : f.bulk.add(n)); render(); },
+  bulkClear: () => { UI.rooms.bulk.clear(); render(); },
+  bulkMt: () => mtDlg(null, { rooms: [...UI.rooms.bulk] }),
+  bulkType: () => openDlg(`${dhead(ic('bed', 'l'), 'Tip değiştir', UI.rooms.bulk.size + ' oda')}<div class="tf"><label>Yeni tip</label><select id="bkType">${Object.entries(S.types).map(([k, v]) => `<option value="${k}">${v.n}</option>`).join('')}</select></div><div class="dfoot"><button class="btn btn-text" data-a="close">Vazgeç</button><button class="btn btn-filled" data-a="bulkTypeSave">Uygula</button></div>`),
+  bulkTypeSave: () => { const k = $('#bkType').value; UI.rooms.bulk.forEach(no => room(no).type = k); log(`${UI.rooms.bulk.size} odanın tipi ${S.types[k].n} yapıldı`, 'bed'); UI.rooms.bulk.clear(); closeDlg(); afterChange('Oda tipleri güncellendi'); },
+  rmFeat: t => t.classList.toggle('on'),
+  rmHk: t => { room(t.dataset.no).hk = t.dataset.v; save(); render(); roomDlg(t.dataset.no); },
+  saveRoom: t => { const r = room(t.dataset.no); r.type = $('#rmType').value; r.note = $('#rmNote').value.trim(); r.feats = $$('#rmFeats .chip.on').map(c => c.dataset.k); log(`${r.no} numaralı oda güncellendi`, 'edit'); closeDlg(); afterChange('Oda kaydedildi'); },
+  bookRoom: t => { const no = +t.dataset.no, r = room(no); closeDlg(); UI.floor = r.floor; if (isFree(no, UI.q.in, UI.q.out)) { UI.sel.add(no); go('kroki'); } else { go('kroki'); toast(`${no} seçili tarihlerde müsait değil — tarihleri değiştirin`); } },
+  // bakım
+  mt: t => mtDlg(t.dataset.id),
+  newmt: t => mtDlg(null, t && t.dataset.rooms ? { rooms: [+t.dataset.rooms] } : {}),
+  mtTab: t => { UI.mt = t.dataset.v; render(); },
+  mtPrio: t => { UI.mtDraft.prio = t.dataset.v; $$('#mtPrio button').forEach(b => b.classList.toggle('on', b === t)); },
+  saveMt: () => {
+    const d = UI.mtDraft, rooms = parseRooms($('#mtRooms').value), from = $('#mtFrom').value, to = $('#mtTo').value;
+    if (!rooms.length) { toast('Geçerli oda numarası girin'); return; }
+    if (!from || !to || to < from) { toast('Tarih aralığını kontrol edin'); return; }
+    const data = { rooms, from, to, cat: $('#mtCat').value, who: $('#mtWho').value, reason: $('#mtReason').value.trim() || $('#mtCat').value, prio: d.prio };
+    let m;
+    if (d.id) { m = S.maint.find(x => x.id === d.id); Object.assign(m, data); if (m.status === 'done' && to >= TODAY) m.status = 'planned'; }
+    else { m = { id: 'M' + (S.seq++), ...data, status: 'planned', note: '', created: Date.now() }; S.maint.push(m); }
+    let moved = 0, stuck = 0;
+    if ($('#mtMove')?.checked) mtConflicts(m).forEach(r => relocate(r, rooms) ? moved++ : stuck++);
+    log(`Oda ${roomsLabel(rooms)} için bakım ${d.id ? 'güncellendi' : 'planlandı'} (${fmt(from)}–${fmt(to)})`, 'build');
+    UI.sel.forEach(no => { if (rooms.includes(no)) UI.sel.delete(no); });
+    closeDlg(); afterChange(`Bakım ${d.id ? 'güncellendi' : 'planlandı'}${moved ? ` · ${moved} misafir taşındı` : ''}${stuck ? ` · ${stuck} rezervasyon için boş oda bulunamadı` : ''}`);
+  },
+  doneMt: t => { const m = S.maint.find(x => x.id === t.dataset.id); m.status = 'done'; if (m.to > TODAY) m.to = TODAY < m.from ? m.from : TODAY; m.rooms.forEach(no => room(no).hk = 'inspect'); log(`Oda ${roomsLabel(m.rooms)} bakımı tamamlandı`, 'check'); closeDlg(); afterChange('Bakım tamamlandı · odalar kontrole gönderildi'); },
+  delMt: t => { S.maint = S.maint.filter(x => x.id !== t.dataset.id); log('Bir bakım kaydı silindi', 'trash'); closeDlg(); afterChange('Bakım kaydı silindi'); },
+  fixOne: (t, e) => { e.stopPropagation(); const r = S.res.find(x => x.id === t.dataset.id); const mrooms = S.maint.filter(m => m.status !== 'done' && m.rooms.includes(r.room)).flatMap(m => m.rooms); const to = relocate(r, mrooms); afterChange(to ? `${r.guest} ${to} odasına taşındı` : 'Bu tarihler için uygun boş oda yok'); },
+  fixAll: () => { let ok = 0, no = 0; openMaintConflicts().forEach(({ m, r }) => relocate(r, m.rooms) ? ok++ : no++); afterChange(`${ok} misafir taşındı${no ? ` · ${no} rezervasyon için oda bulunamadı` : ''}`); },
+  // kat hizmetleri
+  hkFloor: t => { UI.hkFloor = t.dataset.f === 'ALL' ? 'ALL' : +t.dataset.f; UI.enter = true; render(); },
+  hk: t => { const r = room(t.dataset.no); if (mtDay(r.no, TODAY)) { mtDlg(mtDay(r.no, TODAY).id); return; } const order = ['dirty', 'inspect', 'clean', 'dnd']; r.hk = order[(order.indexOf(r.hk) + 1) % order.length]; save(); render(); },
+  hkAllInspect: () => { let n = 0; S.rooms.forEach(r => { if (r.hk === 'inspect') { r.hk = 'clean'; n++; } }); log(`${n} oda kontrol edilip temize alındı`, 'check'); afterChange(n ? `${n} oda temiz olarak onaylandı` : 'Kontrol bekleyen oda yok'); },
+  // fiyat
+  wkToggle: () => { S.pricing.weekendOn = !S.pricing.weekendOn; afterChange(); },
+  addSeason: () => { S.pricing.seasons.push({ id: uid('s'), name: 'Yeni sezon', from: TODAY, to: addDays(TODAY, 30), mult: 110 }); afterChange('Sezon eklendi'); },
+  delSeason: t => { S.pricing.seasons = S.pricing.seasons.filter(s => s.id !== t.dataset.id); afterChange('Sezon silindi'); },
+  // misafir
+  vip: (t, e) => { e.stopPropagation(); const k = t.dataset.k; S.vip[k] ? delete S.vip[k] : S.vip[k] = true; afterChange(); },
+  guest: t => { const k = t.dataset.k, list = S.res.filter(r => key(r.guest, r.phone) === k).sort((a, b) => a.in < b.in ? 1 : -1); const g = list[0];
+    openDlg(`${dhead(avatar(g.guest), esc(g.guest), `${g.nat} · ${esc(g.phone)} · ${list.length} kayıt`)}<div class="list">${list.map(r => `<div class="li" data-a="res" data-id="${r.id}"><div class="t"><b>Oda ${r.room} · ${fmt(r.in)} – ${fmt(r.out)}</b><span>${r.board} · ${r.channel} · ${money(r.total)}</span></div><span class="tag ${ST[r.status].c}">${ST[r.status].n}</span></div>`).join('')}</div><div class="dfoot"><button class="btn btn-filled" data-a="close">Kapat</button></div>`); },
+  // ayarlar
+  stars: t => { S.hotel.stars = +t.dataset.v; afterChange(); },
+  saveStruct: () => { const f = clamp(+$('#stF').value || 1, 1, 30), r = clamp(+$('#stR').value || 1, 1, 2), p = clamp(+$('#stP').value || 2, 2, 20);
+    S.structure = { floors: f, rows: r, perRow: p }; S.rooms = buildRooms(S.structure, S.rooms); for (let i = 1; i <= f; i++) if (!S.hkFloor[i]) S.hkFloor[i] = S.staff.find(s => s.role === 'Oda görevlisi')?.id;
+    UI.floor = clamp(UI.floor, 1, f); if (UI.tapeFloor !== 'ALL') UI.tapeFloor = clamp(UI.tapeFloor, 1, f); UI.sel.clear(); log(`Bina yapısı güncellendi: ${f} kat, ${S.rooms.length} oda`, 'plan'); afterChange(`Yapı güncellendi · ${S.rooms.length} oda`); },
+  addStaff: () => { S.staff.push({ id: uid('p'), name: 'Yeni personel', role: 'Oda görevlisi' }); afterChange(); },
+  delStaff: t => { S.staff = S.staff.filter(s => s.id !== t.dataset.id); afterChange('Personel silindi'); },
+  setTheme: t => { S.theme = t.dataset.v; applyTheme(); afterChange(); },
+  setMotion: t => { S.motion = t.dataset.v; applyMotion(); afterChange(); },
+  export: () => { const txt = JSON.stringify(S); openDlg(`${dhead(ic('copy', 'l'), 'Dışa aktar', Math.round(txt.length / 1024) + ' KB veri')}<div class="tf"><label>Yedek (JSON)</label><textarea id="expTxt" rows="8" readonly>${esc(txt)}</textarea></div><div class="dfoot"><button class="btn btn-text" data-a="close">Kapat</button><button class="btn btn-filled" data-a="copyExp">${ic('copy', 's')} Kopyala</button></div>`); },
+  copyExp: () => { const t = $('#expTxt'); t.select(); (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(() => toast('Panoya kopyalandı'), () => { try { document.execCommand('copy'); toast('Panoya kopyalandı'); } catch (e) { toast('Metni seçip kendiniz kopyalayın'); } }); },
+  import: () => openDlg(`${dhead(ic('down', 'l'), 'İçe aktar', 'Mevcut verinin yerine geçer')}<div class="tf"><label>Yedek JSON'unu yapıştırın</label><textarea id="impTxt" rows="8"></textarea></div><div class="dfoot"><button class="btn btn-text" data-a="close">Vazgeç</button><button class="btn btn-filled" data-a="doImport">İçe aktar</button></div>`),
+  doImport: () => { try { const d = JSON.parse($('#impTxt').value); if (!d.rooms || !d.res || !d.types) throw 0; S = d; save(); closeDlg(); applyTheme(); applyMotion(); UI.sel.clear(); go('panel'); toast('Veri içe aktarıldı'); } catch (e) { toast('Geçersiz yedek verisi'); } },
+  reset: () => openDlg(`${dhead(ic('alert', 'l'), 'Demo veriye sıfırla', 'Tüm rezervasyonlar, bakım kayıtları ve ayarlar silinir')}<div class="muted">Bu işlem geri alınamaz. Önce “Dışa aktar” ile yedek almanız önerilir.</div><div class="dfoot"><button class="btn btn-text" data-a="close">Vazgeç</button><button class="btn btn-err" data-a="doReset">Sıfırla</button></div>`),
+  doReset: () => { const th = S.theme, mo = S.motion; S = seed(); S.theme = th; S.motion = mo; save(); closeDlg(); UI.sel.clear(); go('panel'); toast('Demo veri yüklendi'); }
+};
+
+/* ---------- input olayları ---------- */
+const IN = {
+  qIn: v => { if (!v) return; UI.q.in = v; if (UI.q.out <= v) UI.q.out = addDays(v, 1); pruneSel(); render(); },
+  qOut: v => { if (!v) return; UI.q.out = v <= UI.q.in ? addDays(UI.q.in, 1) : v; pruneSel(); render(); },
+  qBoard: v => { UI.q.board = v; render(); }, qType: v => { UI.q.type = v; render(); },
+  bName: v => bf('name', v), bPhone: v => bf('phone', v), bNat: v => bf('nat', v), bCh: v => bf('ch', v), bPaid: v => bf('paid', v), bNote: v => bf('note', v),
+  rezQ: v => { UI.rez.q = v; UI.rez.limit = 80; debounce(render); },
+  roomQ: v => { UI.rooms.q = v; debounce(render); }, roomFloor: v => { UI.rooms.floor = v; render(); }, roomType: v => { UI.rooms.type = v; render(); }, roomFeat: v => { UI.rooms.feat = v; render(); },
+  mtRooms: () => mtConfRender(), mtFrom: v => { $('#mtTo').min = v; if ($('#mtTo').value < v) $('#mtTo').value = v; mtConfRender(); }, mtTo: () => mtConfRender(),
+  hkStaff: (v, t) => { S.hkFloor[t.dataset.f] = v; save(); toast(`${t.dataset.f}. kat: ${staff(v)?.name}`); },
+  typeName: (v, t) => { S.types[t.dataset.k].n = v || t.dataset.k; save(); }, typeCap: (v, t) => { S.types[t.dataset.k].cap = clamp(+v || 1, 1, 12); save(); },
+  typeBase: (v, t) => { S.types[t.dataset.k].base = Math.max(0, +v || 0); save(); debounce(render, 500); },
+  wkPct: v => { S.pricing.weekendPct = clamp(+v || 0, 0, 200); save(); debounce(render, 500); }, childPct: v => { S.pricing.childPct = clamp(+v || 0, 0, 100); save(); },
+  boardP: (v, t) => { S.pricing.board[t.dataset.k] = Math.max(0, +v || 0); save(); },
+  sName: (v, t) => { ssn(t).name = v; save(); }, sFrom: (v, t) => { ssn(t).from = v; save(); render(); }, sTo: (v, t) => { ssn(t).to = v; save(); render(); }, sMult: (v, t) => { ssn(t).mult = clamp(+v || 100, 10, 500); save(); debounce(render, 500); },
+  priceType: v => { UI.priceType = v; UI.enter = true; render(); },
+  gQ: v => { UI.guests.q = v; debounce(render); },
+  hName: v => { S.hotel.name = v || 'Otel'; save(); renderRail(); }, hCity: v => { S.hotel.city = v; save(); }, hCin: v => { S.hotel.cin = v; save(); }, hCout: v => { S.hotel.cout = v; save(); },
+  stName: (v, t) => { S.staff.find(s => s.id === t.dataset.id).name = v; save(); }, stRole: (v, t) => { S.staff.find(s => s.id === t.dataset.id).role = v; save(); }
+};
+const ssn = t => S.pricing.seasons.find(s => s.id === t.dataset.id);
+function bf(k, v) { UI.bf = UI.bf || {}; UI.bf[k] = v; }
+function pruneSel() { [...UI.sel].forEach(no => { if (!isFree(no, UI.q.in, UI.q.out)) UI.sel.delete(no); }); }
+let dT; function debounce(fn, ms = 220) { clearTimeout(dT); dT = setTimeout(fn, ms); }
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  if (t.tagName === 'INPUT' && t.type === 'checkbox' && !['bulk', 'bulkAll'].includes(t.dataset.a)) return;
+  const f = A[t.dataset.a]; if (f) { if (t.tagName === 'BUTTON' || t.tagName === 'A') e.preventDefault(); f(t, e); }
 });
-$('#btnSettings').addEventListener('click',settingsDlg);
-$('#btnBook').addEventListener('click',()=>{
-  const name=$('#gName').value.trim(); if(!name){ $('#gName').focus(); return toast('Misafir adını girin'); }
-  const sel=[...selected].map(room), n=diff(Q.in,Q.out); let ad=Q.ad, ch=Q.ch;
-  sel.forEach((r,i)=>{ const left=sel.length-i, a=Math.max(1,Math.ceil(ad/left)), c=Math.ceil(ch/left); ad-=a; ch-=c;
-    S.res.push({id:'R'+(S.seq++),room:r.no,in:Q.in,out:Q.out,guest:name,phone:$('#gPhone').value.trim(),ad:a,ch:c,board:Q.board,status:'confirmed',total:price(r.type,n,a,c,Q.board)}); });
-  save(); toast(sel.length+' oda rezerve edildi · '+name);
-  selected.clear(); $('#gName').value=''; $('#gPhone').value=''; render();
+const onIn = e => { const t = e.target, k = t.dataset && t.dataset.in; if (k && IN[k]) IN[k](t.value, t); };
+document.addEventListener('change', e => { const k = e.target.dataset?.in; if (k && !['rezQ','roomQ','gQ','bName','bPhone','bPaid','bNote','mtRooms','typeName','sName','stName','hName','hCity'].includes(k)) onIn(e); });
+document.addEventListener('input', e => { const k = e.target.dataset?.in; if (k && ['rezQ','roomQ','gQ','bName','bPhone','bPaid','bNote','mtRooms','typeName','sName','stName','hName','hCity','typeBase','wkPct','sMult','childPct','boardP','typeCap'].includes(k)) onIn(e); });
+
+/* ripple */
+document.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.btn,.ibtn,.navi,.chip,.hk'); if (!b || S.motion === 'off') return;
+  const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2.2, sp = document.createElement('span');
+  sp.className = 'rip'; sp.style.cssText = `width:${s}px;height:${s}px;left:${e.clientX - r.left - s / 2}px;top:${e.clientY - r.top - s / 2}px`;
+  b.appendChild(sp); sp.addEventListener('animationend', () => sp.remove());
 });
 
-save(); render();
+/* genel arama */
+$('#gsearch').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return; const v = e.target.value.trim(); if (!v) return;
+  if (/^\d{3,4}$/.test(v) && room(+v)) { roomDlg(+v); return; }
+  const id = S.res.find(r => r.id.toLowerCase() === v.toLowerCase()); if (id) { resDlg(id.id); return; }
+  UI.rez = { q: v, st: 'all', when: 'all', limit: 80 }; go('rezervasyonlar'); e.target.value = '';
+});
+
+/* responsive kroki üst satırı */
+const fitKroki = () => { const g = $('#krokiTop'); if (g) g.style.gridTemplateColumns = innerWidth < 1100 ? '1fr' : 'minmax(0,1fr) 230px'; };
+new MutationObserver(fitKroki).observe($('#page'), { childList: true });
+addEventListener('resize', fitKroki);
+
+/* ---------- başlat ---------- */
+applyTheme(); applyMotion(); save();
+UI.page = PAGES.find(p => p.id === location.hash.slice(1)) ? location.hash.slice(1) : 'panel';
+render();
+setTimeout(() => $('#splash').classList.add('gone'), S.motion === 'off' ? 50 : 850);
 </script>
 </body>
 </html>
