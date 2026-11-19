@@ -4,6 +4,10 @@
 
 > Sürüm: **v1.0.2**
 
+### 🚀 [Canlı demoyu deneyin → tunagirit.github.io/Renstek-PMS](https://tunagirit.github.io/Renstek-PMS/)
+
+Demo her zaman `main` dalındaki en güncel sürümü gösterir. Kurulum gerekmez; tarayıcıda açılır ve örnek bir otelle gelir. Yaptığınız değişiklikler yalnızca sizin tarayıcınızda saklanır, **Ayarlar → Demo veriye sıfırla** ile başa dönebilirsiniz.
+
 | Genel bakış | Kat planı |
 |---|---|
 | ![Genel bakış](docs/panel.png) | ![Kat planı](docs/kat-plani.png) |
@@ -64,7 +68,7 @@
 
 Material 3 Expressive: tonal renk paleti, büyük yuvarlak şekiller, şekil değiştiren butonlar ve odalar, yaylı (spring) hareketler, sayfa geçişleri, sırayla beliren kartlar, sayarak artan göstergeler, büyüyen grafikler, dalga (ripple) efekti ve şekil değiştiren açılış göstergesi. Simgeler dosyanın içine gömülüdür, internet olmadan da görünür.
 
-## Çalıştırma
+## Kendi bilgisayarınızda çalıştırma
 
 Kurulum gerektirmez; uygulama tek bir HTML dosyasıdır.
 
