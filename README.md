@@ -117,4 +117,8 @@ Renstek-PMS/
 
 ---
 
+## Lisans
+
+Bu yazılım lisanslı açık kaynak **değildir**: kaynak kodu yalnızca incelenmek için yayımlanmıştır. Renstek'in yazılı izni olmadan kopyalanamaz, değiştirilemez, ticari amaçla ya da bir işletmede kullanılamaz. Ayrıntılar: [LICENSE](LICENSE).
+
 © 2026 Renstek. Tüm hakları saklıdır.
