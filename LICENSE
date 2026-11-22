@@ -1,40 +1,45 @@
-Copyright (c) 2026 Renstek. Tüm hakları saklıdır. / All rights reserved.
+Copyright (c) 2026 Renstek. All rights reserved. / Tüm hakları saklıdır.
+
+ENGLISH
+
+Renstek PMS — including its source code, designs, screens, texts and
+documentation (the "Software") — is the property of Renstek and is protected by
+copyright law.
+
+The source code is published publicly for viewing only. The hosted version may
+be used in a web browser for evaluation only.
+
+Without Renstek's prior written permission you may not, in whole or in part:
+  - copy, download for redistribution, reproduce or republish the Software,
+  - modify it, incorporate it into another product or create derivative works,
+  - host it elsewhere, sell, rent, sublicense or otherwise use it commercially,
+  - use it to train or build competing products,
+  - run it in production at a hotel or any other business.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. IN NO EVENT SHALL RENSTEK BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
+
+For licensing enquiries, contact Renstek.
 
 TÜRKÇE
 
-Bu depodaki yazılım, kaynak kodu, tasarımlar, görseller ve belgeler ("Yazılım")
-Renstek'in mülkiyetindedir ve telif hakkı yasalarıyla korunmaktadır.
+Renstek PMS — kaynak kodu, tasarımları, ekranları, metinleri ve
+belgeleri dahil ("Yazılım") — Renstek'in mülkiyetindedir ve telif hakkı
+yasalarıyla korunmaktadır.
 
-Yazılımın kaynak kodu yalnızca incelenmek amacıyla herkese açık olarak
-yayımlanmaktadır. Canlı demo, yalnızca denemek amacıyla tarayıcıda kullanılabilir.
+Kaynak kodu yalnızca incelenmek amacıyla herkese açık olarak yayımlanmıştır.
+Yayındaki sürüm, yalnızca denemek amacıyla tarayıcıda kullanılabilir.
 
 Renstek'in önceden verdiği yazılı izin olmadan Yazılımın tamamı veya bir kısmı:
-  - kopyalanamaz, çoğaltılamaz ya da başka bir yerde yayımlanamaz,
+  - kopyalanamaz, yeniden dağıtmak için indirilemez, çoğaltılamaz ya da yayımlanamaz,
   - değiştirilemez, başka bir ürüne dahil edilemez ya da türev çalışmalarda kullanılamaz,
-  - satılamaz, kiralanamaz, lisanslanamaz ya da ticari amaçla kullanılamaz,
+  - başka bir yerde barındırılamaz, satılamaz, kiralanamaz, lisanslanamaz ya da
+    ticari amaçla kullanılamaz,
+  - rakip ürün geliştirmek ya da eğitmek için kullanılamaz,
   - bir otelde ya da başka bir işletmede üretim ortamında çalıştırılamaz.
 
 Yazılım "OLDUĞU GİBİ" sunulur; açık ya da örtülü hiçbir garanti verilmez.
 Renstek, Yazılımın kullanımından doğabilecek hiçbir zarardan sorumlu tutulamaz.
 
 Lisans ve kullanım talepleri için Renstek ile iletişime geçin.
-
-ENGLISH
-
-The software, source code, designs, images and documentation in this repository
-(the "Software") are the property of Renstek and are protected by copyright law.
-
-The source code is published for viewing purposes only. The live demo may be
-used in a browser for evaluation only.
-
-Without Renstek's prior written permission, you may not, in whole or in part:
-  - copy, reproduce or republish the Software,
-  - modify it, incorporate it into another product or create derivative works,
-  - sell, rent, sublicense or otherwise use it commercially,
-  - run it in production at a hotel or any other business.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED. IN NO EVENT SHALL RENSTEK BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
-
-For licensing enquiries, contact Renstek.

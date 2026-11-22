@@ -1,124 +1,98 @@
-# Renstek PMS
+<h1 align="center">🏨 Renstek PMS</h1>
 
-**Renstek** tarafından geliştirilen, büyük oteller için yerel bir otel yönetim sistemi (PMS – Property Management System) ve yönetim paneli. Otelin kat planı üzerinden rezervasyon yapılır; bakım, kat hizmetleri, fiyat ve misafir yönetimi tek bir panelden yürütülür.
+<p align="center">
+  <b>A hotel management system built around your floor plan.</b><br/>
+  Reservations, maintenance, housekeeping, pricing and guests — one panel for the whole hotel.
+</p>
 
-> Sürüm: **v1.0.2**
+<p align="center">
+  <a href="https://tunagirit.github.io/Renstek-PMS/"><img src="https://img.shields.io/badge/▶_Try_the_live_demo-0b6bcb?style=for-the-badge" alt="Live demo"></a>
+  &nbsp;
+  <img src="https://img.shields.io/badge/version-v1.0.2-455a64?style=for-the-badge" alt="v1.0.2">
+</p>
 
-### 🚀 [Canlı demoyu deneyin → tunagirit.github.io/Renstek-PMS](https://tunagirit.github.io/Renstek-PMS/)
+<p align="center">
+  <img src="https://img.shields.io/badge/design-Material%203%20Expressive-6750a4" alt="Material 3 Expressive">
+  <img src="https://img.shields.io/badge/lang-TR-546e7a" alt="TR">
+  <img src="https://img.shields.io/badge/license-All%20rights%20reserved-b71c1c" alt="All rights reserved">
+</p>
 
-Demo her zaman `main` dalındaki en güncel sürümü gösterir. Kurulum gerekmez; tarayıcıda açılır ve örnek bir otelle gelir. Yaptığınız değişiklikler yalnızca sizin tarayıcınızda saklanır, **Ayarlar → Demo veriye sıfırla** ile başa dönebilirsiniz.
+<p align="center">
+  <a href="#english">English</a> · <a href="#türkçe">Türkçe</a>
+</p>
 
-| Genel bakış | Kat planı |
-|---|---|
-| ![Genel bakış](docs/panel.png) | ![Kat planı](docs/kat-plani.png) |
-| **Bakım & arıza** | **Doluluk takvimi** |
-| ![Bakım ve arıza](docs/bakim.png) | ![Doluluk takvimi](docs/takvim.png) |
-| **Kat hizmetleri** | **Karanlık tema** |
-| ![Kat hizmetleri](docs/kat-hizmetleri.png) | ![Karanlık tema](docs/panel-karanlik.png) |
-
-## Modüller
-
-### Genel bakış (otel sahibi paneli)
-- Bu geceki doluluk, ADR (ortalama oda fiyatı), RevPAR, bu ayın geliri ve oteldeki misafir sayısı
-- Önümüzdeki 14 günün doluluk grafiği, odaların anlık durumu (dolu / müsait / temizlik bekliyor / bakımda)
-- Bugünkü girişler ve çıkışlar (tek dokunuşla giriş / çıkış), kanal bazında gelir, tahsil edilmemiş bakiye
-- Bakımla çakışan rezervasyon uyarısı ve son işlemler kaydı
-
-### Kat planı ve rezervasyon
-- Seçilen katın çizgisel krokisi ve tüm binanın kesit görünümü (her kat, her oda tek bakışta)
-- Tarih, yetişkin / çocuk, oda tipi, pansiyon (RO, BB, HB, FB, AI, UAI) seçimi
-- Özelliğe göre filtre: deniz manzarası, balkon, jakuzi, engelli erişimi, bağlantılı oda, mutfak, evcil hayvan, sigara
-- Birden fazla oda seçimi, alt çubukta canlı toplam; misafir, kanal, kapora ve not ile rezervasyonu tamamlama
-
-### Doluluk takvimi
-- Odalar × 3 hafta şerit görünümü; onaylı, konaklayan, çıkış yapmış rezervasyonlar ve bakım blokları
-- Boş hücreye dokunarak o tarihten rezervasyon başlatma
-
-### Rezervasyonlar
-- Arama (misafir, oda, telefon, kanal, numara), durum ve tarih filtreleri
-- Giriş / çıkış, iptal, gelmedi (no-show), tahsilat, tarih değiştirme, oda değiştirme, VIP işaretleme
-
-### Odalar
-- 7 oda tipi (Standart, Superior, Deluxe, Aile, Junior suit, Suit, Kral dairesi) ve oda bazında özellikler
-- Oda tipini, özelliklerini ve personel notunu düzenleme; toplu seçimle bakım planlama veya tip değiştirme
-
-### Bakım & arıza
-- Odaları belirli tarihlerde (örn. `601-604`, 27 Kas – 3 Ara) bakıma alıp satışa kapatma
-- Kategori (klima, tesisat, elektrik, mobilya, boya / tadilat, elektronik), öncelik ve teknik sorumlu
-- Planlarken çakışan rezervasyonları ve kayıp geliri gösterir; çakışan misafirleri otomatik olarak uygun boş odalara taşır
-- Devam eden / planlı / tamamlanan iş emirleri ve ilerleme çubuğu; tamamlanan odalar kontrole düşer
-
-### Kat hizmetleri
-- Temiz, kirli, kontrol bekliyor, rahatsız etmeyin durumları; bugün giriş / çıkış işaretleri
-- Kat bazında sorumlu personel atama, temizlenenleri toplu onaylama
-
-### Fiyat & sezon
-- Oda tipi taban fiyatları ve kapasiteleri, sezonlar (yüzde ile), hafta sonu farkı, çocuk oranı, pansiyon fiyatları
-- Önümüzdeki 60 günün fiyat önizlemesi
-
-### Misafirler
-- Konaklama sayısı, geceleme, toplam harcama, son konaklama; VIP işaretleme, uyruğa göre dağılım
-
-### Ayarlar
-- Otel bilgileri, bina yapısı (kat, sıra, sıradaki oda), personel
-- Açık / karanlık / otomatik tema, animasyonlar (açık / cihaza göre / kapalı)
-- Veriyi dışa aktarma (yedek), içe aktarma ve demo veriye sıfırlama
-
-## Tasarım
-
-Material 3 Expressive: tonal renk paleti, büyük yuvarlak şekiller, şekil değiştiren butonlar ve odalar, yaylı (spring) hareketler, sayfa geçişleri, sırayla beliren kartlar, sayarak artan göstergeler, büyüyen grafikler, dalga (ripple) efekti ve şekil değiştiren açılış göstergesi. Simgeler dosyanın içine gömülüdür, internet olmadan da görünür.
-
-## Kendi bilgisayarınızda çalıştırma
-
-Kurulum gerektirmez; uygulama tek bir HTML dosyasıdır.
-
-```bash
-git clone https://github.com/tunagirit/Renstek-PMS.git
-cd Renstek-PMS
-```
-
-`index.html` dosyasını tarayıcıda açın. İsterseniz yerel bir sunucuyla da çalıştırabilirsiniz:
-
-```bash
-python3 -m http.server 8080
-# http://localhost:8080
-```
-
-## Veri saklama
-
-Veriler tarayıcının `localStorage` alanında tutulur. İlk açılışta 8 katlı, 192 odalı örnek bir otel ve demo rezervasyonlar yüklenir. **Ayarlar → Veri** bölümünden yedek alıp başka bir bilgisayara aktarabilirsiniz.
-
-## Oda numaralandırma
-
-Oda numarası `kat × 100 + sıra numarası` şeklindedir. Varsayılan yapıda her katta 2 sıra ve sırada 12 oda vardır:
-
-| Sıra | 1. kat | 8. kat |
-|---|---|---|
-| A blok (deniz cephesi) | 101 – 112 | 801 – 812 |
-| B blok | 113 – 124 | 813 – 824 |
-
-## Yol haritası
-
-- [ ] Yerel veritabanı (SQLite) ile çok kullanıcılı çalışma
-- [ ] Kullanıcı girişi ve rol bazlı yetki (resepsiyon, kat hizmetleri, teknik servis)
-- [ ] Fatura ve folyo yönetimi
-- [ ] Kanal yöneticisi entegrasyonu
-- [ ] PDF / Excel raporları
-
-## Proje yapısı
-
-```
-Renstek-PMS/
-├── index.html      # Uygulamanın tamamı (HTML + CSS + JS)
-├── docs/           # Ekran görüntüleri
-├── CHANGELOG.md
-└── README.md
-```
+<p align="center">
+  <img src="docs/panel.png" width="49%" alt="Overview">
+  <img src="docs/kat-plani.png" width="49%" alt="Floor plan">
+</p>
 
 ---
 
-## Lisans
+<a id="english"></a>
 
-Bu yazılım lisanslı açık kaynak **değildir**: kaynak kodu yalnızca incelenmek için yayımlanmıştır. Renstek'in yazılı izni olmadan kopyalanamaz, değiştirilemez, ticari amaçla ya da bir işletmede kullanılamaz. Ayrıntılar: [LICENSE](LICENSE).
+## 🇬🇧 English
 
-© 2026 Renstek. Tüm hakları saklıdır.
+### What is it?
+**Renstek PMS** is a property management system for large hotels, developed by **Renstek**. Instead of long room lists, the front desk books straight from the hotel's floor plan: pick the dates, the guests and the room features, tap the rooms, done. The owner gets a live overview of occupancy and revenue; maintenance, housekeeping, pricing and guest history live in the same panel.
+
+The live demo opens with a sample 8-floor, 192-room hotel. Changes you make stay in your own browser only.
+
+### 🧩 Modules
+| | |
+|---|---|
+| 📊 **Owner overview** | Tonight's occupancy, ADR, RevPAR, monthly revenue, guests in house, 14-day occupancy chart, today's arrivals and departures, revenue by channel, open balances. |
+| 🗺️ **Floor plan & booking** | Floor sketch and a cross-section of the whole building; filter by sea view, balcony, jacuzzi, accessibility, connecting rooms and more; book several rooms at once with board type, channel and deposit. |
+| 📅 **Occupancy calendar** | Rooms × 3 weeks timeline with stays and maintenance blocks; tap an empty cell to start a booking. |
+| 🧾 **Reservations** | Search and filters, check-in / check-out, payments, change dates or room, cancel, no-show, VIP. |
+| 🛠️ **Maintenance** | Take rooms out of sale for a date range, with category, priority and technician; shows clashing bookings and lost revenue and moves affected guests to free rooms automatically. |
+| 🧹 **Housekeeping** | Clean, dirty, inspection and do-not-disturb states; floor supervisors; bulk approval. |
+| 💶 **Rates & seasons** | Base rates per room type, seasons, weekend difference, child rate, board prices and a 60-day preview. |
+| 👤 **Guests** | Stays, nights, total spend, VIP flag and nationality breakdown. |
+
+### ▶️ Live demo
+**https://tunagirit.github.io/Renstek-PMS/**
+
+<p align="center">
+  <img src="docs/bakim.png" width="32%" alt="Maintenance">
+  <img src="docs/takvim.png" width="32%" alt="Occupancy calendar">
+  <img src="docs/kat-hizmetleri.png" width="32%" alt="Housekeeping">
+</p>
+
+---
+
+<a id="türkçe"></a>
+
+## 🇹🇷 Türkçe
+
+### Nedir?
+**Renstek PMS**, **Renstek** tarafından büyük oteller için geliştirilen bir otel yönetim sistemi. Resepsiyon uzun oda listeleri yerine doğrudan otelin kat planı üzerinden rezervasyon yapar: tarihleri, misafirleri ve oda özelliklerini seç, odalara dokun, bitti. Otel sahibi doluluk ve geliri canlı olarak görür; bakım, kat hizmetleri, fiyatlar ve misafir geçmişi aynı panelde yönetilir.
+
+Canlı demo, 8 katlı ve 192 odalı örnek bir otelle açılır. Yaptığın değişiklikler yalnızca senin tarayıcında saklanır.
+
+### 🧩 Modüller
+| | |
+|---|---|
+| 📊 **Sahip paneli** | Bu geceki doluluk, ADR, RevPAR, aylık gelir, oteldeki misafir, 14 günlük doluluk grafiği, bugünkü giriş ve çıkışlar, kanal geliri, tahsil edilmemiş bakiye. |
+| 🗺️ **Kat planı ve rezervasyon** | Kat krokisi ve tüm binanın kesiti; deniz manzarası, balkon, jakuzi, engelli erişimi, bağlantılı oda gibi filtreler; pansiyon, kanal ve kapora ile birden fazla odayı tek seferde ayırma. |
+| 📅 **Doluluk takvimi** | Oda × 3 hafta şerit görünümü, konaklamalar ve bakım blokları; boş hücreye dokunarak rezervasyon başlatma. |
+| 🧾 **Rezervasyonlar** | Arama ve filtreler, giriş / çıkış, tahsilat, tarih ya da oda değiştirme, iptal, gelmedi, VIP. |
+| 🛠️ **Bakım ve arıza** | Odaları tarih aralığıyla satışa kapatma; kategori, öncelik ve teknik sorumlu; çakışan rezervasyonları ve kayıp geliri gösterir, etkilenen misafirleri boş odalara otomatik taşır. |
+| 🧹 **Kat hizmetleri** | Temiz, kirli, kontrol bekliyor, rahatsız etmeyin durumları; kat sorumluları; toplu onay. |
+| 💶 **Fiyat ve sezon** | Oda tipi taban fiyatları, sezonlar, hafta sonu farkı, çocuk oranı, pansiyon fiyatları ve 60 günlük önizleme. |
+| 👤 **Misafirler** | Konaklama sayısı, geceleme, toplam harcama, VIP işareti ve uyruğa göre dağılım. |
+
+### 🛣️ Yol haritası
+- Çok kullanıcılı çalışma ve rol bazlı yetki (resepsiyon, kat hizmetleri, teknik servis)
+- Fatura ve folyo yönetimi
+- Kanal yöneticisi entegrasyonu
+- PDF / Excel raporları
+
+### ▶️ Canlı demo
+**https://tunagirit.github.io/Renstek-PMS/**
+
+---
+
+<p align="center">
+  © 2026 Renstek · <b>All rights reserved / Tüm hakları saklıdır.</b><br/>
+  The source is public for viewing only — see <a href="LICENSE">LICENSE</a>. · Kaynak kodu yalnızca incelenmek için açıktır — <a href="LICENSE">LICENSE</a>.
+</p>
